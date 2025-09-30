@@ -270,13 +270,32 @@ export class ClozeController {
    * was changed
    */
   private refreshCloze() {
-    for (var highlight of this.cloze.highlights) {
+    for (const highlight of this.cloze.highlights) {
       const highlightView = this.highlightsViews[highlight.id];
       highlightView?.set(highlight);
     }
 
-    for (var blank of this.cloze.blanks) {
+    for (const blank of this.cloze.blanks) {
       const blankView = this.blankViews[blank.id];
+      let tickSpacer = 0;
+      if (blank.isCorrect || blank.isShowingSolution) {
+        tickSpacer = Number(blank.isCorrect) * 1.5;
+        if (blank.hasHint) {
+          tickSpacer += 2; 
+        }
+        blank.currTextLength = blank.enteredText.length + tickSpacer;
+        
+      } else  {
+        if (blank.enteredText) {
+          // Auto grow input field to accomodate entered text!
+          if (blank.hasHint && (blank.isError || blank.isRetry)) {
+            tickSpacer = 2;
+          };
+          blank.currTextLength = Math.max(blank.minTextLength, blank.enteredText.length + 2 + tickSpacer);
+        } else {
+          blank.currTextLength = blank.minTextLength;
+        }
+      }
       blankView?.set(blank);
     }
   }

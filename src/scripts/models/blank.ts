@@ -28,6 +28,7 @@ export class Blank extends ClozeElement {
   isShowingSolution: boolean;
   message: string;
   minTextLength: number;
+  currTextLength: number;
   speechBubble: any;
 
   /**
@@ -57,7 +58,8 @@ export class Blank extends ClozeElement {
     if (this.settings.clozeType === ClozeType.Select && this.settings.selectAlternatives === SelectAlternatives.Alternatives) {
       this.loadChoicesFromOwnAlternatives();
     }
-    this.calculateMinTextLength();
+    this.minTextLength = 8;
+    this.currTextLength = this.minTextLength;
   }
 
   public addCorrectAnswer(answer: Answer) {
@@ -85,27 +87,6 @@ export class Blank extends ClozeElement {
   public addIncorrectAnswer(text: string, reaction: string, showHighlight: boolean, highlight: number): void {
     this.incorrectAnswers.push(
       new Answer(text, reaction, showHighlight, highlight, this.settings));
-  }
-
-  /**
-   * Returns how many characters the input box must have be to allow for all correct answers.
-   */
-  // TODO: refactor
-  private calculateMinTextLength(): void {
-    var answers: string[] = new Array();
-    for (let correctAnswer of this.correctAnswers) {
-      answers.push(getLongestString(correctAnswer.alternatives));
-    }
-
-    if (this.settings.clozeType === ClozeType.Select) {
-      for (let incorrectAnswer of this.incorrectAnswers) {
-        answers.push(getLongestString(incorrectAnswer.alternatives));
-      }
-    }
-
-    var longestAnswer = getLongestString(answers);
-    var l = longestAnswer.length;
-    this.minTextLength = Math.max(10, l - (l % 10) + 10);
   }
 
   /**
@@ -194,7 +175,13 @@ export class Blank extends ClozeElement {
     this.removeTooltip();
     if (this.isCorrect)
       return;
-    this.enteredText = this.correctAnswers[0].alternatives[0];
+    this.hasPendingFeedback = false;
+    
+    if (this.settings.showAllSolutions) {
+      this.enteredText = this.correctAnswers[0].alternatives.join(" | ");
+    } else {
+      this.enteredText = this.correctAnswers[0].alternatives[0];
+    }
     this.setAnswerState(MessageType.ShowSolution);
   }
 
