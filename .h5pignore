@@ -8,8 +8,9 @@ src
 .git
 .babelrc
 .gitmodules
+.eslintrc
+.eslint.config.js
 .h5pignore
-.travis.yml
 karma.conf.js
 webpack.config.js
 webpack.dev.config.js
@@ -19,8 +20,6 @@ package.json
 worknotes
 releases/
 tsconfig.json
-postcss.config.js
-tslint.json
 .gitignore
 TODO
 h5p-hub-metadata.md
