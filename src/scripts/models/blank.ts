@@ -42,9 +42,9 @@ export class Blank extends ClozeElement {
     super();
 
     this.enteredText = "";
-    this.correctAnswers = new Array();
-    this.incorrectAnswers = new Array();
-    this.choices = new Array();
+    this.correctAnswers = [];
+    this.incorrectAnswers = [];
+    this.choices = [];
     this.type = ClozeElementType.Blank;
 
     this.id = id;
@@ -66,7 +66,7 @@ export class Blank extends ClozeElement {
 
   public getCorrectAnswers(): string[] {
     let result = [];
-    for (let answer of this.correctAnswers) {
+    for (const answer of this.correctAnswers) {
       result = result.concat(answer.alternatives);
     }
     return result;
@@ -92,19 +92,19 @@ export class Blank extends ClozeElement {
    */
   // TODO: refactor
   private calculateMinTextLength(): void {
-    var answers: string[] = new Array();
-    for (let correctAnswer of this.correctAnswers) {
+    const answers: string[] = [];
+    for (const correctAnswer of this.correctAnswers) {
       answers.push(getLongestString(correctAnswer.alternatives));
     }
 
     if (this.settings.clozeType === ClozeType.Select) {
-      for (let incorrectAnswer of this.incorrectAnswers) {
+      for (const incorrectAnswer of this.incorrectAnswers) {
         answers.push(getLongestString(incorrectAnswer.alternatives));
       }
     }
 
-    var longestAnswer = getLongestString(answers);
-    var l = longestAnswer.length;
+    const longestAnswer = getLongestString(answers);
+    const l = longestAnswer.length;
     this.minTextLength = Math.max(10, l - (l % 10) + 10);
   }
 
@@ -113,15 +113,15 @@ export class Blank extends ClozeElement {
    * the correct and incorrect answers.
    */
   private loadChoicesFromOwnAlternatives(): string[] {
-    this.choices = new Array();
-    for (let answer of this.correctAnswers) {
-      for (let alternative of answer.alternatives) {
+    this.choices = [];
+    for (const answer of this.correctAnswers) {
+      for (const alternative of answer.alternatives) {
         this.choices.push(alternative);
       }
     }
 
-    for (let answer of this.incorrectAnswers) {
-      for (let alternative of answer.alternatives) {
+    for (const answer of this.incorrectAnswers) {
+      for (const alternative of answer.alternatives) {
         this.choices.push(alternative);
       }
     }
@@ -137,17 +137,17 @@ export class Blank extends ClozeElement {
    * @param otherBlanks All OTHER blanks in the cloze. (excludes the current one!)
    */
   public loadChoicesFromOtherBlanks(otherBlanks: Blank[]): string[] {
-    let ownChoices = new Array();
-    for (let answer of this.correctAnswers) {
-      for (let alternative of answer.alternatives) {
+    const ownChoices = [];
+    for (const answer of this.correctAnswers) {
+      for (const alternative of answer.alternatives) {
         ownChoices.push(alternative);
       }
     }
 
-    let otherChoices = new Array();
-    for (let otherBlank of otherBlanks) {
-      for (let answer of otherBlank.correctAnswers) {
-        for (let alternative of answer.alternatives) {
+    let otherChoices = [];
+    for (const otherBlank of otherBlanks) {
+      for (const answer of otherBlank.correctAnswers) {
+        for (const alternative of answer.alternatives) {
           otherChoices.push(alternative);
         }
       }
@@ -216,7 +216,7 @@ export class Blank extends ClozeElement {
 
   private displayTooltip(message: string, type: MessageType, surpressTooltip: boolean, id?: string) {
     if (!surpressTooltip)
-      this.messageService.show(id ? id : this.id, message, this, type);
+      this.messageService.show(id ? id : this.id, message, this);
     else {
       this.hasPendingFeedback = true;
     }
@@ -236,14 +236,14 @@ export class Blank extends ClozeElement {
   }
 
   private getSpellingMistakeMessage(expectedText: string, enteredText: string): string {
-    var message = this.localization.getTextFromLabel(LocalizationLabels.typoMessage)
+    let message = this.localization.getTextFromLabel(LocalizationLabels.typoMessage)
 
-    var diff = jsdiff.diffChars(expectedText, enteredText, { ignoreCase: !this.settings.caseSensitive });
+    const diff = jsdiff.diffChars(expectedText, enteredText, { ignoreCase: !this.settings.caseSensitive });
 
-    var mistakeSpan = this.jquery("<span/>", { "class": "spelling-mistake" });
-    for (var index = 0; index < diff.length; index++) {
-      var part = diff[index];
-      var spanClass = '';
+    const mistakeSpan = this.jquery("<span/>", { "class": "spelling-mistake" });
+    for (let index = 0; index < diff.length; index++) {
+      const part = diff[index];
+      let spanClass = '';
       if (part.removed) {
         if (index === diff.length - 1 || !diff[index + 1].added) {
           part.value = part.value.replace(/./g, "_");
@@ -257,7 +257,7 @@ export class Blank extends ClozeElement {
         spanClass = 'mistaken-character';
       }
 
-      var span = this.jquery("<span/>", { "class": spanClass, "html": part.value.replace(" ", "&nbsp;") });
+      const span = this.jquery("<span/>", { "class": spanClass, "html": part.value.replace(" ", "&nbsp;") });
       mistakeSpan.append(span);
     }
 
@@ -266,7 +266,7 @@ export class Blank extends ClozeElement {
   }
 
   /**
-   * Checks if the entered text is the correct answer or one of the 
+   * Checks if the entered text is the correct answer or one of the
    * incorrect ones and gives the user feedback accordingly.
    */
   public evaluateAttempt(surpressTooltips: boolean, forceCheck?: boolean) {
@@ -277,10 +277,10 @@ export class Blank extends ClozeElement {
     this.hasPendingFeedback = false;
     this.removeTooltip();
 
-    var exactCorrectMatches = this.correctAnswers.map(answer => answer.evaluateAttempt(this.enteredText)).filter(evaluation => evaluation.correctness === Correctness.ExactMatch).sort(evaluation => evaluation.characterDifferenceCount);
-    var closeCorrectMatches = this.correctAnswers.map(answer => answer.evaluateAttempt(this.enteredText)).filter(evaluation => evaluation.correctness === Correctness.CloseMatch).sort(evaluation => evaluation.characterDifferenceCount);
-    var exactIncorrectMatches = this.incorrectAnswers.map(answer => answer.evaluateAttempt(this.enteredText)).filter(evaluation => evaluation.correctness === Correctness.ExactMatch).sort(evaluation => evaluation.characterDifferenceCount);
-    var closeIncorrectMatches = this.incorrectAnswers.map(answer => answer.evaluateAttempt(this.enteredText)).filter(evaluation => evaluation.correctness === Correctness.CloseMatch).sort(evaluation => evaluation.characterDifferenceCount);
+    const exactCorrectMatches = this.correctAnswers.map(answer => answer.evaluateAttempt(this.enteredText)).filter(evaluation => evaluation.correctness === Correctness.ExactMatch).sort(evaluation => evaluation.characterDifferenceCount);
+    const closeCorrectMatches = this.correctAnswers.map(answer => answer.evaluateAttempt(this.enteredText)).filter(evaluation => evaluation.correctness === Correctness.CloseMatch).sort(evaluation => evaluation.characterDifferenceCount);
+    const exactIncorrectMatches = this.incorrectAnswers.map(answer => answer.evaluateAttempt(this.enteredText)).filter(evaluation => evaluation.correctness === Correctness.ExactMatch).sort(evaluation => evaluation.characterDifferenceCount);
+    const closeIncorrectMatches = this.incorrectAnswers.map(answer => answer.evaluateAttempt(this.enteredText)).filter(evaluation => evaluation.correctness === Correctness.CloseMatch).sort(evaluation => evaluation.characterDifferenceCount);
 
     if (exactCorrectMatches.length > 0) {
       this.setAnswerState(MessageType.Correct);
@@ -315,7 +315,7 @@ export class Blank extends ClozeElement {
       return;
     }
 
-    var alwaysApplyingAnswers = this.incorrectAnswers.filter(a => a.appliesAlways);
+    const alwaysApplyingAnswers = this.incorrectAnswers.filter(a => a.appliesAlways);
     if (alwaysApplyingAnswers && alwaysApplyingAnswers.length > 0) {
       this.showErrorTooltip(alwaysApplyingAnswers[0], surpressTooltips);
     }
@@ -337,7 +337,7 @@ export class Blank extends ClozeElement {
 
   /**
    * Sets the boolean properties isCorrect, is Error and isRetry according to thepassed  messageType.
-   * @param messageType 
+   * @param messageType
    */
   private setAnswerState(messageType: MessageType) {
     this.isCorrect = false;

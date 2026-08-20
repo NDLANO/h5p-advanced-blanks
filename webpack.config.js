@@ -1,42 +1,86 @@
-module.exports = (env, argv) => {
-  var path = require('path');
-  var isDev = (argv.mode !== 'production');
+import { dirname, resolve as _resolve } from 'path';
+import { fileURLToPath } from 'url';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import TerserPlugin from 'terser-webpack-plugin';
+import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
 
-  var config = {
-    entry: {
-      dist: './src/entries/dist.ts'
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const mode = process.argv.includes('--mode=production') ?
+  'production' :
+  'development';
+const libraryName = process.env.npm_package_name;
+
+export default {
+  mode: mode,
+  resolve: {
+    alias: {
+      '@models': _resolve(__dirname, 'src/scripts/models'),
+      '@root': _resolve(__dirname, './'),
+      '@scripts': _resolve(__dirname, 'src/scripts'),
+      '@services': _resolve(__dirname, 'src/scripts/services'),
+      '@styles': _resolve(__dirname, 'src/styles'),
     },
-    output: {
-      path: path.resolve(__dirname, 'dist'),
-      filename: 'h5p-advanced-blanks.js'
-    },
-    module: {
-      rules: [
-        {
-          test: /\.js$/,
-          include: path.resolve(__dirname, 'src'),
-          loader: 'babel-loader'
+    extensions: ['.tsx', '.ts', '.js'],
+  },
+  optimization: {
+    minimize: mode === 'production',
+    minimizer: [
+      new TerserPlugin({
+        terserOptions: {
+          compress: {
+            drop_console: true,
+          },
         },
-        {
-          test: /\.css$/,
-          include: path.resolve(__dirname, 'src'),
-          use: ['style-loader', 'css-loader', 'postcss-loader']
-        },
-        {
-          test: /\.tsx?$/,
-          use: 'ts-loader',
-          exclude: /node_modules/
-        }
-      ]
-    },
-    resolve: {
-      extensions: [".tsx", ".ts", ".js"]
-    }
-  };
-
-  if (isDev) {
-    config.devtool = 'inline-source-map';
-  }
-
-  return config;
-}
+      }),
+      new CssMinimizerPlugin(),
+    ],
+  },
+  plugins: [
+    new MiniCssExtractPlugin({
+      filename: `${libraryName}.css`,
+    }),
+  ],
+  entry: {
+    dist: './src/entries/dist.ts',
+  },
+  output: {
+    filename: `${libraryName}.js`,
+    path: _resolve(__dirname, 'dist'),
+    clean: true,
+  },
+  target: ['browserslist'],
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader: 'babel-loader',
+      },
+      {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
+      },
+      {
+        test: /\.css$/,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              publicPath: '',
+            },
+          },
+          {
+            loader: 'css-loader',
+          },
+        ],
+      },
+    ],
+  },
+  stats: {
+    colors: true,
+  },
+  ...(mode !== 'production' && { devtool: 'eval-cheap-module-source-map' }),
+};

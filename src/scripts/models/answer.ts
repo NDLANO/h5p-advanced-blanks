@@ -26,7 +26,7 @@ export class Evaluation {
  */
 export class Answer {
   /**
-   * The alternatives are equivalent strings that the library should treat the same way, e.g. show the same feedback. 
+   * The alternatives are equivalent strings that the library should treat the same way, e.g. show the same feedback.
    */
   alternatives: string[];
 
@@ -75,16 +75,16 @@ export class Answer {
     return text.replace(/\s{2,}/g, " ");
   }
   /**
-   * Looks through the diff and checks how many character change operations are needed to turn one string into the other. Should return the same results as the Levensthein distance. 
+   * Looks through the diff and checks how many character change operations are needed to turn one string into the other. Should return the same results as the Levensthein distance.
    * @param  {[{added?:boolean, boolean: removed?, string: value}]} diff - as returned by jsdiff
-   * @returns number - the count of changes (replace, add, delete) needed to change the text from one string to the other 
+   * @returns number - the count of changes (replace, add, delete) needed to change the text from one string to the other
    */
   private getChangesCountFromDiff(diff: jsdiff.Change[]): number {
-    var totalChangesCount = 0;
-    var lastType = "";
-    var lastCount = 0;
+    let totalChangesCount = 0;
+    let lastType = "";
+    let lastCount = 0;
 
-    for (var element of diff) {
+    for (const element of diff) {
       if (element.removed) {
         totalChangesCount += element.value.length;
         lastType = "removed";
@@ -115,7 +115,7 @@ export class Answer {
    */
 
   private getAcceptableSpellingMistakes(text: string): number {
-    var acceptableTypoCount: number;
+    let acceptableTypoCount: number;
     if (this.settings.warnSpellingErrors || this.settings.acceptSpellingErrors) // TODO: consider removal
       acceptableTypoCount = Math.floor(text.length / 10) + 1;
     else
@@ -129,15 +129,15 @@ export class Answer {
    * @returns Evaluation indicates if the entered text is matched by the answer.
    */
   public evaluateAttempt(attempt: string): Evaluation {
-    var cleanedAttempt = this.cleanString(attempt);
-    var evaluation = new Evaluation(this);
+    const cleanedAttempt = this.cleanString(attempt);
+    const evaluation = new Evaluation(this);
 
-    for (var alternative of this.alternatives) {
-      var cleanedAlternative = this.cleanString(alternative);
+    for (const alternative of this.alternatives) {
+      const cleanedAlternative = this.cleanString(alternative);
 
-      var diff = jsdiff.diffChars(cleanedAlternative, cleanedAttempt,
+      const diff = jsdiff.diffChars(cleanedAlternative, cleanedAttempt,
         { ignoreCase: !this.settings.caseSensitive });
-      var changeCount = this.getChangesCountFromDiff(diff);
+      const changeCount = this.getChangesCountFromDiff(diff);
 
       if (changeCount === 0) {
         evaluation.usedAlternative = cleanedAlternative;

@@ -2,8 +2,8 @@
   "title": "Complex fill the blanks",
   "description": "Fill the blanks exercise with individual feedback",
   "majorVersion": 1,
-  "minorVersion": 2,
-  "patchVersion": 7,
+  "minorVersion": 3,
+  "patchVersion": 0,
   "runnable": 1,
   "author": "S. Rettig",
   "license": "MIT",
@@ -18,6 +18,11 @@
   "preloadedJs": [
     {
       "path": "dist/h5p-advanced-blanks.js"
+    }
+  ],
+  "preloadedCss": [
+    {
+      "path": "dist/h5p-advanced-blanks.css"
     }
   ],
   "preloadedDependencies": [

@@ -11,6 +11,7 @@ Bugfixes:
   ✘ you can press "Check" in Selection mode even if nothing has been selected so far @cancelled(18-06-02 20:38)
 
 General todo:
+  ☐ Remove `"strict": false` and type properly.
   ☐ change structure of directories so that it's enough to simply build the library to get it running
   ☐ create 1.0.1 release package
   ☐ make ! clickable

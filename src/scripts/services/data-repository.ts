@@ -45,19 +45,19 @@ export class H5PDataRepository implements IDataRepository {
   }
 
   getBlanks(): Blank[] {
-    var blanks: Blank[] = new Array();
+    const blanks: Blank[] = [];
 
     if (!this.h5pConfigData.content.blanksList)
       return blanks;
 
-    for (var i = 0; i < this.h5pConfigData.content.blanksList.length; i++) {
-      var h5pBlank = this.h5pConfigData.content.blanksList[i];
+    for (let i = 0; i < this.h5pConfigData.content.blanksList.length; i++) {
+      const h5pBlank = this.h5pConfigData.content.blanksList[i];
 
-      var correctText = h5pBlank.correctAnswerText;
+      const correctText = h5pBlank.correctAnswerText;
       if (correctText === "" || correctText === undefined)
         continue;
 
-      var blank = BlankLoader.instance.createBlank("cloze" + i, correctText,
+      const blank = BlankLoader.instance.createBlank("cloze" + i, correctText,
         h5pBlank.hint, h5pBlank.incorrectAnswersList);
 
       blank.finishInitialization();
@@ -68,14 +68,14 @@ export class H5PDataRepository implements IDataRepository {
   }
 
   getSnippets(): Snippet[] {
-    var snippets: Snippet[] = new Array();
+    const snippets: Snippet[] = [];
 
     if (!this.h5pConfigData.snippets)
       return snippets;
 
-    for (var i = 0; i < this.h5pConfigData.snippets.length; i++) {
-      var raw_snippet = this.h5pConfigData.snippets[i];
-      var snippet = new Snippet(raw_snippet.snippetName, this.unwrapper.unwrap(raw_snippet.snippetText));
+    for (let i = 0; i < this.h5pConfigData.snippets.length; i++) {
+      const raw_snippet = this.h5pConfigData.snippets[i];
+      const snippet = new Snippet(raw_snippet.snippetName, this.unwrapper.unwrap(raw_snippet.snippetText));
       snippets.push(snippet);
     }
     return snippets;

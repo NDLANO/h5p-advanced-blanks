@@ -12,7 +12,6 @@ import { Correctness } from '../models/answer';
 
 import BlankView from '../views/blank-view';
 import HighlightView from '../views/highlight-view';
-import blankView from '../views/blank-view';
 
 interface ScoreChanged {
   (score: number, maxScore: number): void;
@@ -72,7 +71,7 @@ export class ClozeController {
         .filter(evaluation => evaluation.correctness === Correctness.CloseMatch);
       const similarAnswerGiven = this.settings.acceptSpellingErrors && closeCorrectMatches.length > 0;
 
-      return score += (notShowingSolution && (correctAnswerGiven || similarAnswerGiven)) ? 1 : 0;
+      return score + ((notShowingSolution && (correctAnswerGiven || similarAnswerGiven)) ? 1 : 0);
     }, 0);
 
     return Math.max(0, score);
@@ -111,28 +110,28 @@ export class ClozeController {
     this.jquery = jquery;
     this.isSelectCloze = this.settings.clozeType === ClozeType.Select ? true : false;
 
-    var blanks = this.repository.getBlanks();
+    const blanks = this.repository.getBlanks();
 
     if (this.isSelectCloze && this.settings.selectAlternatives === SelectAlternatives.All) {
-      for (var blank of blanks) {
-        let otherBlanks = blanks.filter(v => v !== blank);
+      for (const blank of blanks) {
+        const otherBlanks = blanks.filter(v => v !== blank);
         blank.loadChoicesFromOtherBlanks(otherBlanks);
       }
     }
 
-    var snippets = this.repository.getSnippets();
+    const snippets = this.repository.getSnippets();
     blanks.forEach(blank => BlankLoader.instance.replaceSnippets(blank, snippets));
 
     this.cloze = ClozeLoader.createCloze(this.repository.getClozeText(), blanks);
 
-    var containers = this.createAndAddContainers(root);
+    const containers = this.createAndAddContainers(root);
     containers.cloze.innerHTML = this.cloze.html;
     this.createViews();
   }
 
   checkAll = () => {
     this.cloze.hideAllHighlights();
-    for (var blank of this.cloze.blanks) {
+    for (const blank of this.cloze.blanks) {
       if ((!blank.isCorrect) && blank.enteredText !== "")
         blank.evaluateAttempt(true, true);
     }
@@ -192,8 +191,8 @@ export class ClozeController {
       && ((this.settings.autoCheck && blank.isCorrect && !this.isSolved)
         || !this.settings.autoCheck)) {
       // move to next blank
-      var index = this.cloze.blanks.indexOf(blank);
-      var nextId;
+      let index = this.cloze.blanks.indexOf(blank);
+      let nextId;
       while (index < this.cloze.blanks.length - 1 && !nextId) {
         index++;
         if (!this.cloze.blanks[index].isCorrect)
@@ -216,7 +215,7 @@ export class ClozeController {
   }
 
   private createAndAddContainers(addTo: HTMLElement): { cloze: HTMLDivElement } {
-    var clozeContainerElement = document.createElement('div');
+    const clozeContainerElement = document.createElement('div');
     clozeContainerElement.id = 'h5p-cloze-container';
     if (this.settings.clozeType === ClozeType.Select) {
       clozeContainerElement.className = 'h5p-advanced-blanks-select-mode';
@@ -256,11 +255,11 @@ export class ClozeController {
   }
 
   private createViews() {
-    for (var highlight of this.cloze.highlights) {
+    for (const highlight of this.cloze.highlights) {
       this.createHighlightView(highlight);
     }
 
-    for (var blank of this.cloze.blanks) {
+    for (const blank of this.cloze.blanks) {
       this.createBlankView(blank);
     }
   }
@@ -270,12 +269,12 @@ export class ClozeController {
    * was changed
    */
   private refreshCloze() {
-    for (var highlight of this.cloze.highlights) {
+    for (const highlight of this.cloze.highlights) {
       const highlightView = this.highlightsViews[highlight.id];
       highlightView?.set(highlight);
     }
 
-    for (var blank of this.cloze.blanks) {
+    for (const blank of this.cloze.blanks) {
       const blankView = this.blankViews[blank.id];
       blankView?.set(blank);
     }
@@ -309,8 +308,8 @@ export class ClozeController {
   public getCorrectAnswerList(): string[][] {
     if (!this.cloze || this.cloze.blanks.length === 0)
       return [[]];
-    let result = [];
-    for (var blank of this.cloze.blanks) {
+    const result = [];
+    for (const blank of this.cloze.blanks) {
       result.push(blank.getCorrectAnswers());
     }
 

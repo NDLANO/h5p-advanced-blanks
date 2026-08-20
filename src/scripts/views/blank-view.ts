@@ -33,10 +33,10 @@ export default class BlankView {
     this.createDomStructure(blank);
 
     if (isSelectCloze) {
-      this.createSelectElement(blank, callbacks);
+      this.createSelectElement(blank);
     }
     else {
-      this.createInputElement(blank, callbacks);
+      this.createInputElement(blank);
     }
   }
 
@@ -99,7 +99,7 @@ export default class BlankView {
     return tipContainer;
   }
 
-  private createSelectElement(blank: Blank, callbacks: BlankCallbacks): void {
+  private createSelectElement(blank: Blank): void {
     this.dom.append(this.buildNotificationButton(blank));
 
     const inputWrapper = document.createElement('span');
@@ -141,7 +141,7 @@ export default class BlankView {
       return notificationButton;
   }
 
-  private createInputElement(blank: Blank, callbacks: BlankCallbacks): void {
+  private createInputElement(blank: Blank): void {
     const inputWrapper = document.createElement('span');
     inputWrapper.classList.add('h5p-input-wrapper');
     this.dom.append(inputWrapper);
