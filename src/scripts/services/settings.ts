@@ -12,6 +12,7 @@ export interface ISettings {
   warnSpellingErrors: boolean;
   acceptSpellingErrors: boolean;
   showSolutionsRequiresInput: boolean;
+  showAllSolutions: boolean;
   confirmCheckDialog: boolean;
   confirmRetryDialog: boolean;
   disableImageZooming: boolean;
@@ -29,6 +30,7 @@ export class H5PSettings implements ISettings {
   public warnSpellingErrors: boolean = true;
   public acceptSpellingErrors: boolean = false;
   public showSolutionsRequiresInput: boolean = true;
+  public showAllSolutions: boolean = false;
   public confirmCheckDialog: boolean = false;
   public confirmRetryDialog: boolean = false;
   public disableImageZooming: boolean = false;
@@ -59,6 +61,7 @@ export class H5PSettings implements ISettings {
     this.warnSpellingErrors = h5pConfigData.behaviour.spellingErrorBehaviour === "warn";
     this.acceptSpellingErrors = h5pConfigData.behaviour.spellingErrorBehaviour === "accept";
     this.showSolutionsRequiresInput = h5pConfigData.behaviour.showSolutionsRequiresInput;
+    this.showAllSolutions = h5pConfigData.behaviour.showAllSolutions;
     this.confirmCheckDialog = h5pConfigData.behaviour.confirmCheckDialog;
     this.confirmRetryDialog = h5pConfigData.behaviour.confirmRetryDialog;
     this.disableImageZooming = h5pConfigData.media.disableImageZooming;
@@ -80,6 +83,7 @@ export class H5PSettings implements ISettings {
       this.warnSpellingErrors = false;
       this.acceptSpellingErrors = false;
       this.caseSensitive = false;
+      this.showAllSolutions = false;
     }
   }
 }

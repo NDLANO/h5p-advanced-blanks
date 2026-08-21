@@ -217,13 +217,11 @@ export default class BlankView {
     this.dom.id = `container${blank.id}`;
     this.updateDomClasses(blank);
 
-    if (this.inputElement instanceof HTMLInputElement) {
-      // this.inputElement.value = blank.enteredText || '';
+    if (this.inputElement instanceof HTMLInputElement) {      
       this.inputElement.disabled = blank.isCorrect || blank.isShowingSolution;
-      this.inputElement.size = blank.minTextLength;
+      this.inputElement.size = blank.currTextLength;
     }
     else if (this.inputElement instanceof HTMLSelectElement) {
-      // this.inputElement.value = blank.enteredText || '';
       this.inputElement.disabled = blank.isCorrect || blank.isShowingSolution;
     }
   }
