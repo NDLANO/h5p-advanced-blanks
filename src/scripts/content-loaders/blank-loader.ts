@@ -30,13 +30,15 @@ export class BlankLoader {
     return elem.value;
   }
 
-  public createBlank(id: string, correctText: string, hintText: string, incorrectAnswers: any[]): Blank {
+  public createBlank(id: string, correctText: string, correctFeedback : string, hintText: string, incorrectAnswers: any[]): Blank {
     var blank = new Blank(this.settings, this.localization, this.jquery, this.messageService, id)
     if (correctText) {
       correctText = this.decodeHtml(correctText);
       blank.addCorrectAnswer(new Answer(correctText, "", false, 0, this.settings));
     }
     blank.setHint(new Message(hintText ? hintText : "", false, 0));
+    blank.correctFeedback = correctFeedback;
+    blank.hasCorrectFeedback = correctFeedback !== "";
 
     if (incorrectAnswers) {
       for (var h5pIncorrectAnswer of incorrectAnswers) {

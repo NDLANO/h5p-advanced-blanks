@@ -128,6 +128,25 @@
               "optional": true
             },
             {
+              "name": "correctFeedback",
+              "type": "text",
+              "label": "Feedback for correct answer",
+              "optional": true,
+              "description": "This feedback should confirm that the user found the correct answer in order to re-enforce his choice.",
+              "widget": "html",
+              "tags": [
+                "strong",
+                "em",
+                "u",
+                "strike",
+                "a",
+                "ul",
+                "ol",
+                "sub",
+                "sup"
+              ]
+            },
+            {
               "name": "incorrectAnswersList",
               "type": "list",
               "label": "Incorrect answers",

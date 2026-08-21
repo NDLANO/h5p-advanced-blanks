@@ -142,6 +142,7 @@ export default class BlankView {
   }
 
   private createInputElement(blank: Blank, callbacks: BlankCallbacks): void {
+    this.dom.append(this.buildNotificationButton(blank));
     const inputWrapper = document.createElement('span');
     inputWrapper.classList.add('h5p-input-wrapper');
     this.dom.append(inputWrapper);

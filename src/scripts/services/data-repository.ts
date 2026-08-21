@@ -54,10 +54,11 @@ export class H5PDataRepository implements IDataRepository {
       var h5pBlank = this.h5pConfigData.content.blanksList[i];
 
       var correctText = h5pBlank.correctAnswerText;
+      const correctFeedback = h5pBlank.correctFeedback;
       if (correctText === "" || correctText === undefined)
         continue;
 
-      var blank = BlankLoader.instance.createBlank("cloze" + i, correctText,
+      var blank = BlankLoader.instance.createBlank("cloze" + i, correctText, correctFeedback,
         h5pBlank.hint, h5pBlank.incorrectAnswersList);
 
       blank.finishInitialization();
