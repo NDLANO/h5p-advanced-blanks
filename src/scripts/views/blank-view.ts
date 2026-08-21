@@ -16,7 +16,8 @@ const ICONS = {
 
 export default class BlankView {
   private dom: HTMLSpanElement;
-  private inputElement: HTMLInputElement | HTMLSelectElement;
+  private inputElement: HTMLInputElement;
+  private selectElement: HTMLSelectElement;
   private tipButton: HTMLButtonElement;
   private callbacks: BlankCallbacks = {
     requestCloseTooltip: () => { },
@@ -106,22 +107,22 @@ export default class BlankView {
     inputWrapper.classList.add('h5p-input-wrapper');
     this.dom.append(inputWrapper);
 
-    const selectElement = document.createElement('select');
-    selectElement.id = blank.id;
-    selectElement.classList.add('h5p-text-input');
-    selectElement.size = 1;
-    selectElement.value = blank.enteredText || '';
-    selectElement.disabled = blank.isCorrect || blank.isShowingSolution;
+    this.selectElement = document.createElement('select');
+    this.selectElement.id = blank.id;
+    this.selectElement.classList.add('h5p-text-input');
+    this.selectElement.size = 1;
+    this.selectElement.value = blank.enteredText || '';
+    this.selectElement.disabled = blank.isCorrect || blank.isShowingSolution;
 
-    this.bindInputToBlank(blank, selectElement);
-    this.setupSelectEventHandlers(selectElement, blank);
+    this.bindSelectToBlank(blank, this.selectElement);
+    this.setupSelectEventHandlers(this.selectElement, blank);
 
-    inputWrapper.append(selectElement);
+    inputWrapper.append(this.selectElement);
 
     for (const choice of blank.choices) {
       const optionElement = document.createElement('option');
       optionElement.textContent = choice;
-      selectElement.append(optionElement);
+      this.selectElement.append(optionElement);
     }
 
     if (blank.hasHint) {
@@ -202,10 +203,17 @@ export default class BlankView {
     }
   }
 
-  private bindInputToBlank(blank: Blank, inputElement: HTMLInputElement | HTMLSelectElement): void {
+  private bindInputToBlank(blank: Blank, inputElement: HTMLInputElement): void {
     Object.defineProperty(blank, 'enteredText', {
       get: () => inputElement.value,
       set: (value) => { inputElement.value = value; }
+    });
+  }
+
+  private bindSelectToBlank(blank: Blank, selectElement: HTMLSelectElement): void {
+    Object.defineProperty(blank, 'enteredText', {
+      get: () => selectElement.value,
+      set: (value) => { selectElement.value = value; }
     });
   }
 
@@ -222,9 +230,9 @@ export default class BlankView {
       this.inputElement.disabled = blank.isCorrect || blank.isShowingSolution;
       this.inputElement.size = blank.minTextLength;
     }
-    else if (this.inputElement instanceof HTMLSelectElement) {
-      // this.inputElement.value = blank.enteredText || '';
-      this.inputElement.disabled = blank.isCorrect || blank.isShowingSolution;
+    else if (this.selectElement instanceof HTMLSelectElement) {
+      this.selectElement.value = blank.enteredText || '';
+      this.selectElement.disabled = blank.isCorrect || blank.isShowingSolution;
     }
   }
 }
