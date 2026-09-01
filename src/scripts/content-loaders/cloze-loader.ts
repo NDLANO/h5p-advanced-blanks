@@ -2,7 +2,7 @@ import { BlankLoader } from './blank-loader';
 import { ClozeElement, ClozeElementType } from '../models/cloze-element';
 import { Blank } from '../models/blank';
 import { Highlight } from '../models/highlight';
-import { Cloze } from "../models/cloze";
+import { Cloze } from '../models/cloze';
 
 /**
  * Loads a cloze object.
@@ -34,7 +34,7 @@ export class ClozeLoader {
     return cloze;
   }
 
-   /**
+  /**
    * Converts !!signal!! highlight markup and ___  blank markup into <span>...</span>.
    * Returns the resulting html string and three lists of all active elements used in the cloze:
    *    orderedAllElements: highlights and blanks in the order of appearance in the html.
@@ -44,7 +44,9 @@ export class ClozeLoader {
    * @param  {Blank[]} blanks
    * @returns Lists of active elements (see description).
    */
-  private static convertMarkupToSpans(html: string, blanks: Blank[]): { html: string, orderedAllElementsList: ClozeElement[], highlightInstances: Highlight[], blanksInstances: Blank[] } {
+  private static convertMarkupToSpans(html: string, blanks: Blank[]): {
+    html: string, orderedAllElementsList: ClozeElement[], highlightInstances: Highlight[], blanksInstances: Blank[]
+  } {
     const orderedAllElementsList: ClozeElement[] = [];
     const highlightInstances: Highlight[] = [];
     const blanksInstances: Blank[] = [];
@@ -67,11 +69,12 @@ export class ClozeLoader {
         orderedAllElementsList.push(highlight);
         html = html.replace(exclamationMarkRegExp, `<span id='container_highlight_${highlightCounter}'></span>`);
         highlightCounter++;
-      } else if (nextBlankIndex >= 0) {
+      }
+      else if (nextBlankIndex >= 0) {
         // next active element is a blank
         if (blankCounter >= blanks.length) {
-          // if the blank is not in the repository (The content author has marked too many blanks in the text, but not entered correct answers.)
-          html = html.replace(ClozeLoader.normalizedBlankMarker, "<span></span>");
+          // The content author has marked too many blanks in the text, but not entered correct answers.
+          html = html.replace(ClozeLoader.normalizedBlankMarker, '<span></span>');
         }
         else {
           const blank = blanks[blankCounter];
@@ -103,24 +106,26 @@ export class ClozeLoader {
     return html;
   }
 
-   /**
+  /**
    * Iterates through all blanks and calls their linkHighlightIdsToObjects(...).
    * @param orderedAllElementsList
    * @param highlightInstances
    * @param blanksInstances
    */
-  private static linkHighlightsObjects(orderedAllElementsList: ClozeElement[], highlightInstances: Highlight[], blanksInstances: Blank[]): void {
+  private static linkHighlightsObjects(
+    orderedAllElementsList: ClozeElement[], highlightInstances: Highlight[], blanksInstances: Blank[]
+  ): void {
     for (const blank of blanksInstances) {
       const nextBlankIndexInArray = orderedAllElementsList.indexOf(blank);
       const highlightsBeforeBlank = orderedAllElementsList
         .slice(0, nextBlankIndexInArray)
-        .filter(e => e.type === ClozeElementType.Highlight)
-        .map(e => e as Highlight)
+        .filter((e) => e.type === ClozeElementType.Highlight)
+        .map((e) => e as Highlight)
         .reverse();
       const highlightsAfterBlank = orderedAllElementsList
         .slice(nextBlankIndexInArray + 1)
-        .filter(e => e.type === ClozeElementType.Highlight)
-        .map(e => e as Highlight);
+        .filter((e) => e.type === ClozeElementType.Highlight)
+        .map((e) => e as Highlight);
       BlankLoader.instance.linkHighlightIdToObject(blank, highlightsBeforeBlank, highlightsAfterBlank);
     }
   }

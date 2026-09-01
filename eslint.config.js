@@ -6,18 +6,18 @@ import { defineConfig } from 'eslint/config';
 import tseslint from 'typescript-eslint';
 
 export default defineConfig(
+  {
+    ignores: ['dist/**', 'node_modules/**', '**/*.json.d.ts'],
+  },
+
   eslint.configs.recommended,
   tseslint.configs.recommended,
   eslintConfigNdlaH5P.configs['flat/recommended'],
-  [
-    {
-      ignores: ['dist/', 'node_modules/', '*.json.d.ts'],
+
+  {
+    files: ['**/*.ts', '**/*.tsx'],
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
     },
-    {
-      files: ['**/*.ts', '**/*.tsx'],
-      rules: {
-        '@typescript-eslint/no-explicit-any': 'off',
-      }
-    }
-  ]
+  }
 );

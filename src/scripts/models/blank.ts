@@ -4,8 +4,8 @@ import { Answer, Correctness } from './answer';
 import { Message } from './message';
 import { MessageType, ClozeType, SelectAlternatives } from './enums';
 import { H5PLocalization, LocalizationLabels } from '../services/localization';
-import { ISettings } from "../services/settings";
-import { getLongestString, shuffleArray } from "../../lib/helpers";
+import { ISettings } from '../services/settings';
+import { getLongestString, shuffleArray } from '../../lib/helpers';
 import * as jsdiff from 'diff';
 
 export class Blank extends ClozeElement {
@@ -32,17 +32,22 @@ export class Blank extends ClozeElement {
   speechBubble: any;
 
   /**
-   * Add incorrect answers after initializing the object. Call finishInitialization()
-   * when done.
+   * Add incorrect answers after initializing the object. Call finishInitialization() when done.
    * @param  {ISettings} settings
    * @param  {string} id
    * @param  {string} correctText?
    * @param  {string} hintText?
    */
-  constructor(private settings: ISettings, private localization: H5PLocalization, private jquery: JQueryStatic, private messageService: MessageService, id: string) {
+  constructor(
+    private settings: ISettings,
+    private localization: H5PLocalization,
+    private jquery: JQueryStatic,
+    private messageService: MessageService,
+    id: string
+  ) {
     super();
 
-    this.enteredText = "";
+    this.enteredText = '';
     this.correctAnswers = [];
     this.incorrectAnswers = [];
     this.choices = [];
@@ -55,7 +60,10 @@ export class Blank extends ClozeElement {
   * Call this method when all incorrect answers have been added.
   */
   public finishInitialization(): void {
-    if (this.settings.clozeType === ClozeType.Select && this.settings.selectAlternatives === SelectAlternatives.Alternatives) {
+    if (
+      this.settings.clozeType === ClozeType.Select &&
+      this.settings.selectAlternatives === SelectAlternatives.Alternatives
+    ) {
       this.loadChoicesFromOwnAlternatives();
     }
     this.calculateMinTextLength();
@@ -75,7 +83,7 @@ export class Blank extends ClozeElement {
 
   public setHint(message: Message) {
     this.hint = message;
-    this.hasHint = this.hint.text !== "";
+    this.hasHint = this.hint.text !== '';
   }
 
   /**
@@ -125,7 +133,9 @@ export class Blank extends ClozeElement {
   private loadChoicesFromOwnAlternatives(): string[] {
     if (this.defaultOrder) {
       this.choices = this.defaultOrder
-        .reduce((choices, choice) => { return [...choices, ...choice.split('/')]; }, []);
+        .reduce((choices, choice) => {
+          return [...choices, ...choice.split('/')];
+        }, []);
     }
     else {
       this.choices = [];
@@ -145,7 +155,7 @@ export class Blank extends ClozeElement {
     if (this.settings.randomAnswers) {
       this.choices = shuffleArray(this.choices);
     }
-    this.choices.unshift("");
+    this.choices.unshift('');
 
     return this.choices;
   }
@@ -181,13 +191,14 @@ export class Blank extends ClozeElement {
     for (let x = 0; x < leftOverChoices && x < otherChoices.length; x++) {
       if (ownChoices.indexOf(otherChoices[x]) >= 0) {
         leftOverChoices++;
-      } else {
+      }
+      else {
         ownChoices.push(otherChoices[x]);
       }
     }
 
     this.choices = shuffleArray(ownChoices);
-    this.choices.unshift("");
+    this.choices.unshift('');
 
     return this.choices;
   }
@@ -196,8 +207,8 @@ export class Blank extends ClozeElement {
   * Clears the blank from all entered text and hides popups.
   */
   public reset() {
-    this.enteredText = "";
-    this.lastCheckedText = "";
+    this.enteredText = '';
+    this.lastCheckedText = '';
     this.removeTooltip();
     this.setAnswerState(MessageType.None);
     this.hasPendingFeedback = false;
@@ -222,7 +233,7 @@ export class Blank extends ClozeElement {
     }
     if (this.settings.clozeType === ClozeType.Select) {
       this.setAnswerState(MessageType.None);
-      this.lastCheckedText = "";
+      this.lastCheckedText = '';
     }
   }
 
@@ -254,17 +265,17 @@ export class Blank extends ClozeElement {
   }
 
   private getSpellingMistakeMessage(expectedText: string, enteredText: string): string {
-    let message = this.localization.getTextFromLabel(LocalizationLabels.typoMessage)
+    let message = this.localization.getTextFromLabel(LocalizationLabels.typoMessage);
 
     const diff = jsdiff.diffChars(expectedText, enteredText, { ignoreCase: !this.settings.caseSensitive });
 
-    const mistakeSpan = this.jquery("<span/>", { "class": "spelling-mistake" });
+    const mistakeSpan = this.jquery('<span/>', { 'class': 'spelling-mistake' });
     for (let index = 0; index < diff.length; index++) {
       const part = diff[index];
       let spanClass = '';
       if (part.removed) {
         if (index === diff.length - 1 || !diff[index + 1].added) {
-          part.value = part.value.replace(/./g, "_");
+          part.value = part.value.replace(/./g, '_');
           spanClass = 'missing-character';
         }
         else {
@@ -275,11 +286,11 @@ export class Blank extends ClozeElement {
         spanClass = 'mistaken-character';
       }
 
-      const span = this.jquery("<span/>", { "class": spanClass, "html": part.value.replace(" ", "&nbsp;") });
+      const span = this.jquery('<span/>', { 'class': spanClass, 'html': part.value.replace(' ', '&nbsp;') });
       mistakeSpan.append(span);
     }
 
-    message = message.replace("@mistake", this.jquery("<span/>").append(mistakeSpan).html());
+    message = message.replace('@mistake', this.jquery('<span/>').append(mistakeSpan).html());
     return message;
   }
 
@@ -295,10 +306,19 @@ export class Blank extends ClozeElement {
     this.hasPendingFeedback = false;
     this.removeTooltip();
 
-    const exactCorrectMatches = this.correctAnswers.map(answer => answer.evaluateAttempt(this.enteredText)).filter(evaluation => evaluation.correctness === Correctness.ExactMatch).sort(evaluation => evaluation.characterDifferenceCount);
-    const closeCorrectMatches = this.correctAnswers.map(answer => answer.evaluateAttempt(this.enteredText)).filter(evaluation => evaluation.correctness === Correctness.CloseMatch).sort(evaluation => evaluation.characterDifferenceCount);
-    const exactIncorrectMatches = this.incorrectAnswers.map(answer => answer.evaluateAttempt(this.enteredText)).filter(evaluation => evaluation.correctness === Correctness.ExactMatch).sort(evaluation => evaluation.characterDifferenceCount);
-    const closeIncorrectMatches = this.incorrectAnswers.map(answer => answer.evaluateAttempt(this.enteredText)).filter(evaluation => evaluation.correctness === Correctness.CloseMatch).sort(evaluation => evaluation.characterDifferenceCount);
+    const getMatches = (answers: Answer[], correctness: Correctness) => {
+      return answers
+        .map((answer) => answer.evaluateAttempt(this.enteredText))
+        .filter((evaluation) => evaluation.correctness === correctness)
+        .sort(
+          (a, b) => a.characterDifferenceCount - b.characterDifferenceCount
+        );
+    };
+
+    const exactCorrectMatches = getMatches(this.correctAnswers, Correctness.ExactMatch);
+    const closeCorrectMatches = getMatches(this.correctAnswers, Correctness.CloseMatch);
+    const exactIncorrectMatches = getMatches(this.incorrectAnswers, Correctness.ExactMatch);
+    const closeIncorrectMatches = getMatches(this.incorrectAnswers, Correctness.CloseMatch);
 
     if (exactCorrectMatches.length > 0) {
       this.setAnswerState(MessageType.Correct);
@@ -316,7 +336,12 @@ export class Blank extends ClozeElement {
 
     if (closeCorrectMatches.length > 0) {
       if (this.settings.warnSpellingErrors) {
-        this.displayTooltip(this.getSpellingMistakeMessage(closeCorrectMatches[0].usedAlternative, this.enteredText), MessageType.Retry, surpressTooltips);
+        this.displayTooltip(
+          this.getSpellingMistakeMessage(closeCorrectMatches[0].usedAlternative,
+            this.enteredText),
+          MessageType.Retry,
+          surpressTooltips
+        );
         this.setAnswerState(MessageType.Retry);
         return;
       }
@@ -333,7 +358,7 @@ export class Blank extends ClozeElement {
       return;
     }
 
-    const alwaysApplyingAnswers = this.incorrectAnswers.filter(a => a.appliesAlways);
+    const alwaysApplyingAnswers = this.incorrectAnswers.filter((a) => a.appliesAlways);
     if (alwaysApplyingAnswers && alwaysApplyingAnswers.length > 0) {
       this.showErrorTooltip(alwaysApplyingAnswers[0], surpressTooltips);
     }
@@ -343,7 +368,7 @@ export class Blank extends ClozeElement {
 
   public onTyped(): void {
     this.setAnswerState(MessageType.None);
-    this.lastCheckedText = "";
+    this.lastCheckedText = '';
     this.removeTooltip();
   }
 
@@ -396,7 +421,7 @@ export class Blank extends ClozeElement {
       return;
 
     this.removeTooltip();
-    if (this.hint && this.hint.text !== "") {
+    if (this.hint && this.hint.text !== '') {
       this.displayTooltip(this.hint.text, MessageType.Retry, false);
       if (this.hint.highlightedElement) {
         this.hint.highlightedElement.isHighlighted = true;

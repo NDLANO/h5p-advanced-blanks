@@ -9,7 +9,7 @@ export class MessageService {
   }
 
   public show(elementId: string, message: string, blank: Blank) {
-    const elements = this.jQuery("#" + elementId);
+    const elements = this.jQuery('#' + elementId);
 
     if (elements.length > 0) {
       this.speechBubble = new H5P.JoubelSpeechBubble(elements, message);

@@ -1,4 +1,4 @@
-﻿import { ClozeType, SelectAlternatives } from "../models/enums";
+﻿import { ClozeType, SelectAlternatives } from '../models/enums';
 
 export interface ISettings {
   clozeType: ClozeType;
@@ -45,7 +45,8 @@ export class H5PSettings implements ISettings {
 
     if (h5pConfigData.behaviour.selectAlternatives === 'all') {
       this.selectAlternatives = SelectAlternatives.All;
-    } else if (h5pConfigData.behaviour.selectAlternatives === 'alternatives') {
+    }
+    else if (h5pConfigData.behaviour.selectAlternatives === 'alternatives') {
       this.selectAlternatives = SelectAlternatives.Alternatives;
     }
     else {
@@ -58,16 +59,13 @@ export class H5PSettings implements ISettings {
     this.enableCheckButton = h5pConfigData.behaviour.enableCheckButton;
     this.autoCheck = h5pConfigData.behaviour.autoCheck;
     this.caseSensitive = h5pConfigData.behaviour.caseSensitive;
-    this.warnSpellingErrors = h5pConfigData.behaviour.spellingErrorBehaviour === "warn";
-    this.acceptSpellingErrors = h5pConfigData.behaviour.spellingErrorBehaviour === "accept";
+    this.warnSpellingErrors = h5pConfigData.behaviour.spellingErrorBehaviour === 'warn';
+    this.acceptSpellingErrors = h5pConfigData.behaviour.spellingErrorBehaviour === 'accept';
     this.showSolutionsRequiresInput = h5pConfigData.behaviour.showSolutionsRequiresInput;
     this.confirmCheckDialog = h5pConfigData.behaviour.confirmCheckDialog;
     this.confirmRetryDialog = h5pConfigData.behaviour.confirmRetryDialog;
     this.disableImageZooming = h5pConfigData.media.disableImageZooming;
     this.randomAnswers = h5pConfigData.behaviour.randomAnswers;
-
-    console.log(this.randomAnswers);
-
 
     this.enforceLogic();
   }
@@ -79,7 +77,8 @@ export class H5PSettings implements ISettings {
     if (this.clozeType === ClozeType.Type) {
       this.selectAlternatives = SelectAlternatives.All;
       this.selectAlternativeRestriction = 0;
-    } else {
+    }
+    else {
       if (this.selectAlternativeRestriction === SelectAlternatives.Alternatives) {
         this.selectAlternativeRestriction = 0;
       }

@@ -17,7 +17,7 @@ export class Evaluation {
   constructor(public usedAnswer: Answer) {
     this.correctness = Correctness.NoMatch;
     this.characterDifferenceCount = 0;
-    this.usedAlternative = "";
+    this.usedAlternative = '';
   }
 }
 
@@ -41,15 +41,20 @@ export class Answer {
   appliesAlways: boolean;
 
   /**
-   * @param  {string} answerText - The expected answer. Alternatives are separated by | or ; . (e.g. "Alternative 1|Alternative 2|Alternative 3|..."  -or- "Alternative 1;Alternative 2;Alternative 3")
+   * @param  {string} answerText - The expected answer. Alternatives are separated by | or ; .
+   *                               (e.g. "Alternative 1|Alternative 2|Alternative 3|..." -or-
+   *                               "Alternative 1;Alternative 2;Alternative 3")
    * @param  {string} reaction - The tooltip that should be displayed. Format: Tooltip Text;!!-1!! !!+1!!
    */
-  constructor(answerText: string, reaction: string, showHighlight: boolean, highlight: number, private settings: ISettings) {
-    this.alternatives = answerText.split(/\//).map(s => s.trim());
+  constructor(
+    answerText: string, reaction: string, showHighlight: boolean, highlight: number, private settings: ISettings
+  ) {
+    this.alternatives = answerText.split(/\//).map((s) => s.trim());
     this.message = new Message(reaction, showHighlight, highlight);
-    if (answerText.trim() === "") {
+    if (answerText.trim() === '') {
       this.appliesAlways = true;
-    } else {
+    }
+    else {
       this.appliesAlways = false;
     }
   }
@@ -72,35 +77,37 @@ export class Answer {
 
   private cleanString(text: string): string {
     text = text.trim();
-    return text.replace(/\s{2,}/g, " ");
+    return text.replace(/\s{2,}/g, ' ');
   }
   /**
-   * Looks through the diff and checks how many character change operations are needed to turn one string into the other. Should return the same results as the Levensthein distance.
+   * Look through the diff and checks how many character change operations are needed to turn one string into the other.
+   * Should return the same results as the Levensthein distance.
    * @param  {[{added?:boolean, boolean: removed?, string: value}]} diff - as returned by jsdiff
-   * @returns number - the count of changes (replace, add, delete) needed to change the text from one string to the other
+   * @returns number - Count of changes (replace, add, delete) needed to change the text from one string to the other
    */
   private getChangesCountFromDiff(diff: jsdiff.Change[]): number {
     let totalChangesCount = 0;
-    let lastType = "";
+    let lastType = '';
     let lastCount = 0;
 
     for (const element of diff) {
       if (element.removed) {
         totalChangesCount += element.value.length;
-        lastType = "removed";
+        lastType = 'removed';
       }
       else if (element.added) {
-        if (lastType === "removed") {
+        if (lastType === 'removed') {
           if (lastCount < element.value.length) {
             totalChangesCount += element.value.length - lastCount;
           }
-        } else {
+        }
+        else {
           totalChangesCount += element.value.length;
         }
-        lastType = "added";
+        lastType = 'added';
       }
       else {
-        lastType = "same";
+        lastType = 'same';
       }
       lastCount = element.value.length;
     }

@@ -9,7 +9,7 @@ export function createPermutations(list: any[][]): any[][] {
     for (const sublistObject of currentSublist) {
       for (const o of output) {
         const newList = o.slice();
-        newList.push(sublistObject)
+        newList.push(sublistObject);
         newOutput.push(newList);
       }
     }

@@ -1,5 +1,5 @@
-﻿import { Highlight } from "./highlight";
-import { Blank } from "./blank";
+﻿import { Highlight } from './highlight';
+import { Blank } from './blank';
 
 /**
  * Represents the cloze. Instantiate with static createCloze().
@@ -16,7 +16,7 @@ export class Cloze {
    * @returns boolean
    */
   public get isSolved(): boolean {
-    return this.blanks.every(b => b.isCorrect === true);
+    return this.blanks.every((b) => b.isCorrect === true);
   }
 
 

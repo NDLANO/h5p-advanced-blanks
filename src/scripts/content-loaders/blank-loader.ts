@@ -4,15 +4,22 @@ import { Answer } from '../models/answer';
 import { Blank } from '../models/blank';
 import { H5PLocalization } from '../services/localization';
 import { ISettings } from '../services/settings';
-import { Message } from "../models/message";
+import { Message } from '../models/message';
 import { Snippet } from '../models/snippet';
 
 export class BlankLoader {
 
-  private constructor(private settings: ISettings, private localization: H5PLocalization, private jquery: JQueryStatic, private messageService: MessageService) { }
+  private constructor(
+    private settings: ISettings,
+    private localization: H5PLocalization,
+    private jquery: JQueryStatic,
+    private messageService: MessageService
+  ) {}
 
   private static _instance: BlankLoader;
-  public static initialize(settings: ISettings, localization: H5PLocalization, jquery: JQueryStatic, messageService: MessageService): BlankLoader {
+  public static initialize(
+    settings: ISettings, localization: H5PLocalization, jquery: JQueryStatic, messageService: MessageService
+  ): BlankLoader {
     this._instance = new BlankLoader(settings, localization, jquery, messageService);
     return this._instance;
   }
@@ -21,7 +28,7 @@ export class BlankLoader {
     if (this._instance)
       return this._instance;
 
-    throw "BlankLoader must be initialized before use.";
+    throw 'BlankLoader must be initialized before use.';
   }
 
   private decodeHtml(html: string): string {
@@ -30,22 +37,29 @@ export class BlankLoader {
     return elem.value;
   }
 
-  public createBlank(id: string, correctText: string, hintText: string, incorrectAnswers: any[], defaultOrder: string[]): Blank {
-    const blank = new Blank(this.settings, this.localization, this.jquery, this.messageService, id)
+  public createBlank(
+    id: string, correctText: string, hintText: string, incorrectAnswers: any[], defaultOrder: string[]
+  ): Blank {
+    const blank = new Blank(this.settings, this.localization, this.jquery, this.messageService, id);
     if (correctText) {
       correctText = this.decodeHtml(correctText);
-      blank.addCorrectAnswer(new Answer(correctText, "", false, 0, this.settings));
+      blank.addCorrectAnswer(new Answer(correctText, '', false, 0, this.settings));
     }
-    blank.setHint(new Message(hintText ? hintText : "", false, 0));
+    blank.setHint(new Message(hintText ? hintText : '', false, 0));
 
     if (incorrectAnswers) {
       for (const h5pIncorrectAnswer of incorrectAnswers) {
-        blank.addIncorrectAnswer(this.decodeHtml(h5pIncorrectAnswer.incorrectAnswerText), h5pIncorrectAnswer.incorrectAnswerFeedback, h5pIncorrectAnswer.showHighlight, h5pIncorrectAnswer.highlight);
+        blank.addIncorrectAnswer(
+          this.decodeHtml(h5pIncorrectAnswer.incorrectAnswerText),
+          h5pIncorrectAnswer.incorrectAnswerFeedback,
+          h5pIncorrectAnswer.showHighlight,
+          h5pIncorrectAnswer.highlight
+        );
       }
     }
 
     if (defaultOrder) {
-      blank.setDefaultOrder(defaultOrder.map(text => this.decodeHtml(text)));
+      blank.setDefaultOrder(defaultOrder.map((text) => this.decodeHtml(text)));
     }
 
     return blank;
@@ -53,21 +67,21 @@ export class BlankLoader {
 
   public replaceSnippets(blank: Blank, snippets: Snippet[]) {
     blank.correctAnswers.concat(blank.incorrectAnswers)
-      .forEach(answer => answer.message.text = this.getStringWithSnippets(answer.message.text, snippets));
+      .forEach((answer) => answer.message.text = this.getStringWithSnippets(answer.message.text, snippets));
     blank.hint.text = this.getStringWithSnippets(blank.hint.text, snippets);
   }
 
   private getStringWithSnippets(text: string, snippets: Snippet[]): string {
     if (!text || text === undefined)
-      return "";
+      return '';
 
-    if(!snippets)
-      return text;    
+    if (!snippets)
+      return text;
 
     for (const snippet of snippets) {
-      if (snippet.name === undefined || snippet.name === "" || snippet.text === undefined || snippet.text === "")
+      if (snippet.name === undefined || snippet.name === '' || snippet.text === undefined || snippet.text === '')
         continue;
-      text = text.replace("@" + snippet.name, snippet.text);
+      text = text.replace('@' + snippet.name, snippet.text);
     }
 
     return text;
@@ -89,5 +103,4 @@ export class BlankLoader {
 
     blank.hint.linkHighlight(highlightsBefore, highlightsAfter);
   }
-
 }

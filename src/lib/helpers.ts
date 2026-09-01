@@ -1,5 +1,5 @@
 export function getLongestString(strings: string[]): string {
-  return strings.reduce((prev, current) => current.length > prev.length ? current : prev, "");
+  return strings.reduce((prev, current) => current.length > prev.length ? current : prev, '');
 }
 
 export function shuffleArray(array: any[]) {

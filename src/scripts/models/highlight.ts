@@ -4,15 +4,15 @@
  * Represents a highlight in the cloze.
  */
 export class Highlight extends ClozeElement {
-	text: string;
-	isHighlighted: boolean;
-	id: string;
+  text: string;
+  isHighlighted: boolean;
+  id: string;
 
-	constructor(text: string, id: string) {
-		super();
-		this.type = ClozeElementType.Highlight;
-		this.text = text;
-		this.id = id;
-		this.isHighlighted = false;
-	}
+  constructor(text: string, id: string) {
+    super();
+    this.type = ClozeElementType.Highlight;
+    this.text = text;
+    this.id = id;
+    this.isHighlighted = false;
+  }
 }

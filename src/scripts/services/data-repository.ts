@@ -1,8 +1,8 @@
 ﻿import { BlankLoader } from '../content-loaders/blank-loader';
-import { Blank } from "../models/blank";
-import { Snippet } from "../models/snippet";
-import { ISettings } from "../services/settings";
-import { H5PLocalization } from "./localization";
+import { Blank } from '../models/blank';
+import { Snippet } from '../models/snippet';
+import { ISettings } from '../services/settings';
+import { H5PLocalization } from './localization';
 import { Unrwapper } from '../helpers/unwrapper';
 
 export interface IDataRepository {
@@ -33,7 +33,7 @@ export class H5PDataRepository implements IDataRepository {
 
   // TODO: remove or implement
   getFeedbackText(): string {
-    return "";
+    return '';
   }
 
   getMedia(): any {
@@ -53,21 +53,21 @@ export class H5PDataRepository implements IDataRepository {
     for (let i = 0; i < this.h5pConfigData.content.blanksList.length; i++) {
       const h5pBlank = this.h5pConfigData.content.blanksList[i];
 
-      const correctAnswer = h5pBlank.filter(alternative => alternative.isCorrect).shift() || {};
-      if (correctAnswer.text === "" || correctAnswer.text === undefined)
+      const correctAnswer = h5pBlank.filter((alternative) => alternative.isCorrect).shift() || {};
+      if (correctAnswer.text === '' || correctAnswer.text === undefined)
         continue;
 
-      const defaultOrder = h5pBlank.map(alternative => alternative.text);
+      const defaultOrder = h5pBlank.map((alternative) => alternative.text);
       const incorrectAnswers = h5pBlank
-        .filter(alternative => !alternative.isCorrect)
-        .map(answer => ({
+        .filter((alternative) => !alternative.isCorrect)
+        .map((answer) => ({
           incorrectAnswerText: answer.text,
           incorrectAnswerFeedback: answer.optionsIncorrect.incorrectAnswerFeedback,
           showHighlight: answer.optionsIncorrect.showHighlight,
           highlight: answer.optionsIncorrect.highlight
         }));
 
-      const blank = BlankLoader.instance.createBlank("cloze-" + H5P.createUUID() + "-" + i,
+      const blank = BlankLoader.instance.createBlank('cloze-' + H5P.createUUID() + '-' + i,
         correctAnswer.text, correctAnswer.hint, incorrectAnswers, defaultOrder);
 
       blank.finishInitialization();

@@ -1,18 +1,18 @@
 ﻿export enum LocalizationLabels {
-  showSolutionButton = "showSolutions",
-  retryButton = "tryAgain",
-  checkAllButton = "checkAnswer",
-  submitAllButton = "submitAnswer",
-  notFilledOutWarning = "notFilledOut",
-  tipButton ="tipLabel",
-  typoMessage = "spellingMistakeWarning",
-  scoreBarLabel = "scoreBarLabel"
+  showSolutionButton = 'showSolutions',
+  retryButton = 'tryAgain',
+  checkAllButton = 'checkAnswer',
+  submitAllButton = 'submitAnswer',
+  notFilledOutWarning = 'notFilledOut',
+  tipButton = 'tipLabel',
+  typoMessage = 'spellingMistakeWarning',
+  scoreBarLabel = 'scoreBarLabel'
 }
 
 export enum LocalizationStructures {
-  confirmCheck = "confirmCheck",
-  confirmRetry = "confirmRetry",
-  overallFeedback = "overallFeedback"
+  confirmCheck = 'confirmCheck',
+  confirmRetry = 'confirmRetry',
+  overallFeedback = 'overallFeedback'
 }
 
 /**

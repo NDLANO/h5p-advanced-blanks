@@ -1,13 +1,13 @@
 ﻿import { MessageService } from '../services/message-service';
 import { BlankLoader } from '../content-loaders/blank-loader';
 import { ClozeLoader } from '../content-loaders/cloze-loader';
-import { Cloze } from "../models/cloze";
-import { IDataRepository } from "../services/data-repository";
-import { ISettings } from "../services/settings";
-import { H5PLocalization } from "../services/localization";
-import { ClozeType, SelectAlternatives } from "../models/enums";
-import { Highlight } from "../models/highlight";
-import { Blank } from "../models/blank";
+import { Cloze } from '../models/cloze';
+import { IDataRepository } from '../services/data-repository';
+import { ISettings } from '../services/settings';
+import { H5PLocalization } from '../services/localization';
+import { ClozeType, SelectAlternatives } from '../models/enums';
+import { Highlight } from '../models/highlight';
+import { Blank } from '../models/blank';
 import { Correctness } from '../models/answer';
 
 import BlankView from '../views/blank-view';
@@ -57,7 +57,7 @@ export class ClozeController {
    * @return {boolean} True if there is at least one blank with more than one solution.
    */
   public get hasAlternatives(): boolean {
-    return this.cloze.blanks.some(b => b.correctAnswers[0].alternatives.length > 1);
+    return this.cloze.blanks.some((b) => b.correctAnswers[0].alternatives.length > 1);
   }
 
   public get currentScore(): number {
@@ -67,8 +67,8 @@ export class ClozeController {
 
       // Detect small mistakes
       const closeCorrectMatches = b.correctAnswers
-        .map(answer => answer.evaluateAttempt(b.enteredText))
-        .filter(evaluation => evaluation.correctness === Correctness.CloseMatch);
+        .map((answer) => answer.evaluateAttempt(b.enteredText))
+        .filter((evaluation) => evaluation.correctness === Correctness.CloseMatch);
       const similarAnswerGiven = this.settings.acceptSpellingErrors && closeCorrectMatches.length > 0;
 
       return score + ((notShowingSolution && (correctAnswerGiven || similarAnswerGiven)) ? 1 : 0);
@@ -79,7 +79,7 @@ export class ClozeController {
 
   public get allBlanksEntered() {
     if (this.cloze)
-      return this.cloze.blanks.every(blank => blank.isError || blank.isCorrect || blank.isRetry);
+      return this.cloze.blanks.every((blank) => blank.isError || blank.isCorrect || blank.isRetry);
     return false;
   }
 
@@ -90,17 +90,21 @@ export class ClozeController {
   public get isFilledOut() {
     if (!this.cloze || this.cloze.blanks.length === 0)
       return true;
-    return this.cloze.blanks.some(b => b.enteredText !== '');
+    return this.cloze.blanks.some((b) => b.enteredText !== '');
   }
 
   public get isFullyFilledOut() {
     if (!this.cloze || this.cloze.blanks.length === 0)
       return true;
-    return this.cloze.blanks.every(b => b.enteredText !== '');
+    return this.cloze.blanks.every((b) => b.enteredText !== '');
   }
 
-  constructor(private repository: IDataRepository, private settings: ISettings, private localization: H5PLocalization, private MessageService: MessageService) {
-  }
+  constructor(
+    private repository: IDataRepository,
+    private settings: ISettings,
+    private localization: H5PLocalization,
+    private MessageService: MessageService
+  ) {}
 
   /**
    * Sets up all blanks, the cloze itself and the views.
@@ -114,13 +118,13 @@ export class ClozeController {
 
     if (this.isSelectCloze && this.settings.selectAlternatives === SelectAlternatives.All) {
       for (const blank of blanks) {
-        const otherBlanks = blanks.filter(v => v !== blank);
+        const otherBlanks = blanks.filter((v) => v !== blank);
         blank.loadChoicesFromOtherBlanks(otherBlanks);
       }
     }
 
     const snippets = this.repository.getSnippets();
-    blanks.forEach(blank => BlankLoader.instance.replaceSnippets(blank, snippets));
+    blanks.forEach((blank) => BlankLoader.instance.replaceSnippets(blank, snippets));
 
     this.cloze = ClozeLoader.createCloze(this.repository.getClozeText(), blanks);
 
@@ -132,41 +136,41 @@ export class ClozeController {
   checkAll = () => {
     this.cloze.hideAllHighlights();
     for (const blank of this.cloze.blanks) {
-      if ((!blank.isCorrect) && blank.enteredText !== "")
+      if ((!blank.isCorrect) && blank.enteredText !== '')
         blank.evaluateAttempt(true, true);
     }
     this.refreshCloze();
     this.checkAndNotifyCompleteness();
-  }
+  };
 
   textTyped = (event, blank: Blank) => {
     blank.onTyped();
     if (this.onTyped)
       this.onTyped();
     this.refreshCloze();
-  }
+  };
 
   focus = (event, blank: Blank) => {
     blank.onFocused();
     this.refreshCloze();
-  }
+  };
 
   displayFeedback = (event, blank: Blank) => {
     blank.onDisplayFeedback();
     this.refreshCloze();
-  }
+  };
 
   showHint = (event, blank: Blank) => {
     this.cloze.hideAllHighlights();
     blank.showHint();
     this.refreshCloze();
-  }
+  };
 
   requestCloseTooltip = (event, blank: Blank) => {
     blank.removeTooltip();
     this.refreshCloze();
-    this.jquery.find("#" + blank.id).focus();
-  }
+    this.jquery.find('#' + blank.id).focus();
+  };
 
   checkBlank = (event, blank: Blank, cause: string) => {
     if ((cause === 'blur' || cause === 'change')) {
@@ -178,7 +182,7 @@ export class ClozeController {
     }
 
     if (this.settings.autoCheck) {
-      if (!blank.enteredText || blank.enteredText === "")
+      if (!blank.enteredText || blank.enteredText === '')
         return;
 
       this.cloze.hideAllHighlights();
@@ -200,26 +204,27 @@ export class ClozeController {
       }
 
       if (nextId)
-        this.jquery.find("#" + nextId).focus();
+        this.jquery.find('#' + nextId).focus();
     }
-  }
+  };
 
   reset = () => {
     this.cloze.reset();
     this.refreshCloze();
-  }
+  };
 
   showSolutions = () => {
     this.cloze.showSolutions();
     this.refreshCloze();
-  }
+  };
 
   private createAndAddContainers(addTo: HTMLElement): { cloze: HTMLDivElement } {
     const clozeContainerElement = document.createElement('div');
     clozeContainerElement.id = 'h5p-cloze-container';
     if (this.settings.clozeType === ClozeType.Select) {
       clozeContainerElement.className = 'h5p-advanced-blanks-select-mode';
-    } else {
+    }
+    else {
       clozeContainerElement.className = 'h5p-advanced-blanks-type-mode';
     }
     addTo.appendChild(clozeContainerElement);
@@ -291,7 +296,7 @@ export class ClozeController {
     }
 
     return false;
-  }
+  };
 
   public serializeCloze(): string[] {
     return this.cloze.serialize();

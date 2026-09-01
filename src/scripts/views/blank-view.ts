@@ -1,4 +1,4 @@
-import { Blank } from "../models/blank";
+import { Blank } from '../models/blank';
 
 type BlankCallbacks = {
   requestCloseTooltip: (event: Event, blank: Blank) => void;
@@ -131,14 +131,14 @@ export default class BlankView {
   }
 
   private buildNotificationButton(blank: Blank): HTMLButtonElement {
-      const notificationButton = document.createElement('button');
-      notificationButton.classList.add('h5p-notification');
-      notificationButton.addEventListener('click', (event) => {
-        this.callbacks.displayFeedback(event, blank);
-      });
-      notificationButton.innerHTML = ICONS.NOTIFICATION;
+    const notificationButton = document.createElement('button');
+    notificationButton.classList.add('h5p-notification');
+    notificationButton.addEventListener('click', (event) => {
+      this.callbacks.displayFeedback(event, blank);
+    });
+    notificationButton.innerHTML = ICONS.NOTIFICATION;
 
-      return notificationButton;
+    return notificationButton;
   }
 
   private createInputElement(blank: Blank): void {
@@ -205,7 +205,9 @@ export default class BlankView {
   private bindInputToBlank(blank: Blank, inputElement: HTMLInputElement | HTMLSelectElement): void {
     Object.defineProperty(blank, 'enteredText', {
       get: () => inputElement.value,
-      set: (value) => { inputElement.value = value; }
+      set: (value) => {
+        inputElement.value = value; 
+      }
     });
   }
 

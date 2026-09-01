@@ -1,8 +1,8 @@
 import { BlankLoader } from './content-loaders/blank-loader';
 import { H5PDataRepository, IDataRepository } from './services/data-repository';
 import { ClozeController } from './controllers/cloze-controller';
-import { H5PLocalization, LocalizationLabels, LocalizationStructures } from "./services/localization";
-import { ISettings, H5PSettings } from "./services/settings";
+import { H5PLocalization, LocalizationLabels, LocalizationStructures } from './services/localization';
+import { ISettings, H5PSettings } from './services/settings';
 import { MessageService } from './services/message-service';
 import { Unrwapper } from './helpers/unwrapper';
 import { XAPIActivityDefinition } from './models/xapi';
@@ -69,7 +69,9 @@ export default class AdvancedBlanks extends (H5P.Question as { new(): any; }) {
 
     this.settings = new H5PSettings(config);
     this.localization = new H5PLocalization(config);
-    this.repository = new H5PDataRepository(config, this.settings, this.localization, <JQueryStatic>this.jQuery, unwrapper);
+    this.repository = new H5PDataRepository(
+      config, this.settings, this.localization, <JQueryStatic> this.jQuery, unwrapper
+    );
     this.messageService = new MessageService(this.jQuery);
     BlankLoader.initialize(this.settings, this.localization, this.jQuery, this.messageService);
 
@@ -102,7 +104,7 @@ export default class AdvancedBlanks extends (H5P.Question as { new(): any; }) {
             this.onCheckAnswer();
           this.toggleButtonVisibility(this.state);
         }
-      }
+      };
     })(this.attach);
   }
 
@@ -117,11 +119,11 @@ export default class AdvancedBlanks extends (H5P.Question as { new(): any; }) {
       this.showFeedback();
     }
     else {
-      this.setFeedback("", score, maxScore);
+      this.setFeedback('', score, maxScore);
     }
     this.transitionState();
     this.toggleButtonVisibility(this.state);
-  }
+  };
 
   private onSolved() {
 
@@ -133,14 +135,14 @@ export default class AdvancedBlanks extends (H5P.Question as { new(): any; }) {
       this.toggleButtonVisibility(this.state);
     }
     this.answered = true;
-  }
+  };
 
   private onAutoChecked = () => {
     this.triggerXAPI('interacted');
     if (this.clozeController.isFullyFilledOut) {
       this.triggerXAPIAnswered();
     }
-  }
+  };
 
   /**
    * Called by H5P.Question.attach(). Creates all content elements and registers them
@@ -150,12 +152,12 @@ export default class AdvancedBlanks extends (H5P.Question as { new(): any; }) {
     this.registerMedia();
     this.setIntroduction(this.repository.getTaskDescription());
 
-    this.container = this.jQuery("<div/>", { "class": "h5p-advanced-blanks" });
+    this.container = this.jQuery('<div/>', { 'class': 'h5p-advanced-blanks' });
     this.setContent(this.container);
     this.registerButtons();
 
     this.moveToState(States.ongoing);
-  }
+  };
 
   /**
    * @returns JQuery - The outer h5p container. The library can add dialogues to this
@@ -210,15 +212,15 @@ export default class AdvancedBlanks extends (H5P.Question as { new(): any; }) {
       // Check answer button
       this.addButton('check-answer', this.localization.getTextFromLabel(LocalizationLabels.checkAllButton),
         this.onCheckAnswer, true, {}, {
-        confirmationDialog: {
-          enable: this.settings.confirmCheckDialog,
-          l10n: this.localization.getObjectForStructure(LocalizationStructures.confirmCheck),
-          instance: this,
-          $parentElement: $container,
-        },
-        contentData: this.contentData,
-        textIfSubmitting: this.localization.getTextFromLabel(LocalizationLabels.submitAllButton),
-      });
+          confirmationDialog: {
+            enable: this.settings.confirmCheckDialog,
+            l10n: this.localization.getObjectForStructure(LocalizationStructures.confirmCheck),
+            instance: this,
+            $parentElement: $container,
+          },
+          contentData: this.contentData,
+          textIfSubmitting: this.localization.getTextFromLabel(LocalizationLabels.submitAllButton),
+        });
     }
 
     // Show solution button
@@ -229,13 +231,13 @@ export default class AdvancedBlanks extends (H5P.Question as { new(): any; }) {
     if (this.settings.enableRetry === true) {
       this.addButton('try-again', this.localization.getTextFromLabel(LocalizationLabels.retryButton),
         this.onRetry, true, {}, {
-        confirmationDialog: {
-          enable: this.settings.confirmRetryDialog,
-          l10n: this.localization.getObjectForStructure(LocalizationStructures.confirmRetry),
-          instance: this,
-          $parentElement: $container
-        }
-      });
+          confirmationDialog: {
+            enable: this.settings.confirmRetryDialog,
+            l10n: this.localization.getObjectForStructure(LocalizationStructures.confirmRetry),
+            instance: this,
+            $parentElement: $container
+          }
+        });
     }
   }
 
@@ -252,19 +254,19 @@ export default class AdvancedBlanks extends (H5P.Question as { new(): any; }) {
     this.showFeedback();
 
     this.toggleButtonVisibility(this.state);
-  }
+  };
 
   private transitionState = () => {
     if (this.clozeController.isSolved) {
       this.moveToState(States.finished);
     }
-  }
+  };
 
   private onShowSolution = () => {
     this.moveToState(States.showingSolutions);
     this.clozeController.showSolutions();
     this.showFeedback();
-  }
+  };
 
   private onRetry = () => {
     this.removeFeedback();
@@ -273,11 +275,20 @@ export default class AdvancedBlanks extends (H5P.Question as { new(): any; }) {
     this.moveToState(States.ongoing);
     // Reset timer
     this.setActivityStarted(true);
-  }
+  };
 
   private showFeedback() {
-    const scoreText = H5P.Question.determineOverallFeedback(this.localization.getObjectForStructure(LocalizationStructures.overallFeedback), this.clozeController.currentScore / this.clozeController.maxScore).replace('@score', this.clozeController.currentScore).replace('@total', this.clozeController.maxScore);
-    this.setFeedback(scoreText, this.clozeController.currentScore, this.clozeController.maxScore, this.localization.getTextFromLabel(LocalizationLabels.scoreBarLabel));
+    const scoreText = H5P.Question.determineOverallFeedback(
+      this.localization.getObjectForStructure(LocalizationStructures.overallFeedback),
+      this.clozeController.currentScore / this.clozeController.maxScore
+    ).replace('@score', this.clozeController.currentScore).replace('@total', this.clozeController.maxScore);
+
+    this.setFeedback(
+      scoreText,
+      this.clozeController.currentScore,
+      this.clozeController.maxScore,
+      this.localization.getTextFromLabel(LocalizationLabels.scoreBarLabel)
+    );
   }
 
   /**
@@ -302,7 +313,10 @@ export default class AdvancedBlanks extends (H5P.Question as { new(): any; }) {
       }
     }
 
-    if (this.settings.enableRetry && (state === States.checking || state === States.finished || state === States.showingSolutions)) {
+    if (
+      this.settings.enableRetry &&
+      (state === States.checking || state === States.finished || state === States.showingSolutions)
+    ) {
       this.showButton('try-again');
     }
     else {
@@ -343,24 +357,24 @@ export default class AdvancedBlanks extends (H5P.Question as { new(): any; }) {
    ****************************************/
   public getAnswerGiven = (): boolean => {
     return this.answered || this.clozeController.maxScore === 0;
-  }
+  };
 
   public getScore = (): number => {
     return this.clozeController.currentScore;
-  }
+  };
 
   public getMaxScore = (): number => {
     return this.clozeController.maxScore;
-  }
+  };
 
   public showSolutions = () => {
     this.onShowSolution();
     this.moveToState(States.showingSolutionsEmbedded);
-  }
+  };
 
   public resetTask = () => {
     this.onRetry();
-  }
+  };
 
   /***
    * XApi implementation
@@ -401,11 +415,13 @@ export default class AdvancedBlanks extends (H5P.Question as { new(): any; }) {
     const definition = new XAPIActivityDefinition();
 
     definition.description = {
-      'en-US': '<p>' + this.repository.getTaskDescription() + '</p>' + this.repository.getClozeText().replace(/__(_)+/g, '__________').replace(/!!/g, '')
+      'en-US': '<p>' + this.repository.getTaskDescription() + '</p>' +
+      this.repository.getClozeText().replace(/__(_)+/g, '__________').replace(/!!/g, '')
     };
 
     definition.type = 'http://adlnet.gov/expapi/activities/cmi.interaction';
-    definition.interactionType = 'fill-in'; // We use the 'fill-in' type even in select mode, as the xAPI format for selections doesn't really cater for sequences.
+    // We use the 'fill-in' type even in select mode, as the xAPI format for selections doesn't cater for sequences.
+    definition.interactionType = 'fill-in';
 
     const correctResponsesPatternPrefix = '{case_matters=' + this.settings.caseSensitive + '}';
 
