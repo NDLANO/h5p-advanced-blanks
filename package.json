@@ -5,7 +5,7 @@
   "scripts": {
     "build": "webpack --mode=production",
     "watch": "webpack --mode=development --watch",
-    "lint": "eslint './src/**/*'"
+    "lint": "eslint './src/**/*.ts'"
   },
   "browserslist": [
     "> 0.5% and last 3 versions, Firefox ESR and not dead"

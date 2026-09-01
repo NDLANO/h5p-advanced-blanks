@@ -37,24 +37,23 @@
           ],
           "field": {
             "label": "Hueco",
-            "fields": [
-              {
-                "label": "Respuesta correcta",
-                "description": "Puede separar respuestas alternas con una diagonal (/)."
-              },
-              {
-                "label": "Pista"
-              },
-              {
-                "label": "Respuestas incorrectas",
-                "entity": "respuesta incorrecta",
-                "field": {
-                  "label": "Respuesta incorrecta",
-                  "description": "Puede separar respuestas alternas con una diagonal (/).",
+            "entity": "alternative",
+            "field": {
+              "label": "Hueco",
+              "fields": [
+                {
+                  "label": "Texto",
+                  "description": "Puede separar respuestas alternas con una diagonal (/)."
+                },
+                {
+                  "label": "Respuesta correcta"
+                },
+                {
+                  "label": "Pista"
+                },
+                {
+                  "label": "Opciones para respuestas incorrectas",
                   "fields": [
-                    {
-                      "label": "Texto de respuesta incorrecta"
-                    },
                     {
                       "label": "Retroalimentación",
                       "description": "La retroalimentación debería ayudar al usuario a encontrar la respuesta correcta y estar idealmente apropiada para la respuesta que el usuario ha ingresado."
@@ -88,8 +87,8 @@
                     }
                   ]
                 }
-              }
-            ]
+              ]
+            }
           }
         }
       ]
@@ -169,6 +168,9 @@
               "label": "Las respuestas correctas de todos los otros huecos"
             }
           ]
+        },
+        {
+          "label": "Randomizar opciones de respuesta"
         },
         {
           "label": "Número máximo de alternativas de otros huecos ofrecidos para selección",

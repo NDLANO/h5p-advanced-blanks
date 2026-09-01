@@ -15,6 +15,7 @@ export class Blank extends ClozeElement {
   hint: Message;
   id: string;
   choices: string[];
+  defaultOrder: string[];
   hasHint: boolean;
 
   // viewmodel stuff
@@ -78,6 +79,14 @@ export class Blank extends ClozeElement {
   }
 
   /**
+   * Sets the alternatives in the order in which the content author
+   * entered them.
+   */
+  public setDefaultOrder(defaultOrder: string[]) {
+    this.defaultOrder = defaultOrder;
+  }
+
+  /**
    * Adds the incorrect answer to the list.
    * @param text - What the user must enter.
    * @param reaction  - What the user gets displayed when he enteres the text.
@@ -109,24 +118,33 @@ export class Blank extends ClozeElement {
   }
 
   /**
-   * Creates a list of choices from all alternatives provided by
-   * the correct and incorrect answers.
+   * Creates a list of choices from the alternatives in the order in
+   * which the content author entered them (defaultOrder), or from all
+   * alternatives provided by the correct and incorrect answers.
    */
   private loadChoicesFromOwnAlternatives(): string[] {
-    this.choices = [];
-    for (const answer of this.correctAnswers) {
-      for (const alternative of answer.alternatives) {
-        this.choices.push(alternative);
+    if (this.defaultOrder) {
+      this.choices = this.defaultOrder
+        .reduce((choices, choice) => { return [...choices, ...choice.split('/')]; }, []);
+    }
+    else {
+      this.choices = [];
+      for (const answer of this.correctAnswers) {
+        for (const alternative of answer.alternatives) {
+          this.choices.push(alternative);
+        }
+      }
+
+      for (const answer of this.incorrectAnswers) {
+        for (const alternative of answer.alternatives) {
+          this.choices.push(alternative);
+        }
       }
     }
 
-    for (const answer of this.incorrectAnswers) {
-      for (const alternative of answer.alternatives) {
-        this.choices.push(alternative);
-      }
+    if (this.settings.randomAnswers) {
+      this.choices = shuffleArray(this.choices);
     }
-
-    this.choices = shuffleArray(this.choices);
     this.choices.unshift("");
 
     return this.choices;

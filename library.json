@@ -2,10 +2,10 @@
   "title": "Complex fill the blanks",
   "description": "Fill the blanks exercise with individual feedback",
   "majorVersion": 1,
-  "minorVersion": 3,
+  "minorVersion": 4,
   "patchVersion": 0,
   "runnable": 1,
-  "author": "S. Rettig",
+  "author": "S. Rettig, NDLA",
   "license": "MIT",
   "machineName": "H5P.AdvancedBlanks",
   "coreApi": {
@@ -55,6 +55,11 @@
     },
     {
       "machineName": "H5PEditor.RangeList",
+      "majorVersion": 1,
+      "minorVersion": 0
+    },
+    {
+      "machineName": "H5PEditor.AdvancedBlanks",
       "majorVersion": 1,
       "minorVersion": 0
     }

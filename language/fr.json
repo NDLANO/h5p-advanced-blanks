@@ -37,24 +37,23 @@
           ],
           "field": {
             "label": "blanc",
-            "fields": [
-              {
-                "label": "Réponse correcte",
-                "description": "Vous pouvez séparer les réponses alternatives par une barre oblique (/)."
-              },
-              {
-                "label": "Indice"
-              },
-              {
-                "label": "Réponses incorrectes",
-                "entity": "réponse incorrecte",
-                "field": {
-                  "label": "Réponse incorrecte",
-                  "description": "Vous pouvez séparer les réponses alternatives par une barre oblique (/).",
+            "entity": "alternative",
+            "field": {
+              "label": "blanc",
+              "fields": [
+                {
+                  "label": "Texte",
+                  "description": "Vous pouvez séparer les réponses alternatives par une barre oblique (/)."
+                },
+                {
+                  "label": "Réponse correcte"
+                },
+                {
+                  "label": "Indice"
+                },
+                {
+                  "label": "Options pour les réponses incorrectes",
                   "fields": [
-                    {
-                      "label": "Texte de la réponse incorrecte"
-                    },
                     {
                       "label": "Feedback",
                       "description": "Le feedback doit aider l'utilisateur à trouver la bonne réponse et être le plus possible adapté à la réponse qu'il a donnée."
@@ -88,8 +87,8 @@
                     }
                   ]
                 }
-              }
-            ]
+              ]
+            }
           }
         }
       ]
@@ -169,6 +168,9 @@
               "label": "Les réponses correctes fournies pour tous les autres blancs"
             }
           ]
+        },
+        {
+          "label": "Randomiser les options de réponse"
         },
         {
           "label": "Nombre maximum de choix proposés",

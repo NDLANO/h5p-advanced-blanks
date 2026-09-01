@@ -37,24 +37,23 @@
           ],
           "field": {
             "label": "Hiányzó kifejezés",
-            "fields": [
-              {
-                "label": "Helyes válasz",
-                "description": "A válaszvariációkat perjellel (/) választhatja el."
-              },
-              {
-                "label": "Segítség"
-              },
-              {
-                "label": "Helytelen válaszok",
-                "entity": "helytelen válasz",
-                "field": {
-                  "label": "Helytelen válasz",
-                  "description": "A válaszvariációkat perjellel (/) választhatja el.",
+            "entity": "alternative",
+            "field": {
+              "label": "Hiányzó kifejezés",
+              "fields": [
+                {
+                  "label": "Text",
+                  "description": "A válaszvariációkat perjellel (/) választhatja el."
+                },
+                {
+                  "label": "Helyes válasz"
+                },
+                {
+                  "label": "Segítség"
+                },
+                {
+                  "label": "Helytelen válaszok",
                   "fields": [
-                    {
-                      "label": "Helytelen válasz szövege"
-                    },
                     {
                       "label": "Visszajelzés",
                       "description": "A visszajelzés célja a felhasználó segítése a helyes válasz megtalálásában, és ideális esetben a felhasználó által megadott téves válaszhoz kell igazodik."
@@ -88,8 +87,8 @@
                     }
                   ]
                 }
-              }
-            ]
+              ]
+            }
           }
         }
       ]
@@ -136,7 +135,7 @@
               {},
               {
                 "label": "Visszajelzés az adott eredmény intervallumnál",
-                "placeholder": "Adja meg a visszajelzést"
+                "placeholder": "Adja meg a visszajelést"
               }
             ]
           }
@@ -169,6 +168,9 @@
               "label": "Az összes többi hiányzó rész helyes válaszai"
             }
           ]
+        },
+        {
+          "label": "Válaszlehetőségek randomizálása"
         },
         {
           "label": "A más hiányzó részekből felkínált lehetőségek maximális száma",
@@ -253,7 +255,7 @@
         },
         {
           "label": "Törzsszöveg",
-          "default": "Biztos, hogy befejezi a megoldást?"
+          "default": "Biztos, hogy befejeji a megoldást?"
         },
         {
           "label": "Mégse gomb felirata",

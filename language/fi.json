@@ -37,24 +37,23 @@
           ],
           "field": {
             "label": "Aukko",
-            "fields": [
-              {
-                "label": "Oikea vastaus",
-                "description": "Voit listata useita oikeita vastaustavaihtoehtoja erottamalla ne kenoviivalla (/) esim. helsinki/turku/hämeenlinna"
-              },
-              {
-                "label": "Vihje"
-              },
-              {
-                "label": "Väärät vastaukset",
-                "entity": "Väärä vastaus",
-                "field": {
-                  "label": "Väärä vastaus",
-                  "description": "Voit listata useita vääriä vastaustavaihtoehtoja erottamalla ne kenoviivalla (/) esim. helsinki/turku/hämeenlinna",
+            "entity": "alternative",
+            "field": {
+              "label": "Aukko",
+              "fields": [
+                {
+                  "label": "Teksti",
+                  "description": "Voit listata useita oikeita vastaustavaihtoehtoja erottamalla ne kenoviivalla (/) esim. helsinki/turku/hämeenlinna"
+                },
+                {
+                  "label": "Oikea vastaus"
+                },
+                {
+                  "label": "Vihje"
+                },
+                {
+                  "label": "Vaihtoehdot väärille vastauksille",
                   "fields": [
-                    {
-                      "label": "Väärän vastauksen teksti"
-                    },
                     {
                       "label": "Väärän vastauksen palaute",
                       "description": "Väärän vastauksen palautteen tarkoituksena on auttaa käyttäjää löytämään oikea vastaus ja ideaalitilanteessa se sopii jokaiseen mahdolliseen väärään vastausvaihtoehtoon jota hän voi antaa"
@@ -64,32 +63,32 @@
                       "description": "Kun haluat korostaa tekstiä palautteen aikana laita sen ympärille huutomerkit !!(esim. Tämä on !!korostettu teksti!!)"
                     },
                     {
-                      "label": "Highlight position relative to blank:",
+                      "label": "Korosteen sijainti suhteessa aukkokohdan:",
                       "options": [
                         {
-                          "label": "- 1 (right before the blank)"
+                          "label": "- 1 (oikein aukkoa edeltävä)"
                         },
                         {
-                          "label": "- 2 (two highlights before the blank)"
+                          "label": "- 2 (kaksi korostetta ennen aukkoa)"
                         },
                         {
-                          "label": "- 3 (three highlights before the blank)"
+                          "label": "- 3 (kolme korostetta ennen aukkoa)"
                         },
                         {
-                          "label": "+ 1 (right after the blank)"
+                          "label": "+ 1 (oikein aukkoa seuraava)"
                         },
                         {
-                          "label": "+ 2 (two highlights after the blank)"
+                          "label": "+ 2 (kaksi korostetta jälkeen aukkoa)"
                         },
                         {
-                          "label": "+ 3 (three highlights after the blank)"
+                          "label": "+ 3 (kolme korostetta jälkeen aukkoa)"
                         }
                       ]
                     }
                   ]
                 }
-              }
-            ]
+              ]
+            }
           }
         }
       ]
@@ -169,6 +168,9 @@
               "label": "Oikeat vastaukset kaikille muille aukoille."
             }
           ]
+        },
+        {
+          "label": "Arvo vastausvaihtoehdot"
         },
         {
           "label": "Muiden vaihtoehtojen maksimimäärä joita tarjotaan valittavaksi.",

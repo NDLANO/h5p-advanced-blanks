@@ -1,5 +1,5 @@
 {
-"semantics": [
+  "semantics": [
     {
       "label": "Media",
       "fields": [
@@ -37,24 +37,23 @@
           ],
           "field": {
             "label": "Spațiu gol",
-            "fields": [
-              {
-                "label": "Răspuns corect",
-                "description": "Puteți separa răspunsurile alternative cu o bară oblică (/)."
-              },
-              {
-                "label": "Indiciu"
-              },
-              {
-                "label": "Răspunsuri incorecte",
-                "entity": "răspuns incorect",
-                "field": {
-                  "label": "Răspuns incorect",
-                  "description": "Puteți separa răspunsurile alternative cu o bară oblică (/)",
+            "entity": "alternative",
+            "field": {
+              "label": "Spațiu gol",
+              "fields": [
+                {
+                  "label": "Text",
+                  "description": "Puteți separa răspunsurile alternative cu o bară oblică (/)."
+                },
+                {
+                  "label": "Răspuns corect"
+                },
+                {
+                  "label": "Indiciu"
+                },
+                {
+                  "label": "Răspunsuri incorecte",
                   "fields": [
-                    {
-                      "label": "Textul răspunsului incorect"
-                    },
                     {
                       "label": "Feedback",
                       "description": "Feedback-ul ar trebui să ajute utilizatorul să găsească răspunsul corect și, în mod ideal, să fie personalizat în funcție de răspunsul introdus de utilizator."
@@ -88,8 +87,8 @@
                     }
                   ]
                 }
-              }
-            ]
+              ]
+            }
           }
         }
       ]
@@ -169,6 +168,9 @@
               "label": "Răspunsurile corecte ale tuturor celorlalte spații goale"
             }
           ]
+        },
+        {
+          "label": "Randomizează opțiunile de răspuns"
         },
         {
           "label": "Numărul maxim de alternative din alte spații goale oferite pentru selecție",

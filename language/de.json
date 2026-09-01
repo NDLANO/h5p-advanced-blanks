@@ -37,24 +37,23 @@
           ],
           "field": {
             "label": "Lücke",
-            "fields": [
-              {
-                "label": "Richtige Antwort",
-                "description": "Alternative Antworten können jeweils mit einem Schrägstrich (/) angefügt werden."
-              },
-              {
-                "label": "Tipp"
-              },
-              {
-                "label": "Falsche Antworten",
-                "entity": "falsche Antwort",
-                "field": {
-                  "label": "Falsche Antwort",
-                  "description": "Alternative Antworten können jeweils mit einem Schrägstrich (/) angefügt werden.",
+            "entity": "alternative",
+            "field": {
+              "label": "Lücke",
+              "fields": [
+                {
+                  "label": "Text",
+                  "description": "Alternative Antworten können jeweils mit einem Schrägstrich (/) angefügt werden."
+                },
+                {
+                  "label": "Richtige Antwort"
+                },
+                {
+                  "label": "Tipp"
+                },
+                {
+                  "label": "Optionen für falsche Antworten",
                   "fields": [
-                    {
-                      "label": "Vom Nutzer eingegebene falsche Antwort"
-                    },
                     {
                       "label": "Rückmeldung",
                       "description": "Die Rückmeldung sollte dem Nutzer dabei helfen, die richtige Antwort zu finden und dabei auf die eingegebene Antwort Rücksicht nehmen."
@@ -88,8 +87,8 @@
                     }
                   ]
                 }
-              }
-            ]
+              ]
+            }
           }
         }
       ]
@@ -169,6 +168,9 @@
               "label": "Die richtigen Antworten von allen anderen Lücken"
             }
           ]
+        },
+        {
+          "label": "Antwortoptionen zufällig anordnen"
         },
         {
           "label": "Maximalzahl der richtigen Antworten von allen anderen Lücken, die zur Auswahl angeboten werden",

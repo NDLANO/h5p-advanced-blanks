@@ -37,24 +37,23 @@
           ],
           "field": {
             "label": "Leeg",
-            "fields": [
-              {
-                "label": "Regte antwoord",
-                "description": "Jy kan alternatiewe antwoorde met 'n flap (/) onderskei."
-              },
-              {
-                "label": "Wenk"
-              },
-              {
-                "label": "Verkeerde antwoord",
-                "entity": "verkeerde antwoord",
-                "field": {
-                  "label": "verkeerde antwoord",
-                  "description": "Jy kan verskillende antwoorde met 'n flap (/) onderskei.",
+            "entity": "alternative",
+            "field": {
+              "label": "Leeg",
+              "fields": [
+                {
+                  "label": "Teks",
+                  "description": "Jy kan alternatiewe antwoorde met 'n flap (/) onderskei."
+                },
+                {
+                  "label": "Regte antwoord"
+                },
+                {
+                  "label": "Wenk"
+                },
+                {
+                  "label": "Opsies vir verkeerde antwoorde",
                   "fields": [
-                    {
-                      "label": "Verkeerde antwoordteks"
-                    },
                     {
                       "label": "Terugvoer",
                       "description": "Die terugvoer behoort die gebruiker te help om die regte antwoord te vind. Die ideaal is om dit aan te pas volgens die antwoord wat die gebruiker gegee het."
@@ -88,8 +87,8 @@
                     }
                   ]
                 }
-              }
-            ]
+              ]
+            }
           }
         }
       ]
@@ -171,6 +170,9 @@
           ]
         },
         {
+          "label": "Willekeurige antwoordopsies"
+        },
+        {
           "label": "Maksimum aantal alternatiewe beskikbaar vir ander oop spasies",
           "description": "Voer 0 in om geen beperking te stel nie."
         },
@@ -208,10 +210,10 @@
           "label": "Aktiveer \"Toets\" knoppie"
         },
         {
-          "label": "Wys bevestigingdialoog op \"Toets\""
+          "label": "Wys bevestigingsdialoog op \"Toets\""
         },
         {
-          "label": "Wys bevestigingdialoog op \"Probeer weer\""
+          "label": "Wys bevestigingsdialoog op \"Probeer weer\""
         }
       ]
     },
@@ -278,7 +280,7 @@
         },
         {
           "label": "Kanselleer knoppie etiket",
-          "default": "Kanselleer"
+          "default": "Kanseleer"
         },
         {
           "label": "Bevestig knoppie etiket",

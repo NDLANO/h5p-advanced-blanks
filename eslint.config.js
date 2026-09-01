@@ -1,5 +1,7 @@
 import eslintConfigNdlaH5P from 'eslint-config-ndla-h5p';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import eslint from '@eslint/js';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { defineConfig } from 'eslint/config';
 import tseslint from 'typescript-eslint';
 

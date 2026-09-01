@@ -37,24 +37,23 @@
           ],
           "field": {
             "label": "Prazno polje",
-            "fields": [
-              {
-                "label": "Pravilen odgovor",
-                "description": "Nadomestni odgovor se loči s poševnico (/)."
-              },
-              {
-                "label": "Namig"
-              },
-              {
-                "label": "Nepravilen odgovor",
-                "entity": "nepravilen odgovor",
-                "field": {
-                  "label": "Nepravilen odgovor",
-                  "description": "Nadomestni odgovor se loči s poševnico (/).",
+            "entity": "alternative",
+            "field": {
+              "label": "Prazno polje",
+              "fields": [
+                {
+                  "label": "Besedilo",
+                  "description": "Nadomestni odgovor se loči s poševnico (/)."
+                },
+                {
+                  "label": "Pravilen odgovor"
+                },
+                {
+                  "label": "Namig"
+                },
+                {
+                  "label": "Možnosti za nepravilne odgovore",
                   "fields": [
-                    {
-                      "label": "Besedilo nepravilnega odgovora"
-                    },
                     {
                       "label": "Povratne informacije",
                       "description": "Povratne informacije naj udeležencu pomagajo pri iskanju pravilnega odgovora. V idealnem primeru so prilagojene vnosu posameznika."
@@ -88,8 +87,8 @@
                     }
                   ]
                 }
-              }
-            ]
+              ]
+            }
           }
         }
       ]
@@ -169,6 +168,9 @@
               "label": "Pravilni odgovori vseh drugih praznih polj"
             }
           ]
+        },
+        {
+          "label": "Naključno razporedi odgovore"
         },
         {
           "label": "Največje število alternativnih odgovorov iz drugih polj",

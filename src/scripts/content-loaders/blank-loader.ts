@@ -30,7 +30,7 @@ export class BlankLoader {
     return elem.value;
   }
 
-  public createBlank(id: string, correctText: string, hintText: string, incorrectAnswers: any[]): Blank {
+  public createBlank(id: string, correctText: string, hintText: string, incorrectAnswers: any[], defaultOrder: string[]): Blank {
     const blank = new Blank(this.settings, this.localization, this.jquery, this.messageService, id)
     if (correctText) {
       correctText = this.decodeHtml(correctText);
@@ -42,6 +42,10 @@ export class BlankLoader {
       for (const h5pIncorrectAnswer of incorrectAnswers) {
         blank.addIncorrectAnswer(this.decodeHtml(h5pIncorrectAnswer.incorrectAnswerText), h5pIncorrectAnswer.incorrectAnswerFeedback, h5pIncorrectAnswer.showHighlight, h5pIncorrectAnswer.highlight);
       }
+    }
+
+    if (defaultOrder) {
+      blank.setDefaultOrder(defaultOrder.map(text => this.decodeHtml(text)));
     }
 
     return blank;

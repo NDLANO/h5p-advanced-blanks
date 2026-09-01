@@ -111,40 +111,62 @@
           }
         ],
         "field": {
-          "name": "blankGroup",
-          "type": "group",
-          "label": "Blank",
-          "fields": [
-            {
-              "name": "correctAnswerText",
-              "type": "text",
-              "label": "Correct answer",
-              "description": "You can separate alternative answers with a slash (/)."
-            },
-            {
-              "name": "hint",
-              "type": "text",
-              "label": "Hint",
-              "optional": true
-            },
-            {
-              "name": "incorrectAnswersList",
-              "type": "list",
-              "label": "Incorrect answers",
-              "entity": "incorrect answer",
-              "optional": true,
-              "min": 0,
-              "field": {
-                "name": "incorrectAnswerGroup",
+          "name": "alternativesList",
+          "type": "list",
+          "label": "Alternatives",
+          "entity": "alternative",
+          "widget": "advancedBlankslistCheckbox",
+          "listCheckbox": {
+            "checkbox": "isCorrect"
+          },
+          "min": 1,
+          "field": {
+            "name": "alternativeGroup",
+            "type": "group",
+            "label": "Alternatives",
+            "fields": [
+              {
+                "name": "text",
+                "type": "text",
+                "label": "Text",
+                "description": "You can separate alternative answers with a slash (/)."
+              },
+              {
+                "name": "isCorrect",
+                "type": "boolean",
+                "label": "Correct answer",
+                "optional": true
+              },
+              {
+                "name": "hint",
+                "type": "text",
+                "label": "Hint",
+                "optional": true,
+                "widget": "showWhen",
+                "showWhen": {
+                  "rules": [
+                    {
+                      "field": "isCorrect",
+                      "equals": true
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "optionsIncorrect",
                 "type": "group",
-                "label": "Incorrect answer",
-                "description": "You can separate alternative answers with a slash (/).",
+                "label": "Options for incorrect alternatives",
+                "expanded": false,
+                "widget": "showWhen",
+                "showWhen": {
+                  "rules": [
+                    {
+                      "field": "isCorrect",
+                      "equals": false
+                    }
+                  ]
+                },
                 "fields": [
-                  {
-                    "name": "incorrectAnswerText",
-                    "type": "text",
-                    "label": "Incorrect answer text"
-                  },
                   {
                     "name": "incorrectAnswerFeedback",
                     "type": "text",
@@ -214,8 +236,8 @@
                   }
                 ]
               }
-            }
-          ]
+            ]
+          }
         }
       }
     ]
@@ -379,6 +401,22 @@
           }
         ],
         "default": "alternatives"
+      },
+      {
+        "name": "randomAnswers",
+        "type": "boolean",
+        "label": "Randomize answer options",
+        "optional": true,
+        "default": true,
+        "widget": "showWhen",
+        "showWhen": {
+          "rules": [
+            {
+              "field": "mode",
+              "equals": "selection"
+            }
+          ]
+        }
       },
       {
         "name": "selectAlternativeRestriction",

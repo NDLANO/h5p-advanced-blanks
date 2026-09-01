@@ -53,12 +53,22 @@ export class H5PDataRepository implements IDataRepository {
     for (let i = 0; i < this.h5pConfigData.content.blanksList.length; i++) {
       const h5pBlank = this.h5pConfigData.content.blanksList[i];
 
-      const correctText = h5pBlank.correctAnswerText;
-      if (correctText === "" || correctText === undefined)
+      const correctAnswer = h5pBlank.filter(alternative => alternative.isCorrect).shift() || {};
+      if (correctAnswer.text === "" || correctAnswer.text === undefined)
         continue;
 
-      const blank = BlankLoader.instance.createBlank("cloze" + i, correctText,
-        h5pBlank.hint, h5pBlank.incorrectAnswersList);
+      const defaultOrder = h5pBlank.map(alternative => alternative.text);
+      const incorrectAnswers = h5pBlank
+        .filter(alternative => !alternative.isCorrect)
+        .map(answer => ({
+          incorrectAnswerText: answer.text,
+          incorrectAnswerFeedback: answer.optionsIncorrect.incorrectAnswerFeedback,
+          showHighlight: answer.optionsIncorrect.showHighlight,
+          highlight: answer.optionsIncorrect.highlight
+        }));
+
+      const blank = BlankLoader.instance.createBlank("cloze-" + H5P.createUUID() + "-" + i,
+        correctAnswer.text, correctAnswer.hint, incorrectAnswers, defaultOrder);
 
       blank.finishInitialization();
       blanks.push(blank);

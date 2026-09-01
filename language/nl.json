@@ -37,24 +37,23 @@
           ],
           "field": {
             "label": "Leeg",
-            "fields": [
-              {
-                "label": "Juist antwoord",
-                "description": "Je kunt alternatieve antwoorden scheiden met een schuine streep (/)."
-              },
-              {
-                "label": "Hint"
-              },
-              {
-                "label": "Onjuiste antwoorden",
-                "entity": "onjuist antwoord",
-                "field": {
-                  "label": "Onjuist antwoord",
-                  "description": "Je kunt alternatieve antwoorden scheiden met een schuine streep (/).",
+            "entity": "alternative",
+            "field": {
+              "label": "Leeg",
+              "fields": [
+                {
+                  "label": "Text",
+                  "description": "Je kunt alternatieve antwoorden scheiden met een schuine streep (/)."
+                },
+                {
+                  "label": "Juist antwoord"
+                },
+                {
+                  "label": "Hint"
+                },
+                {
+                  "label": "Onjuiste antwoorden",
                   "fields": [
-                    {
-                      "label": "Tekst onjuist antwoord"
-                    },
                     {
                       "label": "Feedback",
                       "description": "De feedback moet de gebruiker helpen het juiste antwoord te vinden en moet idealiter zijn afgestemd op het antwoord dat de gebruiker heeft ingevoerd."
@@ -88,8 +87,8 @@
                     }
                   ]
                 }
-              }
-            ]
+              ]
+            }
           }
         }
       ]
@@ -169,6 +168,9 @@
               "label": "De juiste antwoorden van alle andere lege plekken"
             }
           ]
+        },
+        {
+          "label": "Antwoordopties willekeurig ordenen"
         },
         {
           "label": "Het maximaal aantal alternatieven voor andere lege plekken, die voor de selectie worden aangeboden",

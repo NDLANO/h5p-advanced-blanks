@@ -36,25 +36,24 @@
             }
           ],
           "field": {
-            "label": "Blank",
-            "fields": [
-              {
-                "label": "Correct answer",
-                "description": "You can separate alternative answers with a slash (/)."
-              },
-              {
-                "label": "Hint"
-              },
-              {
-                "label": "Incorrect answers",
-                "entity": "incorrect answer",
-                "field": {
-                  "label": "Incorrect answer",
-                  "description": "You can separate alternative answers with a slash (/).",
+            "label": "Alternatives",
+            "entity": "alternative",
+            "field": {
+              "label": "Alternatives",
+              "fields": [
+                {
+                  "label": "Text",
+                  "description": "You can separate alternative answers with a slash (/)."
+                },
+                {
+                  "label": "Correct answer"
+                },
+                {
+                  "label": "Hint"
+                },
+                {
+                  "label": "Options for incorrect alternatives",
                   "fields": [
-                    {
-                      "label": "Incorrect answer text"
-                    },
                     {
                       "label": "Feedback",
                       "description": "The feedback should help the user find the correct answer and ideally be tailored to the answer the user has entered."
@@ -88,8 +87,8 @@
                     }
                   ]
                 }
-              }
-            ]
+              ]
+            }
           }
         }
       ]
@@ -169,6 +168,9 @@
               "label": "The correct answers of all other blanks"
             }
           ]
+        },
+        {
+          "label": "Randomize answer options"
         },
         {
           "label": "Maximum number of alternatives of other blanks offered for selection",
