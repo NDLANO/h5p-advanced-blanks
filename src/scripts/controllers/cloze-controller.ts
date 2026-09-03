@@ -107,11 +107,11 @@ export class ClozeController {
   ) {}
 
   /**
-   * Sets up all blanks, the cloze itself and the views.
-   * @param  {HTMLElement} root
+   * Sets up the cloze model (blanks, snippets, cloze instance).
+   * Touches no DOM, so it can be called from the content type's constructor
+   * before the container exists.
    */
-  initialize(root: HTMLElement, jquery: JQuery) {
-    this.jquery = jquery;
+  public setupModel() {
     this.isSelectCloze = this.settings.clozeType === ClozeType.Select ? true : false;
 
     const blanks = this.repository.getBlanks();
@@ -127,6 +127,15 @@ export class ClozeController {
     blanks.forEach((blank) => BlankLoader.instance.replaceSnippets(blank, snippets));
 
     this.cloze = ClozeLoader.createCloze(this.repository.getClozeText(), blanks);
+  }
+
+  /**
+   * Renders the cloze into the DOM and creates the views.
+   * Requires setupModel() to have been called first.
+   * @param  {HTMLElement} root
+   */
+  public render(root: HTMLElement, jquery: JQuery) {
+    this.jquery = jquery;
 
     const containers = this.createAndAddContainers(root);
     containers.cloze.innerHTML = this.cloze.html;

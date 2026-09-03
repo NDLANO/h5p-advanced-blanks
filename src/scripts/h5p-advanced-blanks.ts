@@ -20,7 +20,7 @@ const XAPI_ALTERNATIVE_EXTENSION = 'https://h5p.org/x-api/alternatives';
 const XAPI_CASE_SENSITIVITY = 'https://h5p.org/x-api/case-sensitivity';
 const XAPI_REPORTING_VERSION_EXTENSION = 'https://h5p.org/x-api/h5p-reporting-version';
 
-export default class AdvancedBlanks extends (H5P.Question as { new(): any; }) {
+export default class AdvancedBlanks extends (H5P.Question as { new( type:string, options?:object ): any; }) {
 
   private clozeController: ClozeController;
   private repository: IDataRepository;
@@ -32,6 +32,7 @@ export default class AdvancedBlanks extends (H5P.Question as { new(): any; }) {
 
   private contentId: string;
   private previousState: any;
+  private restoredPreviousState: boolean = false;
   private state: States;
 
   /**
@@ -47,7 +48,7 @@ export default class AdvancedBlanks extends (H5P.Question as { new(): any; }) {
    * @param {object} contentData
    */
   constructor(config: any, contentId: string, contentData: any = {}) {
-    super();
+    super('advanced-blanks');
 
     // Set mandatory default values for editor widgets that create content type instances
     config = extend({
@@ -86,26 +87,14 @@ export default class AdvancedBlanks extends (H5P.Question as { new(): any; }) {
     if (contentData && contentData.previousState)
       this.previousState = contentData.previousState;
 
-    /**
-    * Overrides the attach method of the superclass (H5P.Question) and calls it
-    * at the same time. (equivalent to super.attach($container)).
-    * This was necessary, as Ractive needs to be initialized with an existing DOM
-    * element. DOM elements are created in H5P.Question.attach, so initializing
-    * Ractive in registerDomElements doesn't work. Can probably be changed now
-    * TODO: Ractive is gone, make normal again
-    */
-    this.attach = ((original) => {
-      return ($container) => {
-        original($container);
-        this.clozeController.initialize(this.container.get(0), $container);
-        if (this.clozeController.deserializeCloze(this.previousState)) {
-          this.answered = this.clozeController.isFilledOut;
-          if (this.settings.autoCheck)
-            this.onCheckAnswer();
-          this.toggleButtonVisibility(this.state);
-        }
-      };
-    })(this.attach);
+    // Set up the cloze model and restore previous answers before any DOM
+    // exists, so the Question-contract methods (getScore, getCurrentState,
+    // getXAPIData) work on instances that have not been attached yet.
+    this.clozeController.setupModel();
+    this.restoredPreviousState = this.clozeController.deserializeCloze(this.previousState);
+    if (this.restoredPreviousState) {
+      this.answered = this.clozeController.isFilledOut;
+    }
   }
 
   /**
@@ -152,11 +141,21 @@ export default class AdvancedBlanks extends (H5P.Question as { new(): any; }) {
     this.registerMedia();
     this.setIntroduction(this.repository.getTaskDescription());
 
-    this.container = this.jQuery('<div/>', { 'class': 'h5p-advanced-blanks' });
+    // TODO: This is jQuery, should be prefixed with $
+    this.container = this.jQuery('<div/>', { 'class': 'h5p-advanced-blanks-conteent' });
     this.setContent(this.container);
     this.registerButtons();
 
     this.moveToState(States.ongoing);
+    window.requestAnimationFrame(() => {
+      const $h5pContainer = this.container.closest('.h5p-advanced-blanks');
+      this.clozeController.render(this.container.get(0), $h5pContainer);
+      if (this.restoredPreviousState) {
+        if (this.settings.autoCheck)
+          this.onCheckAnswer();
+        this.toggleButtonVisibility(this.state);
+      }
+    });
   };
 
   /**
