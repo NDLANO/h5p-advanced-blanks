@@ -84,8 +84,9 @@ export default class AdvancedBlanks extends (H5P.Question as { new( type:string,
     this.clozeController.onTyped = this.onTyped;
     this.clozeController.onTextChanged = () => this.triggerXAPI('interacted');
 
-    if (contentData && contentData.previousState)
+    if (contentData && contentData.previousState) {
       this.previousState = contentData.previousState;
+    }
 
     // Set up the cloze model and restore previous answers before any DOM
     // exists, so the Question-contract methods (getScore, getCurrentState,
@@ -103,8 +104,9 @@ export default class AdvancedBlanks extends (H5P.Question as { new( type:string,
   private onScoreChanged = (score: number, maxScore: number) => {
     if (this.clozeController.isFullyFilledOut) {
       this.transitionState();
-      if (this.state !== States.finished)
+      if (this.state !== States.finished) {
         this.state = States.checking;
+      }
       this.showFeedback();
     }
     else {
@@ -151,8 +153,9 @@ export default class AdvancedBlanks extends (H5P.Question as { new( type:string,
       const $h5pContainer = this.container.closest('.h5p-advanced-blanks');
       this.clozeController.render(this.container.get(0), $h5pContainer);
       if (this.restoredPreviousState) {
-        if (this.settings.autoCheck)
+        if (this.settings.autoCheck) {
           this.onCheckAnswer();
+        }
         this.toggleButtonVisibility(this.state);
       }
     });
@@ -184,8 +187,9 @@ export default class AdvancedBlanks extends (H5P.Question as { new( type:string,
 
   private registerMedia() {
     const media = this.repository.getMedia();
-    if (!media || !media.library)
+    if (!media || !media.library) {
       return;
+    }
 
     const type = media.library.split(' ')[0];
     if (type === 'H5P.Image') {
@@ -247,8 +251,9 @@ export default class AdvancedBlanks extends (H5P.Question as { new( type:string,
     this.triggerXAPIAnswered();
 
     this.transitionState();
-    if (this.state !== States.finished)
+    if (this.state !== States.finished) {
       this.state = States.checking;
+    }
 
     this.showFeedback();
 

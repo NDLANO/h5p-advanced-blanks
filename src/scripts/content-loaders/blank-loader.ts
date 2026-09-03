@@ -25,8 +25,9 @@ export class BlankLoader {
   }
 
   public static get instance(): BlankLoader {
-    if (this._instance)
+    if (this._instance) {
       return this._instance;
+    }
 
     throw 'BlankLoader must be initialized before use.';
   }
@@ -72,15 +73,18 @@ export class BlankLoader {
   }
 
   private getStringWithSnippets(text: string, snippets: Snippet[]): string {
-    if (!text || text === undefined)
+    if (!text || text === undefined) {
       return '';
+    }
 
-    if (!snippets)
+    if (!snippets) {
       return text;
+    }
 
     for (const snippet of snippets) {
-      if (snippet.name === undefined || snippet.name === '' || snippet.text === undefined || snippet.text === '')
+      if (snippet.name === undefined || snippet.name === '' || snippet.text === undefined || snippet.text === '') {
         continue;
+      }
       text = text.replace('@' + snippet.name, snippet.text);
     }
 

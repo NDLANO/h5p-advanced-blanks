@@ -78,8 +78,9 @@ export class ClozeController {
   }
 
   public get allBlanksEntered() {
-    if (this.cloze)
+    if (this.cloze) {
       return this.cloze.blanks.every((blank) => blank.isError || blank.isCorrect || blank.isRetry);
+    }
     return false;
   }
 
@@ -88,14 +89,16 @@ export class ClozeController {
   }
 
   public get isFilledOut() {
-    if (!this.cloze || this.cloze.blanks.length === 0)
+    if (!this.cloze || this.cloze.blanks.length === 0) {
       return true;
+    }
     return this.cloze.blanks.some((b) => b.enteredText !== '');
   }
 
   public get isFullyFilledOut() {
-    if (!this.cloze || this.cloze.blanks.length === 0)
+    if (!this.cloze || this.cloze.blanks.length === 0) {
       return true;
+    }
     return this.cloze.blanks.every((b) => b.enteredText !== '');
   }
 
@@ -145,8 +148,9 @@ export class ClozeController {
   checkAll = () => {
     this.cloze.hideAllHighlights();
     for (const blank of this.cloze.blanks) {
-      if ((!blank.isCorrect) && blank.enteredText !== '')
+      if ((!blank.isCorrect) && blank.enteredText !== '') {
         blank.evaluateAttempt(true, true);
+      }
       blank.isDisabled = true;
     }
     this.refreshCloze();
@@ -155,8 +159,9 @@ export class ClozeController {
 
   textTyped = (event, blank: Blank) => {
     blank.onTyped();
-    if (this.onTyped)
+    if (this.onTyped) {
       this.onTyped();
+    }
     this.refreshCloze();
   };
 
@@ -192,8 +197,9 @@ export class ClozeController {
     }
 
     if (this.settings.autoCheck) {
-      if (!blank.enteredText || blank.enteredText === '')
+      if (!blank.enteredText || blank.enteredText === '') {
         return;
+      }
 
       this.cloze.hideAllHighlights();
       blank.evaluateAttempt(false);
@@ -209,12 +215,14 @@ export class ClozeController {
       let nextId;
       while (index < this.cloze.blanks.length - 1 && !nextId) {
         index++;
-        if (!this.cloze.blanks[index].isCorrect)
+        if (!this.cloze.blanks[index].isCorrect) {
           nextId = this.cloze.blanks[index].id;
+        }
       }
 
-      if (nextId)
+      if (nextId) {
         this.jquery.find('#' + nextId).focus();
+      }
     }
   };
 
@@ -296,12 +304,14 @@ export class ClozeController {
   }
 
   private checkAndNotifyCompleteness = (): boolean => {
-    if (this.onScoreChanged)
+    if (this.onScoreChanged) {
       this.onScoreChanged(this.currentScore, this.maxScore);
+    }
 
     if (this.cloze.isSolved) {
-      if (this.onSolved)
+      if (this.onSolved) {
         this.onSolved();
+      }
       return true;
     }
 
@@ -313,16 +323,18 @@ export class ClozeController {
   }
 
   public deserializeCloze(data: any): boolean {
-    if (!this.cloze || !data)
+    if (!this.cloze || !data) {
       return false;
+    }
     this.cloze.deserialize(data);
     this.refreshCloze();
     return true;
   }
 
   public getCorrectAnswerList(): string[][] {
-    if (!this.cloze || this.cloze.blanks.length === 0)
+    if (!this.cloze || this.cloze.blanks.length === 0) {
       return [[]];
+    }
     const result = [];
     for (const blank of this.cloze.blanks) {
       result.push(blank.getCorrectAnswers());

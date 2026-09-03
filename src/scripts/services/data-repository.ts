@@ -47,15 +47,17 @@ export class H5PDataRepository implements IDataRepository {
   getBlanks(): Blank[] {
     const blanks: Blank[] = [];
 
-    if (!this.h5pConfigData.content.blanksList)
+    if (!this.h5pConfigData.content.blanksList) {
       return blanks;
+    }
 
     for (let i = 0; i < this.h5pConfigData.content.blanksList.length; i++) {
       const h5pBlank = this.h5pConfigData.content.blanksList[i];
 
       const correctAnswer = h5pBlank.filter((alternative) => alternative.isCorrect).shift() || {};
-      if (correctAnswer.text === '' || correctAnswer.text === undefined)
+      if (correctAnswer.text === '' || correctAnswer.text === undefined) {
         continue;
+      }
 
       const defaultOrder = h5pBlank.map((alternative) => alternative.text);
       const incorrectAnswers = h5pBlank
@@ -80,8 +82,9 @@ export class H5PDataRepository implements IDataRepository {
   getSnippets(): Snippet[] {
     const snippets: Snippet[] = [];
 
-    if (!this.h5pConfigData.snippets)
+    if (!this.h5pConfigData.snippets) {
       return snippets;
+    }
 
     for (let i = 0; i < this.h5pConfigData.snippets.length; i++) {
       const raw_snippet = this.h5pConfigData.snippets[i];

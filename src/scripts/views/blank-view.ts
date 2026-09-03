@@ -240,7 +240,8 @@ export default class BlankView {
 
     const showSolution = blank.isShowingSolution && !blank.isCorrect;
     this.solutionSpan.hidden = !showSolution;
-    if (showSolution)
+    if (showSolution) {
       this.solutionSpan.textContent = blank.getCorrectAnswers()[0];
+    }
   }
 }

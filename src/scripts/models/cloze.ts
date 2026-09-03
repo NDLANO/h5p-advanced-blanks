@@ -51,8 +51,9 @@ export class Cloze {
 
   public deserialize(data: any) {
     for (let index = 0; index < data.length; index++) {
-      if (index >= this.blanks.length)
+      if (index >= this.blanks.length) {
         return;
+      }
       const blank = this.blanks[index];
       blank.deserialize(data[index]);
     }

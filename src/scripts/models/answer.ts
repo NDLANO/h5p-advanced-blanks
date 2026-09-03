@@ -71,8 +71,9 @@ export class Answer {
    * Turns on the highlights set by the content author for this answer.
    */
   public activateHighlight() {
-    if (this.message.highlightedElement)
+    if (this.message.highlightedElement) {
       this.message.highlightedElement.isHighlighted = true;
+    }
   }
 
   private cleanString(text: string): string {
@@ -123,10 +124,13 @@ export class Answer {
 
   private getAcceptableSpellingMistakes(text: string): number {
     let acceptableTypoCount: number;
-    if (this.settings.warnSpellingErrors || this.settings.acceptSpellingErrors) // TODO: consider removal
+    // TODO: consider removal
+    if (this.settings.warnSpellingErrors || this.settings.acceptSpellingErrors) {
       acceptableTypoCount = Math.floor(text.length / 10) + 1;
-    else
+    }
+    else {
       acceptableTypoCount = 0;
+    }
 
     return acceptableTypoCount;
   }

@@ -8,13 +8,15 @@ export class Message {
   highlightedElement: Highlight;
 
   constructor(public text: string, showHighlight: boolean, private relativeHighlightPosition: number) {
-    if (!showHighlight)
+    if (!showHighlight) {
       this.relativeHighlightPosition = undefined;
+    }
   }
 
   linkHighlight = (highlightsBefore: Highlight[], highlightsAfter: Highlight[]) => {
-    if (!this.relativeHighlightPosition)
+    if (!this.relativeHighlightPosition) {
       return;
+    }
 
     if (this.relativeHighlightPosition < 0 && (0 - this.relativeHighlightPosition - 1) < highlightsBefore.length) {
       this.highlightedElement = highlightsBefore[0 - this.relativeHighlightPosition - 1];

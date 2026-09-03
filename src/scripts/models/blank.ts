@@ -186,8 +186,9 @@ export class Blank extends ClozeElement {
     otherChoices = shuffleArray(otherChoices);
 
     let maxChoices = this.settings.selectAlternativeRestriction;
-    if (maxChoices === undefined || maxChoices === 0)
+    if (maxChoices === undefined || maxChoices === 0) {
       maxChoices = ownChoices.length + otherChoices.length;
+    }
 
     let leftOverChoices = maxChoices - ownChoices.length;
     for (let x = 0; x < leftOverChoices && x < otherChoices.length; x++) {
@@ -224,8 +225,9 @@ export class Blank extends ClozeElement {
   public showSolution() {
     this.evaluateAttempt(true);
     this.removeTooltip();
-    if (this.isCorrect)
+    if (this.isCorrect) {
       return;
+    }
     this.setAnswerState(MessageType.ShowSolution);
   }
 
@@ -246,8 +248,9 @@ export class Blank extends ClozeElement {
   }
 
   private displayTooltip(message: string, type: MessageType, surpressTooltip: boolean, id?: string) {
-    if (!surpressTooltip)
+    if (!surpressTooltip) {
       this.messageService.show(id ? id : this.id, message, this);
+    }
     else {
       this.hasPendingFeedback = true;
     }
@@ -301,8 +304,9 @@ export class Blank extends ClozeElement {
    * incorrect ones and gives the user feedback accordingly.
    */
   public evaluateAttempt(surpressTooltips: boolean, forceCheck?: boolean) {
-    if (!this.hasPendingFeedback && this.lastCheckedText === this.enteredText && !forceCheck)
+    if (!this.hasPendingFeedback && this.lastCheckedText === this.enteredText && !forceCheck) {
       return;
+    }
 
     this.lastCheckedText = this.enteredText.toString();
     this.hasPendingFeedback = false;
@@ -419,8 +423,9 @@ export class Blank extends ClozeElement {
    * Displays the hint in the tooltip.
    */
   public showHint() {
-    if (this.isShowingSolution || this.isCorrect)
+    if (this.isShowingSolution || this.isCorrect) {
       return;
+    }
 
     this.removeTooltip();
     if (this.hint && this.hint.text !== '') {
