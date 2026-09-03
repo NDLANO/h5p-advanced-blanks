@@ -27,6 +27,7 @@ export class Blank extends ClozeElement {
   isRetry: boolean;
   hasPendingFeedback: boolean;
   isShowingSolution: boolean;
+  isDisabled: boolean;
   message: string;
   minTextLength: number;
   speechBubble: any;
@@ -48,6 +49,7 @@ export class Blank extends ClozeElement {
     super();
 
     this.enteredText = '';
+    this.isDisabled = false;
     this.correctAnswers = [];
     this.incorrectAnswers = [];
     this.choices = [];
@@ -212,6 +214,7 @@ export class Blank extends ClozeElement {
     this.removeTooltip();
     this.setAnswerState(MessageType.None);
     this.hasPendingFeedback = false;
+    this.isDisabled = false;
   }
 
   /**
@@ -223,7 +226,6 @@ export class Blank extends ClozeElement {
     this.removeTooltip();
     if (this.isCorrect)
       return;
-    this.enteredText = this.correctAnswers[0].alternatives[0];
     this.setAnswerState(MessageType.ShowSolution);
   }
 

@@ -18,6 +18,7 @@ export default class BlankView {
   private dom: HTMLSpanElement;
   private inputElement: HTMLInputElement | HTMLSelectElement;
   private tipButton: HTMLButtonElement;
+  private solutionSpan: HTMLSpanElement;
   private callbacks: BlankCallbacks = {
     requestCloseTooltip: () => { },
     checkBlank: () => { },
@@ -38,6 +39,8 @@ export default class BlankView {
     else {
       this.createInputElement(blank);
     }
+
+    this.dom.append(this.solutionSpan);
   }
 
   private initializeCallbacks(callbacks: BlankCallbacks): void {
@@ -49,6 +52,10 @@ export default class BlankView {
     this.dom.id = `container${blank.id}`;
     this.dom.classList.add('blank');
     this.updateDomClasses(blank);
+
+    this.solutionSpan = document.createElement('span');
+    this.solutionSpan.classList.add('correct-answer');
+    this.solutionSpan.hidden = true;
   }
 
   private updateDomClasses(blank: Blank): void {
@@ -58,6 +65,7 @@ export default class BlankView {
     this.dom.classList.toggle('error', blank.isError ?? false);
     this.dom.classList.toggle('retry', blank.isRetry ?? false);
     this.dom.classList.toggle('showing-solution', blank.isShowingSolution ?? false);
+    this.dom.classList.toggle('disabled', blank.isDisabled ?? false);
   }
 
   private buildTipContainer(blank: Blank): HTMLSpanElement {
@@ -219,14 +227,20 @@ export default class BlankView {
     this.dom.id = `container${blank.id}`;
     this.updateDomClasses(blank);
 
+    const isInputDisabled = blank.isDisabled || blank.isCorrect || blank.isShowingSolution;
     if (this.inputElement instanceof HTMLInputElement) {
       // this.inputElement.value = blank.enteredText || '';
-      this.inputElement.disabled = blank.isCorrect || blank.isShowingSolution;
+      this.inputElement.disabled = isInputDisabled;
       this.inputElement.size = blank.minTextLength;
     }
     else if (this.inputElement instanceof HTMLSelectElement) {
       // this.inputElement.value = blank.enteredText || '';
-      this.inputElement.disabled = blank.isCorrect || blank.isShowingSolution;
+      this.inputElement.disabled = isInputDisabled;
     }
+
+    const showSolution = blank.isShowingSolution && !blank.isCorrect;
+    this.solutionSpan.hidden = !showSolution;
+    if (showSolution)
+      this.solutionSpan.textContent = blank.getCorrectAnswers()[0];
   }
 }

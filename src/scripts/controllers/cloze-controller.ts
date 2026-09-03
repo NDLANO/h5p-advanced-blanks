@@ -147,6 +147,7 @@ export class ClozeController {
     for (const blank of this.cloze.blanks) {
       if ((!blank.isCorrect) && blank.enteredText !== '')
         blank.evaluateAttempt(true, true);
+      blank.isDisabled = true;
     }
     this.refreshCloze();
     this.checkAndNotifyCompleteness();

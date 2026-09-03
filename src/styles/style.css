@@ -68,9 +68,37 @@ select.h5p-text-input {
 /* Showing solution input */
 
 .h5p-advanced-blanks .blank.showing-solution .h5p-text-input {
-    border: 1px dashed #9dd8bb;
+  background-color: #f7d0d0;
+  border: 1px solid #f7d0d0;
+  color: #b71c1c;
+  text-decoration: line-through;
+}
+
+.h5p-advanced-blanks .blank.showing-solution .h5p-input-wrapper:after {
+    position: absolute;
+    right: 0.5em;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'H5PFontAwesome4';
+    text-decoration: none;
+    content: "\f00d";
+    color: #b71c1c;
+}
+
+/* Correct answer shown next to a wrong one */
+
+.h5p-advanced-blanks .correct-answer {
+    background-color: #d4f6e6;
+    border: 1px #255c41 dashed;
+    border-radius: 0.25em;
     color: #255c41;
-    background: #FFFFFF;
+    font-weight: bold;
+    margin-left: .5em;
+    padding: 0.15em;
+}
+
+.h5p-advanced-blanks .correct-answer[hidden] {
+    display: none;
 }
 
 
@@ -243,12 +271,18 @@ select.h5p-text-input {
 
 /* pending feedback marker */
 
-.h5p-advanced-blanks .h5p-advanced-blanks-select-mode .blank:not(.has-pending-feedback) button.h5p-notification {
+.h5p-advanced-blanks .h5p-advanced-blanks-select-mode .blank:not(.has-pending-feedback) button.h5p-notification,
+.h5p-advanced-blanks .h5p-advanced-blanks-type-mode .blank:not(.has-pending-feedback) button.h5p-notification {
     display: none;
 }
 
-.h5p-advanced-blanks .h5p-advanced-blanks-select-mode .blank.has-pending-feedback button.h5p-notification {
-    font-size: large;    
+.h5p-advanced-blanks .h5p-advanced-blanks-select-mode .blank.has-pending-feedback button.h5p-notification,
+.h5p-advanced-blanks .h5p-advanced-blanks-type-mode .blank.has-pending-feedback button.h5p-notification {
+    font-size: large;
+}
+
+.h5p-advanced-blanks button.h5p-notification {
+  cursor: pointer;
 }
 
 .h5p-advanced-blanks .h5p-advanced-blanks-select-mode .blank.has-pending-feedback button.h5p-notification,
@@ -298,4 +332,58 @@ select.h5p-text-input {
     13% {
         transform: translate3d(2px, 0, 0);
     }
+}
+
+/* Customization select mode */
+.h5p-advanced-blanks .h5p-advanced-blanks-select-mode .blank.has-tip.correct .h5p-input-wrapper::after,
+.h5p-advanced-blanks .h5p-advanced-blanks-select-mode .blank.has-tip.error .h5p-input-wrapper::after,
+.h5p-advanced-blanks .h5p-advanced-blanks-select-mode .blank.has-tip.retry .h5p-input-wrapper::after,
+.h5p-advanced-blanks .h5p-advanced-blanks-select-mode .blank.has-tip.showing-solution .h5p-input-wrapper::after {
+  right: 0.5em;
+}
+
+.h5p-advanced-blanks .h5p-advanced-blanks-select-mode .blank.has-tip select.h5p-text-input {
+  margin-right: 1.5em;
+}
+
+.h5p-advanced-blanks .h5p-advanced-blanks-select-mode .blank.correct select.h5p-text-input,
+.h5p-advanced-blanks .h5p-advanced-blanks-select-mode .blank.error select.h5p-text-input,
+.h5p-advanced-blanks .h5p-advanced-blanks-select-mode .blank.retry select.h5p-text-input,
+.h5p-advanced-blanks .h5p-advanced-blanks-select-mode .blank.showing-solution select.h5p-text-input {
+  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+
+  padding-right: 3.5em;
+}
+
+.h5p-advanced-blanks .h5p-advanced-blanks-select-mode .blank.has-tip.correct select.h5p-text-input,
+.h5p-advanced-blanks .h5p-advanced-blanks-select-mode .blank.has-tip.error select.h5p-text-input,
+.h5p-advanced-blanks .h5p-advanced-blanks-select-mode .blank.has-tip.retry select.h5p-text-input,
+.h5p-advanced-blanks .h5p-advanced-blanks-select-mode .blank.has-tip.showing-solution select.h5p-text-input {
+  margin-right: 0;
+}
+
+.h5p-advanced-blanks .h5p-advanced-blanks-select-mode .blank.correct select.h5p-text-input::-ms-expand,
+.h5p-advanced-blanks .h5p-advanced-blanks-select-mode .blank.error select.h5p-text-input::-ms-expand,
+.h5p-advanced-blanks .h5p-advanced-blanks-select-mode .blank.retry select.h5p-text-input::-ms-expand,
+.h5p-advanced-blanks .h5p-advanced-blanks-select-mode .blank.showing-solution select.h5p-text-input::-ms-expand {
+  display: none;
+}
+
+.h5p-advanced-blanks .h5p-advanced-blanks-select-mode .h5p-tip-container {
+  right: -0.15em;
+}
+
+.h5p-advanced-blanks .blank.has-tip.correct .h5p-tip-container,
+.h5p-advanced-blanks .blank.has-tip.error .h5p-tip-container,
+.h5p-advanced-blanks .blank.has-tip.retry .h5p-tip-container,
+.h5p-advanced-blanks .blank.has-tip.showing-solution .h5p-tip-container,
+.h5p-advanced-blanks .blank.has-tip.disabled .h5p-tip-container {
+  display: none;
+}
+
+.h5p-advanced-blanks .h5p-advanced-blanks-select-mode .joubel-icon-tip-normal {
+  position: relative;
+  top: -0.5em;
 }
