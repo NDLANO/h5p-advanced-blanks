@@ -8,7 +8,7 @@ import { H5PLocalization } from '@services/localization';
 import { ClozeType, SelectAlternatives } from '@models/enums';
 import { Highlight } from '@models/highlight';
 import { Blank } from '@models/blank';
-import { Correctness } from '@models/answer';
+import { Correctness } from '@models/evaluation';
 
 import BlankView from '@views/blank-view';
 import HighlightView from '@views/highlight-view';

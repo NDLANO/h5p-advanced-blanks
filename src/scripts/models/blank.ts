@@ -1,6 +1,7 @@
 import { MessageService } from '@services/message-service';
 import { ClozeElement, ClozeElementType } from './cloze-element';
-import { Answer, Correctness } from './answer';
+import { Answer } from './answer';
+import { Correctness } from './evaluation';
 import { Message } from './message';
 import { MessageType, ClozeType, SelectAlternatives } from './enums';
 import { H5PLocalization, LocalizationLabels } from '@services/localization';

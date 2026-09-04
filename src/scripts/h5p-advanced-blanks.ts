@@ -169,7 +169,7 @@ export default class AdvancedBlanks extends (H5P.Question as { new( type:string,
   /**
    * Called by H5P.Question.attach(). Create all content elements and registers them with H5P.Question.
    */
-  registerDomElements = function () {
+  registerDomElements = () => {
     this.registerMedia();
     this.setIntroduction(this.repository.getTaskDescription());
 
