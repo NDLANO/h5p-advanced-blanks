@@ -239,6 +239,11 @@ export default class AdvancedBlanks extends (H5P.Question as { new( type:string,
         this.setVideo(media);
       }
     }
+    else if (type === 'H5P.Audio') {
+      if (media.params.files) {
+        this.setAudio(media);
+      }
+    }
   }
 
   /**
