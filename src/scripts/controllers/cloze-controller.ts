@@ -424,6 +424,7 @@ export class ClozeController {
       if (this.onSolved) {
         this.onSolved();
       }
+
       return true;
     }
 

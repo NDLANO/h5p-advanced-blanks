@@ -31,6 +31,7 @@ export const extend = (target: object, ...sources: object[]): object => {
       }
     }
   });
+
   return target;
 };
 
