@@ -5,15 +5,17 @@ import { Highlight } from '../models/highlight';
 import { Cloze } from '../models/cloze';
 
 /**
- * Loads a cloze object.
+ * Load and configure cloze instances from content data.
  */
 export class ClozeLoader {
+  /** @constant {string} normalizedBlankMarker Marker used to normalize blank markings in HTML. */
   private static normalizedBlankMarker = '___';
 
   /**
-   * @param  {string} html - The html string that contains the cloze with blanks marking and highlight markings.
-   * @param  {Blank[]} blanks - All blanks as entered by the content author.
-   * @returns Cloze
+   * Create Cloze instance from HTML and blanks.
+   * @param {string} html HTML string with blank and highlight markup.
+   * @param {Blank[]} blanks Blanks as entered by content author.
+   * @returns {Cloze} Configured Cloze instance.
    */
   public static createCloze(html: string, blanks: Blank[]): Cloze {
     html = ClozeLoader.normalizeBlankMarkings(html);
@@ -35,14 +37,10 @@ export class ClozeLoader {
   }
 
   /**
-   * Converts !!signal!! highlight markup and ___  blank markup into <span>...</span>.
-   * Returns the resulting html string and three lists of all active elements used in the cloze:
-   *    orderedAllElements: highlights and blanks in the order of appearance in the html.
-   *    highlightInstances: only highlights in the order of appearance
-   *    blanksInstances: only blanks in the order of appearance
-   * @param  {string} html
-   * @param  {Blank[]} blanks
-   * @returns Lists of active elements (see description).
+   * Convert highlight and blank markup into span elements.
+   * @param {string} html HTML with markup to convert.
+   * @param {Blank[]} blanks Blanks to match against.
+   * @returns {object} Result containing html, orderedAllElementsList, highlightInstances, and blanksInstances.
    */
   private static convertMarkupToSpans(html: string, blanks: Blank[]): {
     html: string, orderedAllElementsList: ClozeElement[], highlightInstances: Highlight[], blanksInstances: Blank[]
@@ -55,7 +53,6 @@ export class ClozeLoader {
     let highlightCounter = 0;
     let blankCounter = 0;
 
-    // Searches the html string for highlights and blanks and inserts spans.
     let nextHighlightMatch: RegExpMatchArray | null;
     let nextBlankIndex : number;
     do {
@@ -63,7 +60,6 @@ export class ClozeLoader {
       nextBlankIndex = html.indexOf(ClozeLoader.normalizedBlankMarker);
 
       if (nextHighlightMatch && ((nextHighlightMatch.index < nextBlankIndex) || (nextBlankIndex < 0))) {
-        // next active element is a highlight
         const highlight = new Highlight(nextHighlightMatch[1], `highlight_${highlightCounter}`);
         highlightInstances.push(highlight);
         orderedAllElementsList.push(highlight);
@@ -71,9 +67,7 @@ export class ClozeLoader {
         highlightCounter++;
       }
       else if (nextBlankIndex >= 0) {
-        // next active element is a blank
         if (blankCounter >= blanks.length) {
-          // The content author has marked too many blanks in the text, but not entered correct answers.
           html = html.replace(ClozeLoader.normalizedBlankMarker, '<span></span>');
         }
         else {
@@ -96,24 +90,27 @@ export class ClozeLoader {
   }
 
   /**
-   * Looks for all instances of marked blanks and replaces them with ___.
-   * @param  {string} html
-   * @returns string
+   * Replace all marked blank instances with normalized marker.
+   * @param {string} html HTML string to normalize.
+   * @returns {string} Normalized HTML string.
    */
   private static normalizeBlankMarkings(html: string): string {
     const underlineBlankRegEx = /_{3,}/g;
     html = html.replace(underlineBlankRegEx, ClozeLoader.normalizedBlankMarker);
+
     return html;
   }
 
   /**
-   * Iterates through all blanks and calls their linkHighlightIdsToObjects(...).
-   * @param orderedAllElementsList
-   * @param highlightInstances
-   * @param blanksInstances
+   * Link highlight objects to blanks based on document order.
+   * @param {ClozeElement[]} orderedAllElementsList All elements in document order.
+   * @param {Highlight[]} highlightInstances Highlight instances.
+   * @param {Blank[]} blanksInstances Blank instances.
    */
   private static linkHighlightsObjects(
-    orderedAllElementsList: ClozeElement[], highlightInstances: Highlight[], blanksInstances: Blank[]
+    orderedAllElementsList: ClozeElement[],
+    highlightInstances: Highlight[],
+    blanksInstances: Blank[]
   ): void {
     for (const blank of blanksInstances) {
       const nextBlankIndexInArray = orderedAllElementsList.indexOf(blank);

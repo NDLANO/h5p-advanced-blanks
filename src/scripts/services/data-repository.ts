@@ -1,49 +1,77 @@
-﻿import { BlankLoader } from '../content-loaders/blank-loader';
+import { BlankLoader } from '../content-loaders/blank-loader';
 import { Blank } from '../models/blank';
 import { Snippet } from '../models/snippet';
 import { ISettings } from '../services/settings';
 import { H5PLocalization } from './localization';
-import { Unrwapper } from '../helpers/unwrapper';
+import { Unwrapper } from '../helpers/unwrapper';
 
+/**
+ * Interface for accessing cloze content data.
+ */
 export interface IDataRepository {
+  /** Return list of blanks for cloze. */
   getBlanks(): Blank[];
+
+  /** Return cloze text as HTML markup. */
   getClozeText(): string;
-  getFeedbackText(): string;
+
+  /** Return media information for cloze. */
   getMedia(): any;
+
+  /** Return task description text. */
   getTaskDescription(): string;
+
+  /** Return list of snippets for cloze. */
   getSnippets(): Snippet[];
 }
 
 /**
- * Wraps around the h5p config object and provides access to the content.
+ * Wrap h5p config object and provide access to content.
  */
 export class H5PDataRepository implements IDataRepository {
+  /**
+   * Create H5PDataRepository instance.
+   * @class
+   * @param {any} h5pConfigData H5P configuration data.
+   * @param {ISettings} settings Application settings.
+   * @param {H5PLocalization} localization Localization service.
+   * @param {JQueryStatic} jquery jQuery instance.
+   * @param {Unwrapper} unwrapper Unwrapper helper.
+   */
   constructor(private h5pConfigData: any, private settings: ISettings,
-    private localization: H5PLocalization, private jquery: JQueryStatic, 
-    private unwrapper: Unrwapper) {
+    private localization: H5PLocalization, private jquery: JQueryStatic,
+    private unwrapper: Unwrapper) {
 
   }
 
   /**
-   * Returns the blank text of the cloze (as HTML markup).
+   * Return blank text of cloze (as HTML markup).
+   * @returns {string} Cloze text as HTML markup.
    */
   getClozeText(): string {
     return this.h5pConfigData.content.blanksText;
   }
 
-  // TODO: remove or implement
-  getFeedbackText(): string {
-    return '';
-  }
-
+  /**
+   * Return media information for cloze.
+   * @returns {any} Media type of cloze.
+   */
   getMedia(): any {
     return this.h5pConfigData.media.type;
   }
 
+  /**
+   * Return task description text.
+   * @returns {string} Task description text.
+   */
   getTaskDescription(): string {
     return this.h5pConfigData.content.task;
   }
 
+  /**
+   * Return list of blanks for cloze.
+   * @returns {Blank[]} List of configured blank instances.
+   */
   getBlanks(): Blank[] {
     const blanks: Blank[] = [];
 
@@ -79,6 +107,10 @@ export class H5PDataRepository implements IDataRepository {
     return blanks;
   }
 
+  /**
+   * Return list of snippets for cloze.
+   * @returns {Snippet[]} List of configured snippet instances.
+   */
   getSnippets(): Snippet[] {
     const snippets: Snippet[] = [];
 
@@ -91,6 +123,7 @@ export class H5PDataRepository implements IDataRepository {
       const snippet = new Snippet(raw_snippet.snippetName, this.unwrapper.unwrap(raw_snippet.snippetText));
       snippets.push(snippet);
     }
+
     return snippets;
   }
 }

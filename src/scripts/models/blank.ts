@@ -1,4 +1,4 @@
-﻿import { MessageService } from '../services/message-service';
+import { MessageService } from '../services/message-service';
 import { ClozeElement, ClozeElementType } from './cloze-element';
 import { Answer, Correctness } from './answer';
 import { Message } from './message';
@@ -8,36 +8,72 @@ import { ISettings } from '../services/settings';
 import { getLongestString, shuffleArray } from '../../lib/helpers';
 import * as jsdiff from 'diff';
 
+/**
+ * Represent blank in cloze exercise, handling answers, feedback, and state.
+ */
 export class Blank extends ClozeElement {
-  // content
+  /** List of correct answers for this blank. */
   correctAnswers: Answer[];
+
+  /** List of incorrect answers for this blank. */
   incorrectAnswers: Answer[];
+
+  /** Hint message displayed to user. */
   hint: Message;
+
+  /** Unique identifier for this blank. */
   id: string;
+
+  /** List of choices for select-mode blanks. */
   choices: string[];
+
+  /** Order of alternatives as entered by content author. */
   defaultOrder: string[];
+
+  /** True if this blank has a hint. */
   hasHint: boolean;
 
-  // viewmodel stuff
-
+  /** Text last checked against answers. */
   lastCheckedText: string;
+
+  /** Text entered by the user. */
   enteredText: string;
+
+  /** True if the answer is correct. */
   isCorrect: boolean;
+
+  /** True if the answer is incorrect. */
   isError: boolean;
+
+  /** True if the user is being asked to retry. */
   isRetry: boolean;
+
+  /** True if feedback is pending display. */
   hasPendingFeedback: boolean;
+
+  /** True if showing the solution. */
   isShowingSolution: boolean;
+
+  /** True if the blank is disabled. */
   isDisabled: boolean;
+
+  /** Message text to display. */
   message: string;
+
+  /** Minimum text length for input box. */
   minTextLength: number;
+
+  /** Speech bubble element reference. */
   speechBubble: any;
 
   /**
-   * Add incorrect answers after initializing the object. Call finishInitialization() when done.
-   * @param  {ISettings} settings
-   * @param  {string} id
-   * @param  {string} correctText?
-   * @param  {string} hintText?
+   * Create Blank instance.
+   * @class
+   * @param {ISettings} settings Application settings.
+   * @param {H5PLocalization} localization Localization service.
+   * @param {JQueryStatic} jquery jQuery instance.
+   * @param {MessageService} messageService Message service.
+   * @param {string} id Blank identifier.
    */
   constructor(
     private settings: ISettings,
@@ -59,8 +95,8 @@ export class Blank extends ClozeElement {
   }
 
   /**
-  * Call this method when all incorrect answers have been added.
-  */
+   * Finalize initialization after all incorrect answers are added.
+   */
   public finishInitialization(): void {
     if (
       this.settings.clozeType === ClozeType.Select &&
@@ -71,10 +107,18 @@ export class Blank extends ClozeElement {
     this.calculateMinTextLength();
   }
 
-  public addCorrectAnswer(answer: Answer) {
+  /**
+   * Add correct answer to blank.
+   * @param {Answer} answer Answer to add.
+   */
+  public addCorrectAnswer(answer: Answer): void {
     this.correctAnswers.push(answer);
   }
 
+  /**
+   * Return all correct answer alternatives.
+   * @returns {string[]} List of correct answer strings.
+   */
   public getCorrectAnswers(): string[] {
     let result = [];
     for (const answer of this.correctAnswers) {
@@ -83,23 +127,28 @@ export class Blank extends ClozeElement {
     return result;
   }
 
-  public setHint(message: Message) {
+  /**
+   * Set hint message for blank.
+   * @param {Message} message Hint message.
+   */
+  public setHint(message: Message): void {
     this.hint = message;
     this.hasHint = this.hint.text !== '';
   }
 
   /**
-   * Sets the alternatives in the order in which the content author
-   * entered them.
+   * Set alternatives in order entered by content author.
    */
-  public setDefaultOrder(defaultOrder: string[]) {
+  public setDefaultOrder(defaultOrder: string[]): void {
     this.defaultOrder = defaultOrder;
   }
 
   /**
-   * Adds the incorrect answer to the list.
-   * @param text - What the user must enter.
-   * @param reaction  - What the user gets displayed when he enteres the text.
+   * Add incorrect answer to list.
+   * @param {string} text Text the user must enter.
+   * @param {string} reaction Feedback shown when user enters the text.
+   * @param {boolean} showHighlight Whether to show a highlight.
+   * @param {number} highlight Highlight index.
    */
   public addIncorrectAnswer(text: string, reaction: string, showHighlight: boolean, highlight: number): void {
     this.incorrectAnswers.push(
@@ -107,9 +156,8 @@ export class Blank extends ClozeElement {
   }
 
   /**
-   * Returns how many characters the input box must have be to allow for all correct answers.
+   * Calculate minimum input box length to accommodate all correct answers.
    */
-  // TODO: refactor
   private calculateMinTextLength(): void {
     const answers: string[] = [];
     for (const correctAnswer of this.correctAnswers) {
@@ -128,9 +176,8 @@ export class Blank extends ClozeElement {
   }
 
   /**
-   * Creates a list of choices from the alternatives in the order in
-   * which the content author entered them (defaultOrder), or from all
-   * alternatives provided by the correct and incorrect answers.
+   * Create list of choices from own alternatives, respecting content author order.
+   * @returns {string[]} List of choices for select-mode.
    */
   private loadChoicesFromOwnAlternatives(): string[] {
     if (this.defaultOrder) {
@@ -163,8 +210,9 @@ export class Blank extends ClozeElement {
   }
 
   /**
-   * Creates a list of choices from all correct answers of the cloze.
-   * @param otherBlanks All OTHER blanks in the cloze. (excludes the current one!)
+   * Create list of choices from all correct answers of other blanks.
+   * @param {Blank[]} otherBlanks All other blanks in the cloze (excludes current).
+   * @returns {string[]} List of choices for select-mode.
    */
   public loadChoicesFromOtherBlanks(otherBlanks: Blank[]): string[] {
     const ownChoices = [];
@@ -207,9 +255,9 @@ export class Blank extends ClozeElement {
   }
 
   /**
-  * Clears the blank from all entered text and hides popups.
-  */
-  public reset() {
+   * Clear blank from all entered text and hide popups.
+   */
+  public reset(): void {
     this.enteredText = '';
     this.lastCheckedText = '';
     this.removeTooltip();
@@ -219,10 +267,9 @@ export class Blank extends ClozeElement {
   }
 
   /**
-   * Sets the blank to a state in which the correct solution if shown if the user
-   * hasn't entered a correct one so far.
+   * Show solution for blank if no correct answer was entered.
    */
-  public showSolution() {
+  public showSolution(): void {
     this.evaluateAttempt(true);
     this.removeTooltip();
     if (this.isCorrect) {
@@ -231,7 +278,10 @@ export class Blank extends ClozeElement {
     this.setAnswerState(MessageType.ShowSolution);
   }
 
-  public onFocused() {
+  /**
+   * Handle focus event for blank.
+   */
+  public onFocused(): void {
     if (this.hasPendingFeedback) {
       this.evaluateAttempt(false);
     }
@@ -241,13 +291,23 @@ export class Blank extends ClozeElement {
     }
   }
 
-  public onDisplayFeedback() {
+  /**
+   * Handle feedback display event for blank.
+   */
+  public onDisplayFeedback(): void {
     if (this.hasPendingFeedback) {
       this.evaluateAttempt(false);
     }
   }
 
-  private displayTooltip(message: string, type: MessageType, surpressTooltip: boolean, id?: string) {
+  /**
+   * Display tooltip message to user.
+   * @param {string} message Message text to display.
+   * @param {MessageType} type Type of message.
+   * @param {boolean} surpressTooltip Whether to suppress tooltip display.
+   * @param {string} [id] Optional highlight ID.
+   */
+  private displayTooltip(message: string, type: MessageType, surpressTooltip: boolean, id?: string): void {
     if (!surpressTooltip) {
       this.messageService.show(id ? id : this.id, message, this);
     }
@@ -256,11 +316,19 @@ export class Blank extends ClozeElement {
     }
   }
 
-  public removeTooltip() {
+  /**
+   * Hide active tooltip.
+   */
+  public removeTooltip(): void {
     this.messageService.hide();
   }
 
-  private setTooltipErrorText(message: Message, surpressTooltip: boolean) {
+  /**
+   * Set error tooltip text with highlighting if applicable.
+   * @param {Message} message Message containing error text.
+   * @param {boolean} surpressTooltip Whether to suppress tooltip display.
+   */
+  private setTooltipErrorText(message: Message, surpressTooltip: boolean): void {
     if (message.highlightedElement) {
       this.displayTooltip(message.text, MessageType.Error, surpressTooltip, message.highlightedElement.id);
     }
@@ -269,6 +337,12 @@ export class Blank extends ClozeElement {
     }
   }
 
+  /**
+   * Generate spelling mistake message with highlighted differences.
+   * @param {string} expectedText Expected answer text.
+   * @param {string} enteredText Text entered by user.
+   * @returns {string} Formatted spelling mistake message.
+   */
   private getSpellingMistakeMessage(expectedText: string, enteredText: string): string {
     let message = this.localization.getTextFromLabel(LocalizationLabels.typoMessage);
 
@@ -300,10 +374,11 @@ export class Blank extends ClozeElement {
   }
 
   /**
-   * Checks if the entered text is the correct answer or one of the
-   * incorrect ones and gives the user feedback accordingly.
+   * Evaluate user-entered text against correct and incorrect answers, providing feedback.
+   * @param {boolean} surpressTooltips Whether to suppress tooltip display.
+   * @param {boolean} [forceCheck] Whether to force re-checking.
    */
-  public evaluateAttempt(surpressTooltips: boolean, forceCheck?: boolean) {
+  public evaluateAttempt(surpressTooltips: boolean, forceCheck?: boolean): void {
     if (!this.hasPendingFeedback && this.lastCheckedText === this.enteredText && !forceCheck) {
       return;
     }
@@ -372,12 +447,18 @@ export class Blank extends ClozeElement {
     this.setAnswerState(MessageType.Error);
   }
 
+  /**
+   * Handle text typed event, clearing feedback state.
+   */
   public onTyped(): void {
     this.setAnswerState(MessageType.None);
     this.lastCheckedText = '';
     this.removeTooltip();
   }
 
+  /**
+   * Handle blur event, hiding active tooltip.
+   */
   public lostFocus(): void {
     if (this.messageService.isActive(this)) {
       this.messageService.hide();
@@ -385,10 +466,10 @@ export class Blank extends ClozeElement {
   }
 
   /**
-   * Sets the boolean properties isCorrect, is Error and isRetry according to thepassed  messageType.
-   * @param messageType
+   * Set answer state properties based on message type.
+   * @param {MessageType} messageType Type of message determining state.
    */
-  private setAnswerState(messageType: MessageType) {
+  private setAnswerState(messageType: MessageType): void {
     this.isCorrect = false;
     this.isError = false;
     this.isRetry = false;
@@ -410,7 +491,12 @@ export class Blank extends ClozeElement {
     }
   }
 
-  private showErrorTooltip(answer: Answer, surpressTooltip: boolean) {
+  /**
+   * Show error tooltip for given answer.
+   * @param {Answer} answer Answer that triggered the error.
+   * @param {boolean} surpressTooltip Whether to suppress tooltip display.
+   */
+  private showErrorTooltip(answer: Answer, surpressTooltip: boolean): void {
     if (answer.message && answer.message.text) {
       this.setTooltipErrorText(answer.message, surpressTooltip);
     }
@@ -420,9 +506,9 @@ export class Blank extends ClozeElement {
   }
 
   /**
-   * Displays the hint in the tooltip.
+   * Display hint in tooltip.
    */
-  public showHint() {
+  public showHint(): void {
     if (this.isShowingSolution || this.isCorrect) {
       return;
     }
@@ -436,11 +522,19 @@ export class Blank extends ClozeElement {
     }
   }
 
-  public serialize() {
+  /**
+   * Serialize blank state to string.
+   * @returns {string} User-entered text.
+   */
+  public serialize(): string {
     return this.enteredText;
   }
 
-  public deserialize(data: any) {
+  /**
+   * Deserialize blank state from data.
+   * @param {any} data Data to deserialize.
+   */
+  public deserialize(data: any): void {
     this.enteredText = data;
   }
 }

@@ -1,20 +1,35 @@
 /**
- * Extend an array just like JQuery's extend.
- * @param {object} arguments Objects to be merged.
- * @return {object} Merged objects.
+ * Extend object just like JQuery's extend.
+ * @param {object} target Target.
+ * @param {...object} sources Sources.
+ * @returns {object} Merged objects.
  */
-export function extend(...args: any[]) {
-  for (let i = 1; i < args.length; i++) {
-    for (const key in args[i]) {
-      if (Object.prototype.hasOwnProperty.call(args[i], key)) {
-        if (typeof args[0][key] === 'object' && typeof args[i][key] === 'object') {
-          extend(args[0][key], args[i][key]);
+export const extend = (target: object, ...sources: object[]): object => {
+  sources.forEach((source) => {
+    for (const key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        if (key === '__proto__' || key === 'constructor') {
+          continue; // Prevent prototype pollution
+        }
+
+        if (source[key] === undefined) {
+          continue;
+        }
+
+        if (
+          typeof target[key] === 'object' && !Array.isArray(target[key]) &&
+          typeof source[key] === 'object' && !Array.isArray(source[key])
+        ) {
+          extend(target[key], source[key]);
+        }
+        else if (Array.isArray(source[key])) {
+          target[key] = source[key].slice();
         }
         else {
-          args[0][key] = args[i][key];
+          target[key] = source[key];
         }
       }
     }
-  }
-  return args[0];
-}
+  });
+  return target;
+};

@@ -1,19 +1,31 @@
-﻿import { Highlight } from './highlight';
+import { Highlight } from './highlight';
 
 /**
- * Represents a message that the content author has specified to be a reaction
- * to an user's answer. 
+ * Represent message that content author has specified to be reaction to user's answer.
  */
 export class Message {
+  /** Highlight element associated with this message. */
   highlightedElement: Highlight;
 
+  /**
+   * Create Message instance.
+   * @class
+   * @param {string} text Message text content.
+   * @param {boolean} showHighlight Whether to show a highlight.
+   * @param {number} relativeHighlightPosition Position index for highlight lookup.
+   */
   constructor(public text: string, showHighlight: boolean, private relativeHighlightPosition: number) {
     if (!showHighlight) {
       this.relativeHighlightPosition = undefined;
     }
   }
 
-  linkHighlight = (highlightsBefore: Highlight[], highlightsAfter: Highlight[]) => {
+  /**
+   * Link this message to highlight based on position.
+   * @param {Highlight[]} highlightsBefore Highlights before the target blank.
+   * @param {Highlight[]} highlightsAfter Highlights after the target blank.
+   */
+  linkHighlight = (highlightsBefore: Highlight[], highlightsAfter: Highlight[]): void => {
     if (!this.relativeHighlightPosition) {
       return;
     }

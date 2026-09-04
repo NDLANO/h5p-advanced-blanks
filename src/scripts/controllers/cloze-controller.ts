@@ -33,39 +33,65 @@ interface TextChanged {
   () : void;
 }
 
+/**
+ * Control cloze interaction logic and coordinate between model and views.
+ */
 export class ClozeController {
+  /** jQuery instance for DOM queries. */
   private jquery: JQuery;
 
+  /** Cloze model instance. */
   private cloze: Cloze;
+
+  /** True if this is a select-mode cloze. */
   private isSelectCloze: boolean;
 
+  /** Callback invoked when score changes. */
   public onScoreChanged: ScoreChanged;
+
+  /** Callback invoked when auto-check occurs. */
   public onAutoChecked: AutoChecked;
+
+  /** Callback invoked when cloze is solved. */
   public onSolved: Solved;
+
+  /** Callback invoked when text is typed. */
   public onTyped: Typed;
+
+  /** Callback invoked when text changes. */
   public onTextChanged: TextChanged;
 
+  /** Map of blank views by ID. */
   private blankViews: { [id: string]: BlankView } = {};
+
+  /** Map of highlight views by ID. */
   private highlightsViews: { [id: string]: HighlightView } = {};
 
+  /**
+   * Return maximum possible score (number of blanks).
+   * @returns {number} Maximum score.
+   */
   public get maxScore(): number {
     return this.cloze.blanks.length;
   }
 
   /**
-   * Detect whether there are blanks with more than one solution.
-   * @return {boolean} True if there is at least one blank with more than one solution.
+   * Detect whether any blank has more than one solution.
+   * @returns {boolean} True if at least one blank has multiple solutions.
    */
   public get hasAlternatives(): boolean {
     return this.cloze.blanks.some((b) => b.correctAnswers[0].alternatives.length > 1);
   }
 
+  /**
+   * Calculate current score from all blank evaluations.
+   * @returns {number} Current score.
+   */
   public get currentScore(): number {
     const score = this.cloze.blanks.reduce((score, b) => {
       const notShowingSolution = !b.isShowingSolution;
       const correctAnswerGiven = b.correctAnswers[0].alternatives.indexOf(b.enteredText || '') !== -1;
 
-      // Detect small mistakes
       const closeCorrectMatches = b.correctAnswers
         .map((answer) => answer.evaluateAttempt(b.enteredText))
         .filter((evaluation) => evaluation.correctness === Correctness.CloseMatch);
@@ -77,31 +103,58 @@ export class ClozeController {
     return Math.max(0, score);
   }
 
-  public get allBlanksEntered() {
+  /**
+   * Check whether all blanks have been entered (error, correct, or retry state).
+   * @returns {boolean} True if all blanks have been entered.
+   */
+  public get allBlanksEntered(): boolean {
     if (this.cloze) {
       return this.cloze.blanks.every((blank) => blank.isError || blank.isCorrect || blank.isRetry);
     }
+
     return false;
   }
 
+  /**
+   * Check whether cloze is fully solved.
+   * @returns {boolean} True if the cloze is solved.
+   */
   public get isSolved(): boolean {
     return this.cloze.isSolved;
   }
 
-  public get isFilledOut() {
+  /**
+   * Check whether any blank has been filled out.
+   * @returns {boolean} True if at least one blank has content.
+   */
+  public get isFilledOut(): boolean {
     if (!this.cloze || this.cloze.blanks.length === 0) {
       return true;
     }
+
     return this.cloze.blanks.some((b) => b.enteredText !== '');
   }
 
-  public get isFullyFilledOut() {
+  /**
+   * Check whether all blanks have been filled out.
+   * @returns {boolean} True if all blanks have content.
+   */
+  public get isFullyFilledOut(): boolean {
     if (!this.cloze || this.cloze.blanks.length === 0) {
       return true;
     }
+
     return this.cloze.blanks.every((b) => b.enteredText !== '');
   }
 
+  /**
+   * Create ClozeController instance.
+   * @class
+   * @param {IDataRepository} repository Data repository.
+   * @param {ISettings} settings Application settings.
+   * @param {H5PLocalization} localization Localization service.
+   * @param {MessageService} MessageService Message service.
+   */
   constructor(
     private repository: IDataRepository,
     private settings: ISettings,
@@ -110,11 +163,9 @@ export class ClozeController {
   ) {}
 
   /**
-   * Sets up the cloze model (blanks, snippets, cloze instance).
-   * Touches no DOM, so it can be called from the content type's constructor
-   * before the container exists.
+   * Set up cloze model (blanks, snippets, cloze instance).
    */
-  public setupModel() {
+  public setupModel(): void {
     this.isSelectCloze = this.settings.clozeType === ClozeType.Select ? true : false;
 
     const blanks = this.repository.getBlanks();
@@ -133,11 +184,11 @@ export class ClozeController {
   }
 
   /**
-   * Renders the cloze into the DOM and creates the views.
-   * Requires setupModel() to have been called first.
-   * @param  {HTMLElement} root
+   * Render cloze into DOM and creates views. Requires setupModel() to have been called first.
+   * @param {HTMLElement} root Root element to render into.
+   * @param {JQuery} jquery jQuery instance.
    */
-  public render(root: HTMLElement, jquery: JQuery) {
+  public render(root: HTMLElement, jquery: JQuery): void {
     this.jquery = jquery;
 
     const containers = this.createAndAddContainers(root);
@@ -145,7 +196,10 @@ export class ClozeController {
     this.createViews();
   }
 
-  checkAll = () => {
+  /**
+   * Check all blanks and evaluate answers.
+   */
+  checkAll = (): void => {
     this.cloze.hideAllHighlights();
     for (const blank of this.cloze.blanks) {
       if ((!blank.isCorrect) && blank.enteredText !== '') {
@@ -157,37 +211,69 @@ export class ClozeController {
     this.checkAndNotifyCompleteness();
   };
 
-  textTyped = (event, blank: Blank) => {
+  /**
+   * Handle text typed event for blank.
+   * @param {Event} event Keyboard event.
+   * @param {Blank} blank Blank that received input.
+   */
+  textTyped = (event: Event, blank: Blank): void => {
     blank.onTyped();
     if (this.onTyped) {
       this.onTyped();
     }
+
     this.refreshCloze();
   };
 
-  focus = (event, blank: Blank) => {
+  /**
+   * Handle focus event for blank.
+   * @param {Event} event Focus event.
+   * @param {Blank} blank Blank that received focus.
+   */
+  focus = (event: Event, blank: Blank): void => {
     blank.onFocused();
     this.refreshCloze();
   };
 
-  displayFeedback = (event, blank: Blank) => {
+  /**
+   * Handle feedback display event for blank.
+   * @param {Event} event Click event.
+   * @param {Blank} blank Blank to display feedback for.
+   */
+  displayFeedback = (event: Event, blank: Blank): void => {
     blank.onDisplayFeedback();
     this.refreshCloze();
   };
 
-  showHint = (event, blank: Blank) => {
+  /**
+   * Handle hint display event for blank.
+   * @param {Event} event Click event.
+   * @param {Blank} blank Blank to show hint for.
+   */
+  showHint = (event: Event, blank: Blank): void => {
     this.cloze.hideAllHighlights();
     blank.showHint();
     this.refreshCloze();
   };
 
-  requestCloseTooltip = (event, blank: Blank) => {
+  /**
+   * Handle request to close tooltip for blank.
+   * @param {Event} event Keyboard event.
+   * @param {Blank} blank Blank to close tooltip for.
+   */
+  requestCloseTooltip = (event: Event, blank: Blank): void => {
     blank.removeTooltip();
     this.refreshCloze();
     this.jquery.find('#' + blank.id).focus();
   };
 
-  checkBlank = (event, blank: Blank, cause: string) => {
+  /**
+   * Handle blank check event triggered by user action.
+   * @param {Event} event Event that triggered the check.
+   * @param {Blank} blank Blank to check.
+   * @param {string} cause Event cause (blur, change, enter).
+   */
+  checkBlank = (event: Event, blank: Blank, cause: string): void => {
     if ((cause === 'blur' || cause === 'change')) {
       blank.lostFocus();
     }
@@ -207,12 +293,13 @@ export class ClozeController {
       this.refreshCloze();
       this.onAutoChecked();
     }
+
     if ((cause === 'enter')
       && ((this.settings.autoCheck && blank.isCorrect && !this.isSolved)
         || !this.settings.autoCheck)) {
-      // move to next blank
       let index = this.cloze.blanks.indexOf(blank);
-      let nextId;
+
+      let nextId: string;
       while (index < this.cloze.blanks.length - 1 && !nextId) {
         index++;
         if (!this.cloze.blanks[index].isCorrect) {
@@ -226,16 +313,27 @@ export class ClozeController {
     }
   };
 
-  reset = () => {
+  /**
+   * Reset cloze to initial state.
+   */
+  reset = (): void => {
     this.cloze.reset();
     this.refreshCloze();
   };
 
-  showSolutions = () => {
+  /**
+   * Show solutions for all blanks.
+   */
+  showSolutions = (): void => {
     this.cloze.showSolutions();
     this.refreshCloze();
   };
 
+  /**
+   * Create and adds cloze container element to DOM.
+   * @param {HTMLElement} addTo Element to append container to.
+   * @returns {object} Object containing cloze div element.
+   */
   private createAndAddContainers(addTo: HTMLElement): { cloze: HTMLDivElement } {
     const clozeContainerElement = document.createElement('div');
     clozeContainerElement.id = 'h5p-cloze-container';
@@ -252,7 +350,11 @@ export class ClozeController {
     };
   }
 
-  private createHighlightView(highlight: Highlight) {
+  /**
+   * Create and attaches highlight view.
+   * @param {Highlight} highlight Highlight to create view for.
+   */
+  private createHighlightView(highlight: Highlight): void {
     const highlightView = new HighlightView(highlight);
     this.highlightsViews[highlight.id] = highlightView;
 
@@ -260,7 +362,11 @@ export class ClozeController {
     parent?.appendChild(highlightView.getDOM());
   }
 
-  private createBlankView(blank: Blank) {
+  /**
+   * Create and attaches blank view.
+   * @param {Blank} blank Blank to create view for.
+   */
+  private createBlankView(blank: Blank): void {
     const blankView = new BlankView(blank, this.isSelectCloze, {
       requestCloseTooltip: this.requestCloseTooltip,
       checkBlank: this.checkBlank,
@@ -277,7 +383,10 @@ export class ClozeController {
     parent?.appendChild(blankView.getDOM());
   }
 
-  private createViews() {
+  /**
+   * Create views for all highlights and blanks.
+   */
+  private createViews(): void {
     for (const highlight of this.cloze.highlights) {
       this.createHighlightView(highlight);
     }
@@ -288,10 +397,9 @@ export class ClozeController {
   }
 
   /**
-   * Updates all views of highlights and blanks. Can be called when a model
-   * was changed
+   * Update all views of highlights and blanks after model changes.
    */
-  private refreshCloze() {
+  private refreshCloze(): void {
     for (const highlight of this.cloze.highlights) {
       const highlightView = this.highlightsViews[highlight.id];
       highlightView?.set(highlight);
@@ -303,6 +411,10 @@ export class ClozeController {
     }
   }
 
+  /**
+   * Check cloze completeness and notifies listeners of score changes.
+   * @returns {boolean} True if the cloze is solved.
+   */
   private checkAndNotifyCompleteness = (): boolean => {
     if (this.onScoreChanged) {
       this.onScoreChanged(this.currentScore, this.maxScore);
@@ -318,23 +430,39 @@ export class ClozeController {
     return false;
   };
 
+  /**
+   * Serialize current cloze state to strings.
+   * @returns {string[]} Array of user answers per blank.
+   */
   public serializeCloze(): string[] {
     return this.cloze.serialize();
   }
 
+  /**
+   * Deserialize cloze state from data.
+   * @param {any} data Data to deserialize.
+   * @returns {boolean} True if deserialization succeeded.
+   */
   public deserializeCloze(data: any): boolean {
     if (!this.cloze || !data) {
       return false;
     }
+
     this.cloze.deserialize(data);
     this.refreshCloze();
+
     return true;
   }
 
+  /**
+   * Retrieve list of correct answers for all blanks.
+   * @returns {string[][]} List of correct answer lists per blank.
+   */
   public getCorrectAnswerList(): string[][] {
     if (!this.cloze || this.cloze.blanks.length === 0) {
       return [[]];
     }
+
     const result = [];
     for (const blank of this.cloze.blanks) {
       result.push(blank.getCorrectAnswers());

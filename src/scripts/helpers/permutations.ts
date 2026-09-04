@@ -1,6 +1,7 @@
 /**
- * Creates a list of all possible permutations of a list of lists.
- * @param list The list to permute over.
+ * Creates list of all possible permutations of a list of lists.
+ * @param {any[][]} list The list to permute over.
+ * @returns {any[][]} List of all permutations.
  */
 export function createPermutations(list: any[][]): any[][] {
   let output: any[][] = [[]];

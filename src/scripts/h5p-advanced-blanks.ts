@@ -4,10 +4,11 @@ import { ClozeController } from './controllers/cloze-controller';
 import { H5PLocalization, LocalizationLabels, LocalizationStructures } from './services/localization';
 import { ISettings, H5PSettings } from './services/settings';
 import { MessageService } from './services/message-service';
-import { Unrwapper } from './helpers/unwrapper';
+import { Unwrapper } from './helpers/unwrapper';
 import { XAPIActivityDefinition } from './models/xapi';
 import { extend } from './helpers/extend';
 
+/** Application state enumeration for cloze workflow. */
 enum States {
   ongoing = 'ongoing',
   checking = 'checking',
@@ -16,42 +17,65 @@ enum States {
   showingSolutionsEmbedded = 'showing-solution-embedded'
 }
 
+/** XAPI extension key for alternative responses. */
 const XAPI_ALTERNATIVE_EXTENSION = 'https://h5p.org/x-api/alternatives';
+
+/** XAPI extension key for case sensitivity setting. */
 const XAPI_CASE_SENSITIVITY = 'https://h5p.org/x-api/case-sensitivity';
+
+/** XAPI extension key for reporting version. */
 const XAPI_REPORTING_VERSION_EXTENSION = 'https://h5p.org/x-api/h5p-reporting-version';
 
+/**
+ * Main class for H5P Advanced Blanks content type.
+ */
 export default class AdvancedBlanks extends (H5P.Question as { new( type:string, options?:object ): any; }) {
 
+  /** Controller for cloze interaction logic. */
   private clozeController: ClozeController;
+
+  /** Repository for accessing cloze content data. */
   private repository: IDataRepository;
+
+  /** Application settings. */
   private settings: ISettings;
+
+  /** Localization service. */
   private localization: H5PLocalization;
+
+  /** Service for displaying messages. */
   private messageService: MessageService;
 
-  private jQuery;
+  /** jQuery instance for DOM queries. */
+  private jQuery: JQueryStatic;
 
+  /** Content ID for this cloze instance. */
   private contentId: string;
+
+  /** Previous state for restoring user progress. */
   private previousState: any;
+
+  /** True if previous state was successfully restored. */
   private restoredPreviousState: boolean = false;
+
+  /** Current workflow state of cloze. */
   private state: States;
 
-  /**
-   * Indicates if user has entered any answer so far.
-   */
+  /** True if user has entered any answer so far. */
   private answered: boolean = false;
 
   /**
-   * @constructor
-   *
-   * @param {object} config
-   * @param {string} contentId
-   * @param {object} contentData
+   * Create AdvancedBlanks instance.
+   * @class
+   * @param {object} params Paremeters.
+   * @param {string} contentId Content ID.
+   * @param {object} contentData Content data.
    */
-  constructor(config: any, contentId: string, contentData: any = {}) {
+  constructor(params: any, contentId: string, contentData: any = {}) {
     super('advanced-blanks');
 
     // Set mandatory default values for editor widgets that create content type instances
-    config = extend({
+    params = extend({
       content: {
         blanksText: ''
       },
@@ -60,18 +84,18 @@ export default class AdvancedBlanks extends (H5P.Question as { new( type:string,
         selectAlternatives: 'alternatives'
       },
       submitAnswer: 'Submit',
-    }, config);
+    }, params);
 
     this.jQuery = H5P.jQuery;
     this.contentId = contentId;
     this.contentData = contentData;
 
-    const unwrapper = new Unrwapper(this.jQuery);
+    const unwrapper = new Unwrapper(this.jQuery);
 
-    this.settings = new H5PSettings(config);
-    this.localization = new H5PLocalization(config);
+    this.settings = new H5PSettings(params);
+    this.localization = new H5PLocalization(params);
     this.repository = new H5PDataRepository(
-      config, this.settings, this.localization, <JQueryStatic> this.jQuery, unwrapper
+      params, this.settings, this.localization, <JQueryStatic> this.jQuery, unwrapper
     );
     this.messageService = new MessageService(this.jQuery);
     BlankLoader.initialize(this.settings, this.localization, this.jQuery, this.messageService);
@@ -88,9 +112,6 @@ export default class AdvancedBlanks extends (H5P.Question as { new( type:string,
       this.previousState = contentData.previousState;
     }
 
-    // Set up the cloze model and restore previous answers before any DOM
-    // exists, so the Question-contract methods (getScore, getCurrentState,
-    // getXAPIData) work on instances that have not been attached yet.
     this.clozeController.setupModel();
     this.restoredPreviousState = this.clozeController.deserializeCloze(this.previousState);
     if (this.restoredPreviousState) {
@@ -99,7 +120,7 @@ export default class AdvancedBlanks extends (H5P.Question as { new( type:string,
   }
 
   /**
-   * Called from outside when the score of the cloze has changed.
+   * Called from outside when score of cloze changed.
    */
   private onScoreChanged = (score: number, maxScore: number) => {
     if (this.clozeController.isFullyFilledOut) {
@@ -112,14 +133,21 @@ export default class AdvancedBlanks extends (H5P.Question as { new( type:string,
     else {
       this.setFeedback('', score, maxScore);
     }
+
     this.transitionState();
     this.toggleButtonVisibility(this.state);
   };
 
+  /**
+   * Called when cloze is fully solved.
+   */
   private onSolved() {
 
   }
 
+  /**
+   * Called when user types in blank.
+   */
   private onTyped = () => {
     if (this.state === States.checking) {
       this.state = States.ongoing;
@@ -128,6 +156,9 @@ export default class AdvancedBlanks extends (H5P.Question as { new( type:string,
     this.answered = true;
   };
 
+  /**
+   * Called when auto-check triggers.
+   */
   private onAutoChecked = () => {
     this.triggerXAPI('interacted');
     if (this.clozeController.isFullyFilledOut) {
@@ -136,22 +167,22 @@ export default class AdvancedBlanks extends (H5P.Question as { new( type:string,
   };
 
   /**
-   * Called by H5P.Question.attach(). Creates all content elements and registers them
-   * with H5P.Question.
+   * Called by H5P.Question.attach(). Create all content elements and registers them with H5P.Question.
    */
   registerDomElements = function () {
     this.registerMedia();
     this.setIntroduction(this.repository.getTaskDescription());
 
-    // TODO: This is jQuery, should be prefixed with $
-    this.container = this.jQuery('<div/>', { 'class': 'h5p-advanced-blanks-conteent' });
-    this.setContent(this.container);
+    this.container = document.createElement('div');
+    this.container.classList.add('h5p-advanced-blanks-content');
+
+    this.setContent(H5P.jQuery(this.container));
     this.registerButtons();
 
     this.moveToState(States.ongoing);
     window.requestAnimationFrame(() => {
       const $h5pContainer = this.container.closest('.h5p-advanced-blanks');
-      this.clozeController.render(this.container.get(0), $h5pContainer);
+      this.clozeController.render(this.container, $h5pContainer);
       if (this.restoredPreviousState) {
         if (this.settings.autoCheck) {
           this.onCheckAnswer();
@@ -162,15 +193,15 @@ export default class AdvancedBlanks extends (H5P.Question as { new( type:string,
   };
 
   /**
-   * @returns JQuery - The outer h5p container. The library can add dialogues to this
-   * element.
+   * Return outer H5P container element for attaching dialogs.
+   * @returns {JQuery} Outer H5P container.
    */
   private getH5pContainer(): JQuery {
     const $content = this.jQuery('[data-content-id="' + this.contentId + '"].h5p-content');
     const $containerParents = $content.parents('.h5p-container');
 
     // select find container to attach dialogs to
-    let $container;
+    let $container: JQuery;
     if ($containerParents.length !== 0) {
       // use parent highest up if any
       $container = $containerParents.last();
@@ -185,6 +216,9 @@ export default class AdvancedBlanks extends (H5P.Question as { new( type:string,
     return $container;
   }
 
+  /**
+   * Register media (image/video) for the cloze.
+   */
   private registerMedia() {
     const media = this.repository.getMedia();
     if (!media || !media.library) {
@@ -207,9 +241,11 @@ export default class AdvancedBlanks extends (H5P.Question as { new( type:string,
     }
   }
 
+  /**
+   * Register action buttons (check, show solution, retry). TODO: Used where?
+   */
   private registerButtons() {
     const $container = this.getH5pContainer();
-
 
     if (!this.settings.autoCheck) {
       // Check answer button
@@ -244,6 +280,9 @@ export default class AdvancedBlanks extends (H5P.Question as { new( type:string,
     }
   }
 
+  /**
+   * Handle check answer button click.
+   */
   private onCheckAnswer = () => {
     this.clozeController.checkAll();
 
@@ -260,18 +299,27 @@ export default class AdvancedBlanks extends (H5P.Question as { new( type:string,
     this.toggleButtonVisibility(this.state);
   };
 
+  /**
+   * Transition to finished state if cloze is solved.
+   */
   private transitionState = () => {
     if (this.clozeController.isSolved) {
       this.moveToState(States.finished);
     }
   };
 
+  /**
+   * Handle show solution button click.
+   */
   private onShowSolution = () => {
     this.moveToState(States.showingSolutions);
     this.clozeController.showSolutions();
     this.showFeedback();
   };
 
+  /**
+   * Handle retry button click.
+   */
   private onRetry = () => {
     this.removeFeedback();
     this.clozeController.reset();
@@ -281,6 +329,9 @@ export default class AdvancedBlanks extends (H5P.Question as { new( type:string,
     this.setActivityStarted(true);
   };
 
+  /**
+   * Display feedback with score and overall feedback message.
+   */
   private showFeedback() {
     const scoreText = H5P.Question.determineOverallFeedback(
       this.localization.getObjectForStructure(LocalizationStructures.overallFeedback),
@@ -296,15 +347,18 @@ export default class AdvancedBlanks extends (H5P.Question as { new( type:string,
   }
 
   /**
-   * Shows are hides buttons depending on the current state and settings made
-   * by the content creator.
-   * @param  {States} state
+   * Show or hide buttons depending on the current state and settings made by content creator.
+   * @param {States} state Workflow state to set.
    */
   private moveToState(state: States) {
     this.state = state;
     this.toggleButtonVisibility(state);
   }
 
+  /**
+   * Toggle visibility of action buttons based on current state.
+   * @param {States} state Current workflow state.
+   */
   private toggleButtonVisibility(state: States) {
     if (this.settings.enableSolutionsButton) {
       if (((state === States.checking)
@@ -326,7 +380,6 @@ export default class AdvancedBlanks extends (H5P.Question as { new( type:string,
     else {
       this.hideButton('try-again');
     }
-
 
     if (state === States.ongoing && this.settings.enableCheckButton) {
       this.showButton('check-answer');
@@ -352,41 +405,55 @@ export default class AdvancedBlanks extends (H5P.Question as { new( type:string,
     return !!this.contentData.standalone;
   }
 
+  /**
+   * Return current state of all blanks.
+   * @returns {string[]} User-entered text per blank.
+   */
   public getCurrentState = (): string[] => {
     return this.clozeController.serializeCloze();
   };
 
-  /****************************************
-   * Implementation of Question contract  *
-   ****************************************/
+  /**
+   * Determine whether answer has been given.
+   * @returns {boolean} True if user answered or no blanks exist.
+   */
   public getAnswerGiven = (): boolean => {
     return this.answered || this.clozeController.maxScore === 0;
   };
 
+  /**
+   * Get current score.
+   * @returns {number} Current score.
+   */
   public getScore = (): number => {
     return this.clozeController.currentScore;
   };
 
+  /**
+   * Get maximum possible score.
+   * @returns {number} Maximum score.
+   */
   public getMaxScore = (): number => {
     return this.clozeController.maxScore;
   };
 
+  /**
+   * Show solutions and moves to embedded showing state.
+   */
   public showSolutions = () => {
     this.onShowSolution();
     this.moveToState(States.showingSolutionsEmbedded);
   };
 
+  /**
+   * Reset task by retrying.
+   */
   public resetTask = () => {
     this.onRetry();
   };
 
-  /***
-   * XApi implementation
-   */
-
-
   /**
-   * Trigger xAPI answered event
+   * Trigger xAPI answered event.
    */
   public triggerXAPIAnswered = (): void => {
     this.answered = true;
@@ -398,9 +465,7 @@ export default class AdvancedBlanks extends (H5P.Question as { new( type:string,
 
   /**
    * Get xAPI data.
-   * Contract used by report rendering engine.
-   *
-   * @see contract at {@link https://h5p.org/documentation/developers/contracts#guides-header-6}
+   * @see contract at {@link https://h5p.org/documentation/developers/developers#guides-header-6}
    */
   public getXAPIData = () => {
     const xAPIEvent = this.createXAPIEventTemplate('answered');
@@ -413,7 +478,7 @@ export default class AdvancedBlanks extends (H5P.Question as { new( type:string,
 
   /**
    * Generate xAPI object definition used in xAPI statements.
-   * @return {Object}
+   * @returns {XAPIActivityDefinition} XAPI activity definition.
    */
   public getxAPIDefinition = (): XAPIActivityDefinition => {
     const definition = new XAPIActivityDefinition();
@@ -438,8 +503,10 @@ export default class AdvancedBlanks extends (H5P.Question as { new( type:string,
     }, []).join('[,]');
     definition.correctResponsesPattern = [`${correctResponsesPatternPrefix}${firstAlternatives}`];
 
-    // Add the H5P Alternative extension which provides all the combinations of different answers
-    // Reporting software will need to support this extension for alternatives to work.
+    /*
+     * Add H5P Alternative extension which provides all combinations of different answers
+     * Reporting software will need to support this extension for alternatives to work.
+     */
     definition.extensions = definition.extensions || {};
     definition.extensions[XAPI_CASE_SENSITIVITY] = this.settings.caseSensitive;
     definition.extensions[XAPI_ALTERNATIVE_EXTENSION] = correctAnswerList;
@@ -448,9 +515,10 @@ export default class AdvancedBlanks extends (H5P.Question as { new( type:string,
   };
 
   /**
-   * Add the question itself to the definition part of an xAPIEvent
+   * Add question itself to definition part of xAPIEvent.
+   * @param {H5P.XAPIEvent} xAPIEvent xAPI event to add question to.
    */
-  public addQuestionToXAPI = (xAPIEvent) => {
+  public addQuestionToXAPI = (xAPIEvent: any) => {
     const definition = xAPIEvent.getVerifiedStatementValue(['object', 'definition']);
     this.jQuery.extend(true, definition, this.getxAPIDefinition());
 
@@ -463,19 +531,18 @@ export default class AdvancedBlanks extends (H5P.Question as { new( type:string,
   };
 
   /**
-   * Add the response part to an xAPI event
+   * Add response part to xAPI event.
    *
-   * @param {H5P.XAPIEvent} xAPIEvent
-   *  The xAPI event we will add a response to
+   * @param {H5P.XAPIEvent} xAPIEvent The xAPI event we will add a response to.
    */
-  public addResponseToXAPI = (xAPIEvent) => {
+  public addResponseToXAPI = (xAPIEvent: any) => {
     xAPIEvent.setScoredResult(this.clozeController.currentScore, this.clozeController.maxScore, this);
     xAPIEvent.data.statement.result.response = this.getxAPIResponse();
   };
 
   /**
    * Generate xAPI user response, used in xAPI statements.
-   * @return {string} User answers separated by the "[,]" pattern
+   * @returns {string} User answers separated by "[,]" pattern.
    */
   public getxAPIResponse = (): string => {
     const usersAnswers = this.getCurrentState();

@@ -1,5 +1,6 @@
 import { Blank } from '../models/blank';
 
+/** Callback signatures for blank interactions. */
 type BlankCallbacks = {
   requestCloseTooltip: (event: Event, blank: Blank) => void;
   checkBlank: (event: Event, blank: Blank, action: string) => void;
@@ -10,15 +11,28 @@ type BlankCallbacks = {
   textChanged: (event: Event, blank: Blank) => void;
 };
 
+/** @constant {object} ICON Icon definitions for blank UI elements. */
 const ICONS = {
   NOTIFICATION: '&#xf05a;', // FontAwesome i icon for notification
 } as const;
 
+/**
+ * View layer for rendering and managing blank input elements.
+ */
 export default class BlankView {
+  /** DOM span element for this blank. */
   private dom: HTMLSpanElement;
+
+  /** Input or select element for user text entry. */
   private inputElement: HTMLInputElement | HTMLSelectElement;
+
+  /** Tip/help button element. */
   private tipButton: HTMLButtonElement;
+
+  /** Span element showing correct answer. */
   private solutionSpan: HTMLSpanElement;
+
+  /** Callback handlers for blank interactions. */
   private callbacks: BlankCallbacks = {
     requestCloseTooltip: () => { },
     checkBlank: () => { },
@@ -29,6 +43,13 @@ export default class BlankView {
     textChanged: () => { }
   };
 
+  /**
+   * Create BlankView instance.
+   * @class
+   * @param {Blank} blank Blank model to render.
+   * @param {boolean} isSelectCloze True if this is select-mode cloze.
+   * @param {BlankCallbacks} callbacks Callback handlers for interactions.
+   */
   constructor(blank: Blank, isSelectCloze: boolean, callbacks: BlankCallbacks) {
     this.initializeCallbacks(callbacks);
     this.createDomStructure(blank);
@@ -43,10 +64,18 @@ export default class BlankView {
     this.dom.append(this.solutionSpan);
   }
 
+  /**
+   * Initializes callback handlers from provided callbacks.
+   * @param {BlankCallbacks} callbacks Callback handlers to initialize.
+   */
   private initializeCallbacks(callbacks: BlankCallbacks): void {
     Object.assign(this.callbacks, callbacks);
   }
 
+  /**
+   * Create DOM structure for this blank view.
+   * @param {Blank} blank Blank model to render.
+   */
   private createDomStructure(blank: Blank): void {
     this.dom = document.createElement('span');
     this.dom.id = `container${blank.id}`;
@@ -58,6 +87,10 @@ export default class BlankView {
     this.solutionSpan.hidden = true;
   }
 
+  /**
+   * Update CSS classes on DOM element based on blank state.
+   * @param {Blank} blank Blank model with current state.
+   */
   private updateDomClasses(blank: Blank): void {
     this.dom.classList.toggle('has-pending-feedback', blank.hasPendingFeedback ?? false);
     this.dom.classList.toggle('has-tip', blank.hasHint ?? false);
@@ -68,6 +101,11 @@ export default class BlankView {
     this.dom.classList.toggle('disabled', blank.isDisabled ?? false);
   }
 
+  /**
+   * Build tip container element with hint button.
+   * @param {Blank} blank Blank model to build tip for.
+   * @returns {HTMLSpanElement} Tip container element.
+   */
   private buildTipContainer(blank: Blank): HTMLSpanElement {
     const tipContainer = document.createElement('span');
     tipContainer.classList.add('h5p-tip-container');
@@ -101,12 +139,16 @@ export default class BlankView {
     joubelIconTipNormal.append(joubelIconSpeechBubble);
 
     const joubelIconInfo = document.createElement('span');
-    joubelIconInfo.classList.add('h5p-icon-info');
+    joubelIconInfo.classList.add('joubel-icon-info');
     joubelIconTipNormal.append(joubelIconInfo);
 
     return tipContainer;
   }
 
+  /**
+   * Create a select element for select-mode blanks.
+   * @param {Blank} blank Blank model to render.
+   */
   private createSelectElement(blank: Blank): void {
     this.dom.append(this.buildNotificationButton(blank));
 
@@ -138,6 +180,11 @@ export default class BlankView {
     }
   }
 
+  /**
+   * Build notification button element.
+   * @param {Blank} blank Blank model to build notification for.
+   * @returns {HTMLButtonElement} Notification button element.
+   */
   private buildNotificationButton(blank: Blank): HTMLButtonElement {
     const notificationButton = document.createElement('button');
     notificationButton.classList.add('h5p-notification');
@@ -149,6 +196,10 @@ export default class BlankView {
     return notificationButton;
   }
 
+  /**
+   * Create text input element for type-mode blanks.
+   * @param {Blank} blank Blank model to render.
+   */
   private createInputElement(blank: Blank): void {
     const inputWrapper = document.createElement('span');
     inputWrapper.classList.add('h5p-input-wrapper');
@@ -175,6 +226,11 @@ export default class BlankView {
     }
   }
 
+  /**
+   * Set up event handlers for text input elements.
+   * @param {HTMLInputElement} element Input element to bind handlers to.
+   * @param {Blank} blank Blank model for callback context.
+   */
   private setupInputEventHandlers(element: HTMLInputElement, blank: Blank): void {
     element.addEventListener('keydown', (event) => this.handleInputKeydown(event, blank));
     element.addEventListener('blur', (event) => this.callbacks.checkBlank(event, blank, 'blur'));
@@ -182,12 +238,22 @@ export default class BlankView {
     element.addEventListener('change', (event) => this.callbacks.textChanged(event, blank));
   }
 
+  /**
+   * Set up event handlers for select elements.
+   * @param {HTMLSelectElement} element Select element to bind handlers to.
+   * @param {Blank} blank Blank model for callback context.
+   */
   private setupSelectEventHandlers(element: HTMLSelectElement, blank: Blank): void {
     element.addEventListener('keydown', (event) => this.handleSelectKeydown(event, blank));
     element.addEventListener('change', (event) => this.callbacks.checkBlank(event, blank, 'change'));
     element.addEventListener('focus', (event) => this.callbacks.focus(event, blank));
   }
 
+  /**
+   * Handle keydown events for text input elements.
+   * @param {KeyboardEvent} event Keyboard event.
+   * @param {Blank} blank Blank model for callback context.
+   */
   private handleInputKeydown(event: KeyboardEvent, blank: Blank): void {
     switch (event.key) {
       case 'Escape':
@@ -204,25 +270,43 @@ export default class BlankView {
     }
   }
 
+  /**
+   * Handle keydown events for select elements.
+   * @param {KeyboardEvent} event Keyboard event.
+   * @param {Blank} blank Blank model for callback context.
+   */
   private handleSelectKeydown(event: KeyboardEvent, blank: Blank): void {
     if (event.key === 'Enter') {
       this.callbacks.checkBlank(event, blank, 'enter');
     }
   }
 
+  /**
+   * Bind input element value to blank enteredText property.
+   * @param {Blank} blank Blank model to bind.
+   * @param {HTMLInputElement | HTMLSelectElement} inputElement Input element to bind.
+   */
   private bindInputToBlank(blank: Blank, inputElement: HTMLInputElement | HTMLSelectElement): void {
     Object.defineProperty(blank, 'enteredText', {
       get: () => inputElement.value,
       set: (value) => {
-        inputElement.value = value; 
+        inputElement.value = value;
       }
     });
   }
 
-  getDOM() {
+  /**
+   * Get DOM element for this view.
+   * @returns {HTMLSpanElement} DOM element.
+   */
+  getDOM(): HTMLSpanElement {
     return this.dom;
   }
 
+  /**
+   * Update view with current blank state.
+   * @param {Blank} blank Blank model with updated state.
+   */
   set(blank: Blank) {
     this.dom.id = `container${blank.id}`;
     this.updateDomClasses(blank);

@@ -4,16 +4,27 @@ import { ISettings } from '../services/settings';
 import * as jsdiff from 'diff';
 
 export enum Correctness {
-  ExactMatch,
-  CloseMatch,
-  NoMatch
+  ExactMatch, /** Exact match between attempt and answer. */
+  CloseMatch, /** Attempt is close enough to match. */
+  NoMatch /** No match between attempt and answer. */
 }
 
+/** Tracks evaluation results for an answer attempt. */
 export class Evaluation {
+  /** Correctness level of match. */
   public correctness: Correctness;
+
+  /** Number of character differences. */
   public characterDifferenceCount: number;
+
+  /** Alternative answer that matched. */
   public usedAlternative: string;
 
+  /**
+   * Create Evaluation instance.
+   * @class
+   * @param {Answer} usedAnswer Answer used in evaluation.
+   */
   constructor(public usedAnswer: Answer) {
     this.correctness = Correctness.NoMatch;
     this.characterDifferenceCount = 0;
@@ -21,30 +32,25 @@ export class Evaluation {
   }
 }
 
-/**
- * Represents a possible answer the content author enters for a blank, e.g. the correct or an incorrect answer.
- */
+/** Represents possible answer for blank, such as correct or incorrect answer. */
 export class Answer {
-  /**
-   * The alternatives are equivalent strings that the library should treat the same way, e.g. show the same feedback.
-   */
+  /** Equivalent strings treated same, e.g. showing same feedback. */
   alternatives: string[];
 
-  /**
-   * This is the message that is displayed when the answer was entered by the user.
-   */
+  /** Message displayed when answer was entered by user. */
   message: Message;
 
-  /**
-   * Is true if the expected text for this answer is empty.
-   */
+  /** True if expected text for this answer is empty. */
   appliesAlways: boolean;
 
   /**
-   * @param  {string} answerText - The expected answer. Alternatives are separated by | or ; .
-   *                               (e.g. "Alternative 1|Alternative 2|Alternative 3|..." -or-
-   *                               "Alternative 1;Alternative 2;Alternative 3")
-   * @param  {string} reaction - The tooltip that should be displayed. Format: Tooltip Text;!!-1!! !!+1!!
+   * Create Answer instance.
+   * @class
+   * @param {string} answerText Expected answer. Alternatives separated by /.
+   * @param {string} reaction Tooltip to display. Format: Tooltip Text;!!-1!! !!+1!!
+   * @param {boolean} showHighlight Show highlight with message.
+   * @param {number} highlight Highlight id shown with message.
+   * @param {ISettings} settings Application settings.
    */
   constructor(
     answerText: string, reaction: string, showHighlight: boolean, highlight: number, private settings: ISettings
@@ -60,31 +66,35 @@ export class Answer {
   }
 
   /**
-   * Looks through the object's message ids and stores the references to the highlight object for these ids.
-   * @param  {Highlight[]} highlightsBefore
-   * @param  {Highlight[]} highlightsAfter
+   * Look through message ids and store references to corresponding highlight objects.
+   * @param {Highlight[]} highlightsBefore List of highlights before any changes.
+   * @param {Highlight[]} highlightsAfter List of highlights after changes.
    */
-  public linkHighlightIdToObject(highlightsBefore: Highlight[], highlightsAfter: Highlight[]) {
+  public linkHighlightIdToObject(highlightsBefore: Highlight[], highlightsAfter: Highlight[]): void {
     this.message.linkHighlight(highlightsBefore, highlightsAfter);
   }
-  /**
-   * Turns on the highlights set by the content author for this answer.
-   */
+  /** Turn on highlights set by content author for this answer. */
   public activateHighlight() {
     if (this.message.highlightedElement) {
       this.message.highlightedElement.isHighlighted = true;
     }
   }
 
+  /**
+   * Clean string by trimming and collapsing whitespace.
+   * @param {string} text Text to clean.
+   * @returns {string} Cleaned text.
+   */
   private cleanString(text: string): string {
     text = text.trim();
+
     return text.replace(/\s{2,}/g, ' ');
   }
+
   /**
-   * Look through the diff and checks how many character change operations are needed to turn one string into the other.
-   * Should return the same results as the Levensthein distance.
-   * @param  {[{added?:boolean, boolean: removed?, string: value}]} diff - as returned by jsdiff
-   * @returns number - Count of changes (replace, add, delete) needed to change the text from one string to the other
+   * Count character change operations needed to turn one string into another.
+   * @param {jsdiff.Change[]} diff As returned by jsdiff.
+   * @returns {number} Count of changes (replace, add, delete) needed to change one string to another.
    */
   private getChangesCountFromDiff(diff: jsdiff.Change[]): number {
     let totalChangesCount = 0;
@@ -115,13 +125,12 @@ export class Answer {
 
     return totalChangesCount;
   }
-  /**
-   * Returns how many characters can be wrong to still be counted as a spelling mistake.
-   * If spelling mistakes are turned off through the settings, it will return 0.
-   * @param  {string} text
-   * @returns number
-   */
 
+  /**
+   * Return how many characters can be wrong to still count as a spelling mistake.
+   * @param {string} text Text to measure against.
+   * @returns {number} Number of acceptable spelling mistakes, or 0 if disabled.
+   */
   private getAcceptableSpellingMistakes(text: string): number {
     let acceptableTypoCount: number;
     // TODO: consider removal
@@ -134,10 +143,11 @@ export class Answer {
 
     return acceptableTypoCount;
   }
+
   /**
-   * Checks if the text entered by the user in an ettempt is matched by the answer,
-   * @param  {string} attempt The text entered by the user.
-   * @returns Evaluation indicates if the entered text is matched by the answer.
+   * Check if text entered by user in attempt matches answer.
+   * @param {string} attempt Text entered by user.
+   * @returns {Evaluation} Indicates if entered text is matched by answer.
    */
   public evaluateAttempt(attempt: string): Evaluation {
     const cleanedAttempt = this.cleanString(attempt);
@@ -163,6 +173,7 @@ export class Answer {
         evaluation.characterDifferenceCount = changeCount;
       }
     }
+
     return evaluation;
   }
 }

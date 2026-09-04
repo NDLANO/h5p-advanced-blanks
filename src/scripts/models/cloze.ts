@@ -1,46 +1,67 @@
-﻿import { Highlight } from './highlight';
+import { Highlight } from './highlight';
 import { Blank } from './blank';
 
 /**
- * Represents the cloze. Instantiate with static createCloze().
+ * Represent cloze. Instantiate with static createCloze().
  */
 export class Cloze {
+  /** HTML string representing cloze structure. */
   public html: string;
+
+  /** List of highlights in cloze. */
   public highlights: Highlight[];
+
+  /** List of blanks in cloze. */
   public blanks: Blank[];
 
+  /**
+   * Create Cloze instance.
+   * @class
+   */
   public constructor() { }
 
   /**
-   * Returns true if all blanks were entered correctly. 
-   * @returns boolean
+   * Check if all blanks are solved correctly.
+   * @returns {boolean} True if all blanks are correct.
    */
   public get isSolved(): boolean {
     return this.blanks.every((b) => b.isCorrect === true);
   }
 
-
+  /**
+   * Hide all highlights in cloze.
+   */
   public hideAllHighlights(): void {
     for (const highlight of this.highlights) {
       highlight.isHighlighted = false;
     }
   }
 
-  public reset() {
+  /**
+   * Reset all blanks and hide all highlights.
+   */
+  public reset(): void {
     this.hideAllHighlights();
     for (const blank of this.blanks) {
       blank.reset();
     }
   }
 
-  public showSolutions() {
+  /**
+   * Show solutions for all blanks and hide highlights.
+   */
+  public showSolutions(): void {
     for (const blank of this.blanks) {
       blank.showSolution();
     }
     this.hideAllHighlights();
   }
 
-  public serialize() : string[] {
+  /**
+   * Serialize all blank states to array of strings.
+   * @returns {string[]} User-entered text per blank.
+   */
+  public serialize(): string[] {
     const cloze = [];
     for (const blank of this.blanks) {
       cloze.push(blank.serialize());
@@ -49,7 +70,11 @@ export class Cloze {
     return cloze;
   }
 
-  public deserialize(data: any) {
+  /**
+   * Deserialize blank state from array of data.
+   * @param {any} data Data to deserialize.
+   */
+  public deserialize(data: any): void {
     for (let index = 0; index < data.length; index++) {
       if (index >= this.blanks.length) {
         return;

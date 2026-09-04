@@ -1,13 +1,21 @@
 /**
- * A snippet is a text block that is put into placed marked in feedback texts or hints.
+ * Represent snippet, text block inserted at marked positions in feedback texts and hints.
  */
 export class Snippet {
-  /**
-   * Constructs the snippet.
-   * @param name Name of the snippet that is used when it is referenced in a feedbacktext (without the snippet marker @)
-   * @param text The snippet itself (html)
-   */
-  constructor(public name: string, public text: string) {
+  /** Name used as reference marker in feedback text. */
+  name: string;
 
+  /** Text content (HTML). */
+  text: string;
+
+  /**
+   * Create Snippet instance.
+   * @class
+   * @param {string} name Name used when referenced in feedback text (without marker @).
+   * @param {string} text Snippet content (html).
+   */
+  constructor(name: string, text: string) {
+    this.name = name;
+    this.text = text;
   }
 }
