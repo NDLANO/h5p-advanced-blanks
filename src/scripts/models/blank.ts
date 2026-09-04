@@ -125,6 +125,7 @@ export class Blank extends ClozeElement {
     for (const answer of this.correctAnswers) {
       result = result.concat(answer.alternatives);
     }
+
     return result;
   }
 
@@ -152,8 +153,7 @@ export class Blank extends ClozeElement {
    * @param {number} highlight Highlight index.
    */
   public addIncorrectAnswer(text: string, reaction: string, showHighlight: boolean, highlight: number): void {
-    this.incorrectAnswers.push(
-      new Answer(text, reaction, showHighlight, highlight, this.settings));
+    this.incorrectAnswers.push(new Answer(text, reaction, showHighlight, highlight, this.settings));
   }
 
   /**
@@ -276,6 +276,7 @@ export class Blank extends ClozeElement {
     if (this.isCorrect) {
       return;
     }
+
     this.setAnswerState(MessageType.ShowSolution);
   }
 
@@ -371,6 +372,7 @@ export class Blank extends ClozeElement {
     }
 
     message = message.replace('@mistake', this.jquery('<span/>').append(mistakeSpan).html());
+
     return message;
   }
 
