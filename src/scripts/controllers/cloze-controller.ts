@@ -1,17 +1,17 @@
-﻿import { MessageService } from '../services/message-service';
-import { BlankLoader } from '../content-loaders/blank-loader';
-import { ClozeLoader } from '../content-loaders/cloze-loader';
-import { Cloze } from '../models/cloze';
-import { IDataRepository } from '../services/data-repository';
-import { ISettings } from '../services/settings';
-import { H5PLocalization } from '../services/localization';
-import { ClozeType, SelectAlternatives } from '../models/enums';
-import { Highlight } from '../models/highlight';
-import { Blank } from '../models/blank';
-import { Correctness } from '../models/answer';
+﻿import { MessageService } from '@services/message-service';
+import { BlankLoader } from '@content-loaders/blank-loader';
+import { ClozeLoader } from '@content-loaders/cloze-loader';
+import { Cloze } from '@models/cloze';
+import { IDataRepository } from '@services/data-repository';
+import { ISettings } from '@services/settings';
+import { H5PLocalization } from '@services/localization';
+import { ClozeType, SelectAlternatives } from '@models/enums';
+import { Highlight } from '@models/highlight';
+import { Blank } from '@models/blank';
+import { Correctness } from '@models/answer';
 
-import BlankView from '../views/blank-view';
-import HighlightView from '../views/highlight-view';
+import BlankView from '@views/blank-view';
+import HighlightView from '@views/highlight-view';
 
 interface ScoreChanged {
   (score: number, maxScore: number): void;

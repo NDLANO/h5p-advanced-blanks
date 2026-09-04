@@ -16,11 +16,15 @@ export default {
   mode: mode,
   resolve: {
     alias: {
+      '@content-loaders': _resolve(__dirname, 'src/scripts/content-loaders'),
+      '@controllers': _resolve(__dirname, 'src/scripts/controllers'),
+      '@helpers': _resolve(__dirname, 'src/scripts/helpers'),
       '@models': _resolve(__dirname, 'src/scripts/models'),
       '@root': _resolve(__dirname, './'),
       '@scripts': _resolve(__dirname, 'src/scripts'),
       '@services': _resolve(__dirname, 'src/scripts/services'),
       '@styles': _resolve(__dirname, 'src/styles'),
+      '@views': _resolve(__dirname, 'src/scripts/views'),
     },
     extensions: ['.tsx', '.ts', '.js'],
   },

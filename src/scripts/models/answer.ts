@@ -1,6 +1,6 @@
 ﻿import { Message } from './message';
 import { Highlight } from './highlight';
-import { ISettings } from '../services/settings';
+import { ISettings } from '@services/settings';
 import * as jsdiff from 'diff';
 
 export enum Correctness {

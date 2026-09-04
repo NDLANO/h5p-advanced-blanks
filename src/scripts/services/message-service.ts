@@ -1,4 +1,4 @@
-import { Blank } from '../models/blank';
+import { Blank } from '@models/blank';
 
 /**
  * Manage speech bubble message display for blanks.

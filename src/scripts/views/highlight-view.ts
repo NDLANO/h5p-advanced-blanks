@@ -1,4 +1,4 @@
-import { Highlight } from '../models/highlight';
+import { Highlight } from '@models/highlight';
 
 /**
  * View layer for rendering highlight elements.

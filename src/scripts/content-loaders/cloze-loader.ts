@@ -1,8 +1,8 @@
-import { BlankLoader } from './blank-loader';
-import { ClozeElement, ClozeElementType } from '../models/cloze-element';
-import { Blank } from '../models/blank';
-import { Highlight } from '../models/highlight';
-import { Cloze } from '../models/cloze';
+import { BlankLoader } from '@content-loaders/blank-loader';
+import { ClozeElement, ClozeElementType } from '@models/cloze-element';
+import { Blank } from '@models/blank';
+import { Highlight } from '@models/highlight';
+import { Cloze } from '@models/cloze';
 
 /**
  * Load and configure cloze instances from content data.

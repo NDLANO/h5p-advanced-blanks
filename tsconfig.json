@@ -14,6 +14,17 @@
     // "noUnusedLocals": true,
     // "noUnusedParameters": true,
     "noImplicitReturns": true,
+    "paths": {
+      "@content-loaders/*": ["./src/scripts/content-loaders/*"],
+      "@controllers/*": ["./src/scripts/controllers/*"],
+      "@helpers/*": ["./src/scripts/helpers/*"],
+      "@models/*": ["./src/scripts/models/*"],
+      "@root/*": ["./src/*"],
+      "@scripts/*": ["./src/scripts/*"],
+      "@services/*": ["./src/scripts/services/*"],
+      "@styles/*": ["./src/styles/*"],
+      "@views/*": ["./src/scripts/views/*"]
+    }
   },
   "include": ["src/**/*.ts", "src/**/*.tsx", "*.d.ts"]
 }

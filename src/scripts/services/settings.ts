@@ -1,4 +1,4 @@
-import { ClozeType, SelectAlternatives } from '../models/enums';
+import { ClozeType, SelectAlternatives } from '@models/enums';
 
 /**
  * Interface defining cloze behavior settings.

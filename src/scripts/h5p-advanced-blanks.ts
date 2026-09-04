@@ -1,12 +1,12 @@
-import { BlankLoader } from './content-loaders/blank-loader';
-import { H5PDataRepository, IDataRepository } from './services/data-repository';
-import { ClozeController } from './controllers/cloze-controller';
-import { H5PLocalization, LocalizationLabels, LocalizationStructures } from './services/localization';
-import { ISettings, H5PSettings } from './services/settings';
-import { MessageService } from './services/message-service';
-import { Unwrapper } from './helpers/unwrapper';
-import { XAPIActivityDefinition } from './models/xapi';
-import { extend } from './helpers/extend';
+import { BlankLoader } from '@content-loaders/blank-loader';
+import { H5PDataRepository, IDataRepository } from '@services/data-repository';
+import { ClozeController } from '@controllers/cloze-controller';
+import { H5PLocalization, LocalizationLabels, LocalizationStructures } from '@services/localization';
+import { ISettings, H5PSettings } from '@services/settings';
+import { MessageService } from '@services/message-service';
+import { Unwrapper } from '@helpers/unwrapper';
+import { XAPIActivityDefinition } from '@models/xapi';
+import { extend } from '@helpers/helpers';
 
 /** Application state enumeration for cloze workflow. */
 enum States {

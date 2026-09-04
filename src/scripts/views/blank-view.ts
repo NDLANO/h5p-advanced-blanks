@@ -1,4 +1,4 @@
-import { Blank } from '../models/blank';
+import { Blank } from '@models/blank';
 
 /** Callback signatures for blank interactions. */
 type BlankCallbacks = {

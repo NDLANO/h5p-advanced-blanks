@@ -1,11 +1,11 @@
-import { MessageService } from '../services/message-service';
-import { Highlight } from '../models/highlight';
-import { Answer } from '../models/answer';
-import { Blank } from '../models/blank';
-import { H5PLocalization } from '../services/localization';
-import { ISettings } from '../services/settings';
-import { Message } from '../models/message';
-import { Snippet } from '../models/snippet';
+import { MessageService } from '@services/message-service';
+import { Highlight } from '@models/highlight';
+import { Answer } from '@models/answer';
+import { Blank } from '@models/blank';
+import { H5PLocalization } from '@services/localization';
+import { ISettings } from '@services/settings';
+import { Message } from '@models/message';
+import { Snippet } from '@models/snippet';
 
 /**
  * Load and configure blank instances from content data.

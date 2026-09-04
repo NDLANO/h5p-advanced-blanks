@@ -1,9 +1,9 @@
-import { BlankLoader } from '../content-loaders/blank-loader';
-import { Blank } from '../models/blank';
-import { Snippet } from '../models/snippet';
-import { ISettings } from '../services/settings';
+import { BlankLoader } from '@content-loaders/blank-loader';
+import { Blank } from '@models/blank';
+import { Snippet } from '@models/snippet';
+import { ISettings } from '@services/settings';
 import { H5PLocalization } from './localization';
-import { Unwrapper } from '../helpers/unwrapper';
+import { Unwrapper } from '@helpers/unwrapper';
 
 /**
  * Interface for accessing cloze content data.
