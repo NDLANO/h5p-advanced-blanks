@@ -1,4 +1,5 @@
-﻿import { MessageService } from '@services/message-service';
+﻿import './cloze-controller.css';
+import { MessageService } from '@services/message-service';
 import { BlankLoader } from '@content-loaders/blank-loader';
 import { ClozeLoader } from '@content-loaders/cloze-loader';
 import { Cloze } from '@models/cloze';

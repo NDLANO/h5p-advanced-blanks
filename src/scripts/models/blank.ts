@@ -1,3 +1,4 @@
+import './blank.css';
 import { MessageService } from '@services/message-service';
 import { ClozeElement, ClozeElementType } from './cloze-element';
 import { Answer } from './answer';

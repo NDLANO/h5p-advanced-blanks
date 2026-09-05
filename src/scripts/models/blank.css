@@ -1,0 +1,23 @@
+/* Highlight in spelling mistake marker */
+.h5p-advanced-blanks .spelling-mistake .missing-character,
+.h5p-advanced-blanks .spelling-mistake .mistaken-character {
+    color: red;
+    font-weight: bold;
+    animation-duration: 500ms;
+    animation-name: blink-color;
+    animation-iteration-count: 13;
+    animation-direction: alternate;
+}
+
+@keyframes blink-color {
+    from {
+        color: initial;
+    }
+    to {
+        color: red;
+    }
+}
+
+.h5p-advanced-blanks .spelling-mistake .mistaken-character {
+    text-decoration: line-through;
+}

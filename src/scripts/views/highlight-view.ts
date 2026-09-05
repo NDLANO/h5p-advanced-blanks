@@ -1,3 +1,4 @@
+import './highlight-view.css';
 import { Highlight } from '@models/highlight';
 
 /**

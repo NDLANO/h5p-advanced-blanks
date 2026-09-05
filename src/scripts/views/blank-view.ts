@@ -1,3 +1,4 @@
+import './blank-view.css';
 import { Blank } from '@models/blank';
 
 /** Callback signatures for blank interactions. */

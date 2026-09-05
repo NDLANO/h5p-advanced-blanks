@@ -1,4 +1,3 @@
-import '@styles/style.css';
 import AdvancedBlanks from '@scripts/h5p-advanced-blanks';
 
 // Load library

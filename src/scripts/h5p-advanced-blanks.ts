@@ -1,3 +1,4 @@
+import './h5p-advanced-blanks.css';
 import { BlankLoader } from '@content-loaders/blank-loader';
 import { H5PDataRepository, IDataRepository } from '@services/data-repository';
 import { ClozeController } from '@controllers/cloze-controller';

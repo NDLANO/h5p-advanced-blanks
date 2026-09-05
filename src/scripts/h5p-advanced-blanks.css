@@ -1,0 +1,8 @@
+.h5p-advanced-blanks {
+    position: relative;
+}
+
+/* Others */
+.h5p-advanced-blanks .invisible {
+    visibility: collapse;
+}
