@@ -2,26 +2,14 @@
     position: relative;
 }
 
-
 /* Text */
-
 .h5p-advanced-blanks #h5p-cloze-container p,
 .h5p-advanced-blanks #h5p-cloze-container div {
     line-height: 1.8em;
     margin: 0 0 1em;
-    text-align: justify;
 }
-
-@media only screen and (min-width: 480px) {
-    .h5p-advanced-blanks #h5p-cloze-container p,
-    .h5p-advanced-blanks #h5p-cloze-container div {
-        text-align: unset;
-    }
-}
-
 
 /* Input */
-
 .h5p-advanced-blanks .h5p-input-wrapper {
     display: inline-block;
     position: relative;
@@ -45,28 +33,19 @@
   max-width: calc(100vw - 36px);
 }
 
-/* IE + Chrome specific fixes */
-
-.h5p-text-input::-ms-clear {
-    display: none;
-}
-
-:not(.correct).blank.has-tip button {
+/* Chrome specific fix */
+.h5p-advanced-blanks :not(.correct).blank.has-tip button {
     cursor: pointer;
 }
 
-
 /* Select mode */
-
-select.h5p-text-input {
+.h5p-advanced-blanks select.h5p-text-input {
     appearance: button;
     -moz-appearance: none;
     -webkit-appearance: button;
 }
 
-
 /* Showing solution input */
-
 .h5p-advanced-blanks .blank.showing-solution .h5p-text-input {
   background-color: #f7d0d0;
   border: 1px solid #f7d0d0;
@@ -86,7 +65,6 @@ select.h5p-text-input {
 }
 
 /* Correct answer shown next to a wrong one */
-
 .h5p-advanced-blanks .correct-answer {
     background-color: #d4f6e6;
     border: 1px #255c41 dashed;
@@ -103,7 +81,6 @@ select.h5p-text-input {
 
 
 /* Focussed input */
-
 .h5p-advanced-blanks .blank .h5p-text-input:focus {
     outline: none;
     box-shadow: 0 0 0.5em 0 #7fb8ff;
@@ -112,7 +89,6 @@ select.h5p-text-input {
 
 
 /* Correctly answered input */
-
 .h5p-advanced-blanks .blank.correct .h5p-text-input {
     background: #9dd8bb;
     border: 1px solid #9dd8bb;
@@ -121,7 +97,7 @@ select.h5p-text-input {
 
 .h5p-advanced-blanks .blank.correct .h5p-input-wrapper:after {
     position: absolute;
-    right: 0.5em;    
+    right: 0.5em;
     top: 50%;
     transform: translateY(-50%);
     text-decoration: none;
@@ -173,7 +149,6 @@ select.h5p-text-input {
 
 
 /* Buttons */
-
 .h5p-advanced-blanks .blank button {
     padding-left: 5px;
     padding-right: 5px;
@@ -183,9 +158,8 @@ select.h5p-text-input {
 
 
 /* Highlight in spelling mistake marker */
-
-.spelling-mistake .missing-character,
-.spelling-mistake .mistaken-character {
+.h5p-advanced-blanks .spelling-mistake .missing-character,
+.h5p-advanced-blanks .spelling-mistake .mistaken-character {
     color: red;
     font-weight: bold;
     animation-duration: 500ms;
@@ -203,13 +177,12 @@ select.h5p-text-input {
     }
 }
 
-.spelling-mistake .mistaken-character {
+.h5p-advanced-blanks .spelling-mistake .mistaken-character {
     text-decoration: line-through;
 }
 
 
 /* Highlights in text */
-
 .h5p-advanced-blanks .highlighted {
     background-color: rgba(255, 0, 0, 0.2);
     padding: 0.4em;
@@ -231,14 +204,12 @@ select.h5p-text-input {
 
 
 /* Others */
-
 .h5p-advanced-blanks .invisible {
     visibility: collapse;
 }
 
 
 /* Tips */
-
 .h5p-advanced-blanks .h5p-tip-container {
   position: absolute;
   top: 50%;
@@ -270,7 +241,6 @@ select.h5p-text-input {
 }
 
 /* pending feedback marker */
-
 .h5p-advanced-blanks .h5p-advanced-blanks-select-mode .blank:not(.has-pending-feedback) button.h5p-notification,
 .h5p-advanced-blanks .h5p-advanced-blanks-type-mode .blank:not(.has-pending-feedback) button.h5p-notification {
     display: none;
