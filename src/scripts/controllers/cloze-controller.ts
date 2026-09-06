@@ -337,13 +337,13 @@ export class ClozeController {
    */
   private createAndAddContainers(addTo: HTMLElement): { cloze: HTMLDivElement } {
     const clozeContainerElement = document.createElement('div');
-    clozeContainerElement.classList.add('h5p-cloze-container');
     if (this.settings.clozeType === ClozeType.Select) {
       clozeContainerElement.className = 'h5p-advanced-blanks-select-mode';
     }
     else {
       clozeContainerElement.className = 'h5p-advanced-blanks-type-mode';
     }
+    clozeContainerElement.classList.add('h5p-cloze-container');
     addTo.appendChild(clozeContainerElement);
 
     return {
