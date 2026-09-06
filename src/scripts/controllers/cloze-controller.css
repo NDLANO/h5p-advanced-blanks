@@ -1,8 +1,10 @@
 .h5p-advanced-blanks {
-    .h5p-cloze-container {
-        p, div {
-            line-height: 1.8rem;
-            margin: 0 0 1rem;
-        }
+  .h5p-cloze-container {
+
+    p,
+    div {
+      line-height: 1.8rem;
+      margin: 0 0 1rem;
     }
+  }
 }

@@ -1,27 +1,28 @@
 .h5p-advanced-blanks {
-    /* Highlight in spelling mistake marker */
-    .spelling-mistake {
-        .missing-character,
-        .mistaken-character {
-            color: red;
-            font-weight: bold;
-            animation-duration: 500ms;
-            animation-name: blink-color;
-            animation-iteration-count: 13;
-            animation-direction: alternate;
-        }
+  .spelling-mistake {
 
-        .mistaken-character {
-            text-decoration: line-through;
-        }
+    .missing-character,
+    .mistaken-character {
+      color: red;
+      font-weight: bold;
+      animation-duration: 500ms;
+      animation-name: blink-color;
+      animation-iteration-count: 13;
+      animation-direction: alternate;
     }
+
+    .mistaken-character {
+      text-decoration: line-through;
+    }
+  }
 }
 
 @keyframes blink-color {
-    from {
-        color: initial;
-    }
-    to {
-        color: red;
-    }
+  from {
+    color: initial;
+  }
+
+  to {
+    color: red;
+  }
 }

@@ -1,21 +1,22 @@
 .h5p-advanced-blanks {
-    /* Highlights in text */
-    .highlighted {
-        background-color: rgba(255, 0, 0, 0.2);
-        padding: 0.4em;
-        margin: -0.4em;
-        animation-duration: 1000ms;
-        animation-name: blink-background-color;
-        animation-iteration-count: 3;
-        animation-direction: alternate;
-    }
+
+  .highlighted {
+    background-color: rgba(255, 0, 0, 0.2);
+    padding: 0.4em;
+    margin: -0.4em;
+    animation-duration: 1000ms;
+    animation-name: blink-background-color;
+    animation-iteration-count: 3;
+    animation-direction: alternate;
+  }
 }
 
 @keyframes blink-background-color {
-    from {
-        background-color: initial;
-    }
-    to {
-        background-color: rgba(255, 0, 0, 0.2);
-    }
+  from {
+    background-color: initial;
+  }
+
+  to {
+    background-color: rgba(255, 0, 0, 0.2);
+  }
 }
