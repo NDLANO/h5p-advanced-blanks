@@ -337,7 +337,7 @@ export class ClozeController {
    */
   private createAndAddContainers(addTo: HTMLElement): { cloze: HTMLDivElement } {
     const clozeContainerElement = document.createElement('div');
-    clozeContainerElement.id = 'h5p-cloze-container';
+    clozeContainerElement.classList.add('h5p-cloze-container');
     if (this.settings.clozeType === ClozeType.Select) {
       clozeContainerElement.className = 'h5p-advanced-blanks-select-mode';
     }
