@@ -70,15 +70,15 @@
       }
     }
 
-    &.has-tip .h5p-text-input {
+    &.has-tip input.h5p-text-input {
       padding-right: 2.25rem;
     }
 
-    &.has-tip.error .h5p-text-input {
+    &.has-tip.error input.h5p-text-input {
       padding-right: 3.5rem;
     }
 
-    &.has-tip.correct .h5p-text-input {
+    &.has-tip.correct input.h5p-text-input {
       padding-right: 3.5rem;
     }
 
@@ -228,13 +228,13 @@
           -moz-appearance: none;
           -webkit-appearance: none;
 
-          padding-right: 3.5em;
+          padding-right: 2.5em;
         }
       }
     }
 
     .joubel-tip-container {
-      right: -0.15rem;
+      margin-inline-start: -1px;
 
       .joubel-icon-tip-normal {
         position: relative;
@@ -256,14 +256,19 @@
     -webkit-appearance: button;
   }
 
+  .h5p-advanced-blanks-type-mode {
+    .joubel-tip-container {
+      position: absolute;
+      right: 0.4rem;
+    }
+  }
+
   .joubel-tip-container {
     background: none;
     border: none;
     font-size: var(--h5p-theme-font-size-m);
     line-height: inherit;
     padding: 0;
-    position: absolute;
-    right: 0.4rem;
 
     &:focus-visible {
       border-radius: 4px;
