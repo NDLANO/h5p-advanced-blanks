@@ -1,9 +1,11 @@
 .h5p-advanced-blanks {
 
   .highlighted {
-    background-color: rgba(255, 0, 0, 0.2);
-    padding: 0.4em;
-    margin: -0.4em;
+    --space-around: calc(0.2 * var(--h5p-theme-spacing-s));
+    background-color: var(--h5p-theme-feedback-incorrect-main);
+    color: var(--h5p-theme-feedback-incorrect-secondary);
+    padding: var(--space-around);
+    margin: calc(-1 * var(--space-around));
     animation-duration: 1000ms;
     animation-name: blink-background-color;
     animation-iteration-count: 3;
@@ -14,9 +16,11 @@
 @keyframes blink-background-color {
   from {
     background-color: initial;
+    color: initial;
   }
 
   to {
-    background-color: rgba(255, 0, 0, 0.2);
+    background-color: var(--h5p-theme-feedback-incorrect-main);
+    color: var(--h5p-theme-feedback-incorrect-secondary);
   }
 }

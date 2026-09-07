@@ -26,35 +26,19 @@
       white-space: nowrap;
       color: var(--h5p-theme-text-primary);
       min-width: 6em;
-      /* Incase we have empty input we want the height to be equal
-        to the font-size multipled with the line-height. */
       min-height: calc(var(--h5p-theme-font-size-m) * 1.2);
       font-weight: 600;
+      width: 100%;
 
       &:focus-visible {
-        box-shadow: 0 0 0.5em 0 var(--h5p-theme-contrast-cta-white) !important;
-        border-color: var(--h5p-theme-contrast-cta-white) !important;
-        outline: 1px ridge var(--h5p-theme-contrast-cta-white) !important;
+        box-shadow: 0 0 0.5rem 0 var(--h5p-theme-contrast-cta-white);
+        border-color: var(--h5p-theme-contrast-cta-white);
+        outline: 1px ridge var(--h5p-theme-contrast-cta-white);
       }
 
       &:disabled {
         opacity: 1;
       }
-    }
-
-    input.h5p-text-input {
-      max-width: calc(100vw - 64px);
-    }
-
-    select.h5p-text-input {
-      max-width: calc(100vw - 36px);
-    }
-
-    button {
-      padding-left: 5px;
-      padding-right: 5px;
-      border: none;
-      background: none;
     }
 
     &.correct {
@@ -144,7 +128,9 @@
     }
   }
 
-  button.joubel-tip-container {
+  .joubel-tip-container {
+    background: none;
+    border: none;
     font-size: var(--h5p-theme-font-size-m);
     line-height: inherit;
     padding: 0;
@@ -195,13 +181,20 @@
 
   .h5p-advanced-blanks-select-mode .blank.error.has-pending-feedback button.h5p-notification,
   .h5p-advanced-blanks-type-mode .blank.error.has-pending-feedback .h5p-input-wrapper:before {
-    color: #b71c1c;
+    color: var(--h5p-theme-feedback-incorrect-main);
+    text-shadow: 1px 1px var(--h5p-theme-ui-base),
+                 1px -1px var(--h5p-theme-ui-base),
+                 -1px -1px var(--h5p-theme-ui-base),
+                 -1px 1px var(--h5p-theme-ui-base);
   }
 
   .h5p-advanced-blanks-select-mode .blank.retry.has-pending-feedback button.h5p-notification,
   .h5p-advanced-blanks-type-mode .blank.retry.has-pending-feedback .h5p-input-wrapper:before {
-    color: #ffff00;
-    text-shadow: 0px 0px 0.5em black;
+    color: var(--h5p-theme-feedback-neutral-main);
+    text-shadow: 1px 1px var(--h5p-theme-ui-base),
+                 1px -1px var(--h5p-theme-ui-base),
+                 -1px -1px var(--h5p-theme-ui-base),
+                 -1px 1px var(--h5p-theme-ui-base);
   }
 
   .h5p-advanced-blanks-type-mode .blank.has-pending-feedback .h5p-input-wrapper:before {
@@ -215,7 +208,7 @@
     .blank {
 
       &.has-tip select.h5p-text-input {
-        margin-right: 1.5em;
+        margin-right: 1.5rem;
       }
 
       &.correct select.h5p-text-input,
@@ -238,12 +231,12 @@
     }
 
     button.joubel-tip-container {
-      right: -0.15em;
-    }
+      right: -0.15rem;
 
-    .joubel-icon-tip-normal {
-      position: relative;
-      top: -0.5em;
+      .joubel-icon-tip-normal {
+        position: relative;
+        top: -0.5rem;
+      }
     }
   }
 }

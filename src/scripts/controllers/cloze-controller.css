@@ -1,12 +1,15 @@
 .h5p-advanced-blanks {
   .h5p-cloze-container {
+    --padding-block: var(--h5p-theme-spacing-s);
+    --total-cloze-margin: calc(2 * var(--h5p-theme-spacing-m) + 2 * var(--padding-block));
+
     background-color: var(--h5p-theme-alternative-light);
     border: solid 1px var(--h5p-theme-alternative-base);
     border-radius: var(--h5p-theme-border-radius-medium);
     color: var(--h5p-theme-text-secondary);
     font-weight: 500;
     line-height: var(--h5p-theme-spacing-xl);
-    padding: 0 var(--h5p-theme-spacing-s);
+    padding: 0 var(--padding-block);
 
     p,
     div {
