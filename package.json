@@ -8,7 +8,11 @@
     "lint": "eslint './src/**/*.ts'"
   },
   "browserslist": [
-    "> 0.5% and last 3 versions, Firefox ESR and not dead"
+    "chrome >= 112",
+    "edge >= 112",
+    "firefox >= 117",
+    "safari >= 16.5",
+    "not dead"
   ],
   "repository": {
     "type": "git",

@@ -50,7 +50,7 @@ export default class BlankView {
    */
   constructor(blank: Blank, isSelectCloze: boolean, callbacks: BlankCallbacks) {
     this.initializeCallbacks(callbacks);
-    this.createDomStructure(blank);
+    this.createDomStructure(blank, isSelectCloze);
 
     if (isSelectCloze) {
       this.createSelectElement(blank);
@@ -73,11 +73,13 @@ export default class BlankView {
   /**
    * Create DOM structure for this blank view.
    * @param {Blank} blank Blank model to render.
+   * @param {boolean} isSelectCloze True if this is select-mode cloze.
    */
-  private createDomStructure(blank: Blank): void {
+  private createDomStructure(blank: Blank, isSelectCloze: boolean): void {
     this.dom = document.createElement('span');
     this.dom.id = `container${blank.id}`;
     this.dom.classList.add('blank');
+    this.dom.dataset.mode = isSelectCloze ? 'select' : 'type';
     this.updateDomClasses(blank);
 
     this.solutionSpan = document.createElement('span');

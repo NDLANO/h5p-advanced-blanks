@@ -1,260 +1,6 @@
 .h5p-advanced-blanks {
 
-  .blank {
-    .h5p-text-input {
-      background-color: var(--h5p-theme-ui-base);
-      border: 2px solid var(--h5p-theme-alternative-darker);
-      border-radius: var(--h5p-theme-border-radius-medium);
-      color: var(--h5p-theme-text-primary);
-      font-family: var(--h5p-theme-font-name);
-      font-size: var(--h5p-theme-font-size-m);
-      font-weight: 600;
-      min-height: calc(var(--h5p-theme-font-size-m) * 1.2);
-      min-width: 6em;
-      overflow: hidden;
-      padding: calc(var(--h5p-theme-spacing-xs) / 2) 0 calc(var(--h5p-theme-spacing-xs) / 2) var(--h5p-theme-spacing-xxs);
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      width: 100%;
-
-      &:focus-visible {
-        border-color: var(--h5p-theme-contrast-cta-white);
-        box-shadow: 0 0 0.5rem 0 var(--h5p-theme-contrast-cta-white);
-        outline: 1px ridge var(--h5p-theme-contrast-cta-white);
-      }
-
-      &:disabled {
-        opacity: 1;
-      }
-    }
-
-    &.correct {
-      .h5p-text-input {
-        background: var(--h5p-theme-feedback-correct-secondary);
-        border: 2px solid var(--h5p-theme-feedback-correct-third);
-        color: var(--h5p-theme-feedback-correct-main);
-        font-weight: bold;
-        padding-right: var(--h5p-theme-spacing-m);
-      }
-
-      &.has-tip .h5p-text-input {
-        padding-right: 0.5rem;
-      }
-
-      .h5p-input-wrapper:after {
-        color: var(--h5p-theme-feedback-correct-main);
-        content: var(--icon-h5ptheme-checkmark);
-        font-family: 'h5p-theme';
-        position: absolute;
-        right: var(--h5p-theme-spacing-xxs);
-        text-decoration: none;
-      }
-    }
-
-    &.error {
-      .h5p-text-input {
-        background-color: var(--h5p-theme-feedback-incorrect-secondary);
-        border: solid 2px var(--h5p-theme-feedback-incorrect-third);
-        color: var(--h5p-theme-feedback-incorrect-main);
-        font-weight: bold;
-        padding-right: var(--h5p-theme-spacing-m);
-      }
-
-      .h5p-input-wrapper:after {
-        color: var(--h5p-theme-feedback-incorrect-main);
-        content: var(--icon-h5ptheme-crossmark);
-        font-family: 'h5p-theme';
-        position: absolute;
-        right: var(--h5p-theme-spacing-xxs);
-        text-decoration: none;
-      }
-    }
-
-    &.has-tip input.h5p-text-input {
-      padding-right: 2.25rem;
-    }
-
-    &.has-tip.error input.h5p-text-input {
-      padding-right: 3.5rem;
-    }
-
-    &.has-tip.correct input.h5p-text-input {
-      padding-right: 3.5rem;
-    }
-
-    &.has-tip {
-      .h5p-input-wrapper:after {
-        right: 2.25em;
-      }
-    }
-
-    &.retry {
-      .h5p-text-input {
-        background-color: var(--h5p-theme-feedback-incorrect-secondary);
-        border: solid 2px var(--h5p-theme-feedback-incorrect-third);
-        color: var(--h5p-theme-feedback-incorrect-main);
-        font-weight: bold;
-        padding-right: var(--h5p-theme-spacing-m);
-      }
-
-      &.has-tip .h5p-text-input {
-        padding-right: 0.5rem;
-      }
-
-      .h5p-input-wrapper:after {
-        color: var(--h5p-theme-feedback-incorrect-main);
-        content: var(--icon-h5ptheme-crossmark);
-        font-family: 'h5p-theme';
-        position: absolute;
-        text-decoration: none;
-      }
-    }
-
-    &.showing-solution {
-      .h5p-text-input {
-        background-color: var(--h5p-theme-feedback-incorrect-secondary);
-        border: solid 2px var(--h5p-theme-feedback-incorrect-third);
-        color: var(--h5p-theme-feedback-incorrect-main);
-        font-weight: bold;
-        padding-right: var(--h5p-theme-spacing-m);
-      }
-
-      .h5p-input-wrapper:after {
-        color: var(--h5p-theme-feedback-incorrect-main);
-        content: var(--icon-h5ptheme-crossmark);
-        font-family: 'h5p-theme';
-        position: absolute;
-        text-decoration: none;
-      }
-    }
-  }
-
-  .correct-answer {
-    background-color: var(--h5p-theme-feedback-correct-secondary);
-    border: 2px var(--h5p-theme-feedback-correct-main) dashed;
-    border-radius: var(--h5p-theme-border-radius-medium);
-    color: var(--h5p-theme-feedback-correct-main);
-    display: inline-flex;
-    font-weight: bold;
-    line-height: normal;
-    margin-left: .5em;
-    padding: calc(var(--h5p-theme-spacing-xs) / 2);
-
-    &[hidden] {
-      display: none;
-    }
-  }
-
-  .blank.has-pending-feedback button.h5p-notification {
-    animation: shake 3s cubic-bezier(.36, .07, .19, .97) reverse;
-    animation-iteration-count: 2;
-    aspect-ratio: 1;
-    backface-visibility: hidden;
-    background: none;
-    border: none;
-    border-radius: 50%;
-    cursor: pointer;
-    font-family: h5p-theme, sans-serif;
-    font-size: large;
-    margin-right: 2px;
-    perspective: 1000px;
-    position: relative;
-    text-decoration: none;
-    transform: translate3d(0, 0, 0);
-    width: max(24px, var(--h5p-theme-font-size-m));
-
-    &::before {
-      content: var(--icon-h5ptheme-info);
-      left: 50%;
-      position: absolute;
-      text-shadow: 1px 1px var(--h5p-theme-ui-base),
-                  1px -1px var(--h5p-theme-ui-base),
-                  -1px -1px var(--h5p-theme-ui-base),
-                  -1px 1px var(--h5p-theme-ui-base);
-      top: 50%;
-      transform: translate(-50%, -50%);
-    }
-  }
-
-  .blank.has-pending-feedback {
-    &.error button.h5p-notification {
-      background-color: var(--h5p-theme-feedback-incorrect-secondary);
-
-      &::before {
-        color: var(--h5p-theme-feedback-incorrect-main);
-      }
-
-      &:focus-visible {
-        outline: 2px ridge var(--h5p-theme-feedback-incorrect-main);
-      }
-
-      &:hover::before {
-        color: color-mix(in srgb, var(--h5p-theme-feedback-incorrect-main), transparent 60%);
-      }
-    }
-
-    &.retry button.h5p-notification {
-      background-color: var(--h5p-theme-feedback-neutral-third);
-
-      &::before {
-        color: var(--h5p-theme-feedback-neutral-secondary);
-      }
-
-      &:focus-visible {
-        outline: 2px ridge var(--h5p-theme-feedback-neutral-secondary);
-      }
-
-      &:hover::before {
-        color: color-mix(in srgb, var(--h5p-theme-feedback-neutral-secondary), transparent 60%);
-      }
-    }
-
-    &.showing-solution button.h5p-notification {
-      background-color: var(--h5p-theme-feedback-neutral-third);
-
-      &::before {
-        color: var(--h5p-theme-feedback-neutral-secondary);
-      }
-
-      &:focus-visible {
-        outline: 2px ridge var(--h5p-theme-feedback-neutral-secondary);
-      }
-
-      &:hover::before {
-        color: color-mix(in srgb, var(--h5p-theme-feedback-neutral-secondary), transparent 60%);
-      }
-    }
-  }
-
-  .blank:not(.has-pending-feedback) button.h5p-notification {
-    display: none;
-  }
-
-  .h5p-advanced-blanks-select-mode {
-    .blank {
-
-      &.correct,
-      &.error,
-      &.retry,
-      &.showing-solution {
-        select.h5p-text-input {
-          -moz-appearance: none;
-          -webkit-appearance: none;
-          appearance: none;
-          padding-right: 2.0rem;
-        }
-      }
-    }
-
-    .joubel-tip-container {
-      margin-inline-start: -1px;
-
-      .joubel-icon-tip-normal {
-        position: relative;
-        top: -0.5rem;
-      }
-    }
-  }
+  /* --- Base --------------------------------------------------------------- */
 
   .h5p-input-wrapper {
     align-items: center;
@@ -267,13 +13,6 @@
     -moz-appearance: none;
     -webkit-appearance: button;
     appearance: button;
-  }
-
-  .h5p-advanced-blanks-type-mode {
-    .joubel-tip-container {
-      position: absolute;
-      right: 0.4rem;
-    }
   }
 
   .joubel-tip-container {
@@ -296,6 +35,208 @@
       .h5p-icon-shadow:before {
         color: var(--h5p-theme-main-cta-dark);
         opacity: 0.5;
+      }
+    }
+  }
+
+  .correct-answer {
+    background-color: var(--h5p-theme-feedback-correct-secondary);
+    border: 2px var(--h5p-theme-feedback-correct-main) dashed;
+    border-radius: var(--h5p-theme-border-radius-medium);
+    color: var(--h5p-theme-feedback-correct-main);
+    display: inline-flex;
+    font-weight: bold;
+    line-height: normal;
+    margin-left: .5em;
+    padding: calc(var(--h5p-theme-spacing-xs) / 2);
+
+    &[hidden] {
+      display: none;
+    }
+  }
+
+  /* --- Blank -------------------------------------------------------------- */
+
+  .blank {
+    /*
+     * Horizontal space reserved inside the input for the overlaid controls:
+     * the tip button (right-most) and the status icon (left of it).
+     * Both default to zero and are switched on by the relevant state classes,
+     * so the padding and icon offsets below are plain arithmetic rather than
+     * a per-combination lookup table.
+     */
+    --tip-slot: 0rem;
+    --status-slot: 0rem;
+
+    &.has-tip {
+      --tip-slot: 2.25rem;
+    }
+
+    .h5p-text-input {
+      background-color: var(--h5p-theme-ui-base);
+      border: 2px solid var(--h5p-theme-alternative-darker);
+      border-radius: var(--h5p-theme-border-radius-medium);
+      color: var(--h5p-theme-text-primary);
+      font-family: var(--h5p-theme-font-name);
+      font-size: var(--h5p-theme-font-size-m);
+      font-weight: 600;
+      min-height: calc(var(--h5p-theme-font-size-m) * 1.2);
+      min-width: 6em;
+      overflow: hidden;
+      padding: calc(var(--h5p-theme-spacing-xs) / 2) calc(var(--tip-slot) + var(--status-slot) + var(--h5p-theme-spacing-xxs)) calc(var(--h5p-theme-spacing-xs) / 2) var(--h5p-theme-spacing-xxs);
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      width: 100%;
+
+      &:focus-visible {
+        border-color: var(--h5p-theme-contrast-cta-white);
+        box-shadow: 0 0 0.5rem 0 var(--h5p-theme-contrast-cta-white);
+        outline: 1px ridge var(--h5p-theme-contrast-cta-white);
+      }
+
+      &:disabled {
+        opacity: 1;
+      }
+    }
+
+    /*
+     * Answer states. `correct`, `error` and `retry` are mutually exclusive;
+     * `showing-solution` is set alongside `error` (see Blank.setAnswerState),
+     * and never alongside `correct` because Blank.showSolution() returns early
+     * for correct blanks. Error and showing-solution therefore share a palette.
+     */
+    &.correct {
+      --blank-accent: var(--h5p-theme-feedback-correct-main);
+      --blank-surface: var(--h5p-theme-feedback-correct-secondary);
+      --blank-border: var(--h5p-theme-feedback-correct-third);
+      --blank-icon: var(--icon-h5ptheme-checkmark);
+    }
+
+    &.error,
+    &.retry,
+    &.showing-solution {
+      --blank-accent: var(--h5p-theme-feedback-incorrect-main);
+      --blank-surface: var(--h5p-theme-feedback-incorrect-secondary);
+      --blank-border: var(--h5p-theme-feedback-incorrect-third);
+      --blank-icon: var(--icon-h5ptheme-crossmark);
+    }
+
+    &.correct,
+    &.error,
+    &.retry,
+    &.showing-solution {
+      --status-slot: 1.25rem;
+
+      .h5p-text-input {
+        background: var(--blank-surface);
+        border: 2px solid var(--blank-border);
+        color: var(--blank-accent);
+        font-weight: bold;
+      }
+
+      .h5p-input-wrapper:after {
+        color: var(--blank-accent);
+        content: var(--blank-icon);
+        font-family: 'h5p-theme';
+        position: absolute;
+        right: calc(var(--tip-slot) + var(--h5p-theme-spacing-xxs));
+        text-decoration: none;
+      }
+    }
+  }
+
+  /* --- Pending-feedback notification button -------------------------------- */
+
+  .blank:not(.has-pending-feedback) button.h5p-notification {
+    display: none;
+  }
+
+  .blank.has-pending-feedback button.h5p-notification {
+    animation: shake 3s cubic-bezier(.36, .07, .19, .97) reverse;
+    animation-iteration-count: 2;
+    aspect-ratio: 1;
+    backface-visibility: hidden;
+    background: none;
+    background-color: var(--notification-surface);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    font-family: h5p-theme, sans-serif;
+    font-size: large;
+    margin-right: 2px;
+    perspective: 1000px;
+    position: relative;
+    text-decoration: none;
+    transform: translate3d(0, 0, 0);
+    width: max(24px, var(--h5p-theme-font-size-m));
+
+    &::before {
+      color: var(--notification-accent);
+      content: var(--icon-h5ptheme-info);
+      left: 50%;
+      position: absolute;
+      text-shadow: 1px 1px var(--h5p-theme-ui-base),
+                  1px -1px var(--h5p-theme-ui-base),
+                  -1px -1px var(--h5p-theme-ui-base),
+                  -1px 1px var(--h5p-theme-ui-base);
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    &:focus-visible {
+      outline: 2px ridge var(--notification-accent);
+    }
+
+    &:hover::before {
+      color: color-mix(in srgb, var(--notification-accent), transparent 60%);
+    }
+  }
+
+  /*
+   * The notification button uses the neutral feedback palette for retry and
+   * showing-solution, which is deliberately not the same family as the input's
+   * --blank-* tokens above.
+   */
+  .blank.has-pending-feedback {
+    &.error {
+      --notification-accent: var(--h5p-theme-feedback-incorrect-main);
+      --notification-surface: var(--h5p-theme-feedback-incorrect-secondary);
+    }
+
+    &.retry,
+    &.showing-solution {
+      --notification-accent: var(--h5p-theme-feedback-neutral-secondary);
+      --notification-surface: var(--h5p-theme-feedback-neutral-third);
+    }
+  }
+
+  /* --- Mode-specific ------------------------------------------------------- */
+
+  .blank[data-mode="type"] {
+    .joubel-tip-container {
+      position: absolute;
+      right: 0.4rem;
+    }
+  }
+
+  .blank[data-mode="select"] {
+    .joubel-tip-container {
+      margin-inline-start: -1px;
+
+      .joubel-icon-tip-normal {
+        position: relative;
+        top: -0.5rem;
+      }
+    }
+
+    &.correct,
+    &.error,
+    &.retry,
+    &.showing-solution {
+      select.h5p-text-input {
+        -moz-appearance: none;
+        -webkit-appearance: none;
+        appearance: none;
       }
     }
   }

@@ -1,7 +1,6 @@
 .h5p-advanced-blanks {
   .h5p-cloze-container {
     --padding-block: var(--h5p-theme-spacing-s);
-    --total-cloze-margin: calc(2 * var(--h5p-theme-spacing-m) + 2 * var(--padding-block));
 
     background-color: var(--h5p-theme-alternative-light);
     border: solid 1px var(--h5p-theme-alternative-base);
