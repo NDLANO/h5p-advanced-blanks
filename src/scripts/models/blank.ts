@@ -513,10 +513,6 @@ export class Blank extends ClozeElement {
    * Display hint in tooltip.
    */
   public showHint(): void {
-    if (this.isShowingSolution || this.isCorrect) {
-      return;
-    }
-
     this.removeTooltip();
     if (this.hint && this.hint.text !== '') {
       this.displayTooltip(this.hint.text, MessageType.Retry, false);

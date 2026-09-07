@@ -1,8 +1,10 @@
 .h5p-advanced-blanks {
 
   .h5p-input-wrapper {
-    display: inline-block;
+    display: inline-flex;
     position: relative;
+    align-items: center;
+    vertical-align: middle;
   }
 
   select.h5p-text-input {
@@ -13,18 +15,30 @@
 
   .blank {
     .h5p-text-input {
-      font-family: H5PDroidSans, sans-serif;
-      font-size: 1em;
-      border-radius: 0.25em;
-      border: 1px solid #a0a0a0;
-      padding: 0.1875em 1.5em 0.1875em 0.5em;
+      font-family: var(--h5p-theme-font-name);
+      font-size: var(--h5p-theme-font-size-m);
+      border-radius: var(--h5p-theme-border-radius-medium);
+      background-color: var(--h5p-theme-ui-base);
+      border: 2px solid var(--h5p-theme-alternative-darker);
+      padding: calc(var(--h5p-theme-spacing-xs) / 2) 0 calc(var(--h5p-theme-spacing-xs) / 2) var(--h5p-theme-spacing-xxs);
       text-overflow: ellipsis;
       overflow: hidden;
+      white-space: nowrap;
+      color: var(--h5p-theme-text-primary);
+      min-width: 6em;
+      /* Incase we have empty input we want the height to be equal
+        to the font-size multipled with the line-height. */
+      min-height: calc(var(--h5p-theme-font-size-m) * 1.2);
+      font-weight: 600;
 
-      &:focus {
-        outline: none;
-        box-shadow: 0 0 0.5em 0 #7fb8ff;
-        border-color: #7fb8ff;
+      &:focus-visible {
+        box-shadow: 0 0 0.5em 0 var(--h5p-theme-contrast-cta-white) !important;
+        border-color: var(--h5p-theme-contrast-cta-white) !important;
+        outline: 1px ridge var(--h5p-theme-contrast-cta-white) !important;
+      }
+
+      &:disabled {
+        opacity: 1;
       }
     }
 
@@ -43,140 +57,115 @@
       background: none;
     }
 
-    &.has-tip:not(.correct) button {
-      cursor: pointer;
-    }
-
-    &.showing-solution {
-      .h5p-text-input {
-        background-color: #f7d0d0;
-        border: 1px solid #f7d0d0;
-        color: #b71c1c;
-        text-decoration: line-through;
-      }
-
-      .h5p-input-wrapper:after {
-        position: absolute;
-        right: 0.5em;
-        top: 50%;
-        transform: translateY(-50%);
-        font-family: 'H5PFontAwesome4';
-        text-decoration: none;
-        content: "\f00d";
-        color: #b71c1c;
-      }
-    }
-
     &.correct {
       .h5p-text-input {
-        background: #9dd8bb;
-        border: 1px solid #9dd8bb;
-        color: #255c41;
+        background: var(--h5p-theme-feedback-correct-secondary);
+        border: 2px solid var(--h5p-theme-feedback-correct-third);
+        color: var(--h5p-theme-feedback-correct-main);
+        font-weight: bold;
+        padding-right: var(--h5p-theme-spacing-m);
       }
 
       .h5p-input-wrapper:after {
         position: absolute;
-        right: 0.5em;
-        top: 50%;
-        transform: translateY(-50%);
+        right: var(--h5p-theme-spacing-xxs);
         text-decoration: none;
-        content: "\f00c";
-        font-family: 'H5PFontAwesome4';
-        color: #255c41;
+        content: "\e903";
+        font-family: 'h5p-theme';
+        color: var(--h5p-theme-feedback-correct-main);
       }
     }
 
-    &.error {
+    &.error,
+    &.showing-solution {
       .h5p-text-input {
-        background-color: #f7d0d0;
-        border: 1px solid #f7d0d0;
-        color: #b71c1c;
-        text-decoration: line-through;
+        color: var(--h5p-theme-feedback-incorrect-main);
+        background-color: var(--h5p-theme-feedback-incorrect-secondary);
+        border: solid 2px var(--h5p-theme-feedback-incorrect-third);
+        font-weight: bold;
+        padding-right: var(--h5p-theme-spacing-m);
       }
 
       .h5p-input-wrapper:after {
         position: absolute;
-        right: 0.5em;
-        top: 50%;
-        transform: translateY(-50%);
-        font-family: 'H5PFontAwesome4';
+        right: var(--h5p-theme-spacing-xxs);
+        font-family: 'h5p-theme';
         text-decoration: none;
-        content: "\f00d";
-        color: #b71c1c;
+        content: "\e902";
+        color: var(--h5p-theme-feedback-incorrect-main);
       }
     }
 
     &.retry {
       .h5p-text-input {
-        background-color: #ffff99;
-        border: 1px solid #ffff99;
-        color: black;
+        color: var(--h5p-theme-feedback-incorrect-main);
+        background-color: var(--h5p-theme-feedback-incorrect-secondary);
+        border: solid 2px var(--h5p-theme-feedback-incorrect-third);
+        font-weight: bold;
+        padding-right: var(--h5p-theme-spacing-m);
       }
 
       .h5p-input-wrapper:after {
         position: absolute;
-        right: 0.5em;
-        top: 50%;
-        transform: translateY(-50%);
-        font-family: 'H5PFontAwesome4';
+        right: var(--h5p-theme-spacing-xxs);
+        font-family: 'h5p-theme';
         text-decoration: none;
-        content: "\f00d";
-        color: #b71c1c;
+        content: "\e902";
+        color: var(--h5p-theme-feedback-incorrect-main);
       }
     }
 
     &.has-tip {
-      &:not(.correct):not(.error):not(.retry) .h5p-text-input {
-        padding-right: 2.25em;
-      }
-
-      &.correct .h5p-input-wrapper:after,
-      &.error .h5p-input-wrapper:after,
-      &.retry .h5p-input-wrapper:after {
+      .h5p-input-wrapper:after {
         right: 2.25em;
-      }
-
-      &.correct .h5p-tip-container,
-      &.error .h5p-tip-container,
-      &.retry .h5p-tip-container,
-      &.showing-solution .h5p-tip-container,
-      &.disabled .h5p-tip-container {
-        display: none;
       }
     }
 
     &.correct.has-tip .h5p-text-input,
     &.error.has-tip .h5p-text-input,
     &.retry.has-tip .h5p-text-input {
-      padding-right: 3.5em;
+      padding-right: 0.5rem;
     }
   }
 
   .correct-answer {
-    background-color: #d4f6e6;
-    border: 1px #255c41 dashed;
-    border-radius: 0.25em;
-    color: #255c41;
+    color: var(--h5p-theme-feedback-correct-main);
     font-weight: bold;
+    border: 2px var(--h5p-theme-feedback-correct-main) dashed;
+    background-color: var(--h5p-theme-feedback-correct-secondary);
+    padding: calc(var(--h5p-theme-spacing-xs) / 2);
+    border-radius: var(--h5p-theme-border-radius-medium);
     margin-left: .5em;
-    padding: 0.15em;
+    display: inline-flex;
+    line-height: normal;
 
     &[hidden] {
       display: none;
     }
   }
 
-  .h5p-tip-container {
+  button.joubel-tip-container {
+    font-size: var(--h5p-theme-font-size-m);
+    line-height: inherit;
+    padding: 0;
     position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    right: 0.4em;
-    font-size: 1em;
-  }
+    right: 0.4rem;
 
-  .joubel-icon-tip-normal .h5p-icon-shadow:before {
-    color: black;
-    opacity: 0.13;
+    &:focus-visible {
+      border-radius: 4px;
+      outline: 4px ridge var(--h5p-theme-contrast-cta-white);
+    }
+
+    &:hover {
+      color: var(--h5p-theme-contrast-cta-dark);
+    }
+
+    .joubel-icon-tip-normal {
+      .h5p-icon-shadow:before {
+        color: black;
+        opacity: 0.13;
+      }
+    }
   }
 
   button.h5p-notification {
@@ -225,13 +214,6 @@
   .h5p-advanced-blanks-select-mode {
     .blank {
 
-      &.has-tip.correct .h5p-input-wrapper::after,
-      &.has-tip.error .h5p-input-wrapper::after,
-      &.has-tip.retry .h5p-input-wrapper::after,
-      &.has-tip.showing-solution .h5p-input-wrapper::after {
-        right: 0.5em;
-      }
-
       &.has-tip select.h5p-text-input {
         margin-right: 1.5em;
       }
@@ -247,13 +229,6 @@
         padding-right: 3.5em;
       }
 
-      &.has-tip.correct select.h5p-text-input,
-      &.has-tip.error select.h5p-text-input,
-      &.has-tip.retry select.h5p-text-input,
-      &.has-tip.showing-solution select.h5p-text-input {
-        margin-right: 0;
-      }
-
       &.correct select.h5p-text-input::-ms-expand,
       &.error select.h5p-text-input::-ms-expand,
       &.retry select.h5p-text-input::-ms-expand,
@@ -262,7 +237,7 @@
       }
     }
 
-    .h5p-tip-container {
+    button.joubel-tip-container {
       right: -0.15em;
     }
 

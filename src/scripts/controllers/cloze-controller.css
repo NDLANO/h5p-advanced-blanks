@@ -1,10 +1,18 @@
 .h5p-advanced-blanks {
   .h5p-cloze-container {
+    background-color: var(--h5p-theme-alternative-light);
+    border: solid 1px var(--h5p-theme-alternative-base);
+    border-radius: var(--h5p-theme-border-radius-medium);
+    color: var(--h5p-theme-text-secondary);
+    font-weight: 500;
+    line-height: var(--h5p-theme-spacing-xl);
+    padding: 0 var(--h5p-theme-spacing-s);
 
     p,
     div {
-      line-height: 1.8rem;
-      margin: 0 0 1rem;
+      color: var(--h5p-theme-text-secondary);
+      font-size: var(--h5p-theme-font-size-m);
+      margin: 0;
     }
   }
 }

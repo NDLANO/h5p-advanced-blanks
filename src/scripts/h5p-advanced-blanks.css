@@ -1,5 +1,7 @@
 .h5p-advanced-blanks {
   position: relative;
+  /* TODO */
+  --h5p-theme-contrast-cta-dark: #0597FF;
 
   .invisible {
     visibility: collapse;

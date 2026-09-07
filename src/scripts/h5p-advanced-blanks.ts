@@ -73,7 +73,7 @@ export default class AdvancedBlanks extends (H5P.Question as { new( type:string,
    * @param {object} contentData Content data.
    */
   constructor(params: any, contentId: string, contentData: any = {}) {
-    super('advanced-blanks');
+    super('advanced-blanks', { theme: true });
 
     // Set mandatory default values for editor widgets that create content type instances
     params = extend({
@@ -255,8 +255,15 @@ export default class AdvancedBlanks extends (H5P.Question as { new( type:string,
 
     if (!this.settings.autoCheck) {
       // Check answer button
-      this.addButton('check-answer', this.localization.getTextFromLabel(LocalizationLabels.checkAllButton),
-        this.onCheckAnswer, true, {}, {
+      this.addButton(
+        'check-answer',
+        this.localization.getTextFromLabel(LocalizationLabels.checkAllButton),
+        this.onCheckAnswer,
+        true,
+        {
+          // TODO: ARIA LABEL
+        },
+        {
           confirmationDialog: {
             enable: this.settings.confirmCheckDialog,
             l10n: this.localization.getObjectForStructure(LocalizationStructures.confirmCheck),
@@ -265,23 +272,44 @@ export default class AdvancedBlanks extends (H5P.Question as { new( type:string,
           },
           contentData: this.contentData,
           textIfSubmitting: this.localization.getTextFromLabel(LocalizationLabels.submitAllButton),
+          icon: 'check'
         });
     }
 
     // Show solution button
-    this.addButton('show-solution', this.localization.getTextFromLabel(LocalizationLabels.showSolutionButton),
-      this.onShowSolution, this.settings.enableSolutionsButton);
+    this.addButton(
+      'show-solution',
+      this.localization.getTextFromLabel(LocalizationLabels.showSolutionButton),
+      this.onShowSolution,
+      this.settings.enableSolutionsButton,
+      {
+        // TODO: ARIA-LABEL
+      },
+      {
+        styleType: 'secondary',
+        icon: 'show-solutions',
+      }
+    );
 
     // Try again button
     if (this.settings.enableRetry === true) {
-      this.addButton('try-again', this.localization.getTextFromLabel(LocalizationLabels.retryButton),
-        this.onRetry, true, {}, {
+      this.addButton(
+        'try-again',
+        this.localization.getTextFromLabel(LocalizationLabels.retryButton),
+        this.onRetry,
+        true,
+        {
+          // TODO: ARIA-LABEL
+        },
+        {
           confirmationDialog: {
             enable: this.settings.confirmRetryDialog,
             l10n: this.localization.getObjectForStructure(LocalizationStructures.confirmRetry),
             instance: this,
             $parentElement: $container
-          }
+          },
+          styleType: 'secondary',
+          icon: 'retry'
         });
     }
   }

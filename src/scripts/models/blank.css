@@ -3,16 +3,12 @@
 
     .missing-character,
     .mistaken-character {
-      color: red;
+      color: var(--h5p-theme-feedback-incorrect-main);
       font-weight: bold;
       animation-duration: 500ms;
       animation-name: blink-color;
       animation-iteration-count: 13;
       animation-direction: alternate;
-    }
-
-    .mistaken-character {
-      text-decoration: line-through;
     }
   }
 }
@@ -23,6 +19,6 @@
   }
 
   to {
-    color: red;
+    color: var(--h5p-theme-feedback-incorrect-main);
   }
 }

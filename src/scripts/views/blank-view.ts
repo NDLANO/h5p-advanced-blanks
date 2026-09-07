@@ -103,33 +103,24 @@ export default class BlankView {
   }
 
   /**
-   * Build tip container element with hint button.
+   * Build tip button element.
    * @param {Blank} blank Blank model to build tip for.
-   * @returns {HTMLSpanElement} Tip container element.
+   * @returns {HTMLButtonElement} Tip button element.
    */
-  private buildTipContainer(blank: Blank): HTMLSpanElement {
-    const tipContainer = document.createElement('span');
-    tipContainer.classList.add('h5p-tip-container');
-
+  private buildTipContainer(blank: Blank): HTMLButtonElement {
     this.tipButton = document.createElement('button');
+    this.tipButton.classList.add('joubel-tip-container');
     this.tipButton.disabled = blank.isCorrect || blank.isShowingSolution;
+    this.tipButton.title = 'Tip'; // TODO: Need to localize this
+    this.tipButton.setAttribute('aria-label', 'Tip'); // TODO: Need to localize this
+    this.tipButton.setAttribute('aria-expanded', 'true');
     this.tipButton.addEventListener('click', (event: MouseEvent) => {
       this.callbacks.showHint(event, blank);
     });
-    tipContainer.append(this.tipButton);
-
-    const joubelTipContainer = document.createElement('span');
-    joubelTipContainer.classList.add('joubel-tip-container');
-    joubelTipContainer.setAttribute('title', 'Tip'); // TODO: Need to localize this
-    joubelTipContainer.setAttribute('aria-label', 'Tip'); // TODO: Need to localize this
-    joubelTipContainer.setAttribute('aria-expanded', 'true');
-    joubelTipContainer.setAttribute('role', 'button');
-    joubelTipContainer.setAttribute('tabindex', '0');
-    this.tipButton.append(joubelTipContainer);
 
     const joubelIconTipNormal = document.createElement('span');
     joubelIconTipNormal.classList.add('joubel-icon-tip-normal');
-    joubelTipContainer.append(joubelIconTipNormal);
+    this.tipButton.append(joubelIconTipNormal);
 
     const joubelIconShadow = document.createElement('span');
     joubelIconShadow.classList.add('h5p-icon-shadow');
@@ -140,10 +131,10 @@ export default class BlankView {
     joubelIconTipNormal.append(joubelIconSpeechBubble);
 
     const joubelIconInfo = document.createElement('span');
-    joubelIconInfo.classList.add('joubel-icon-info');
+    joubelIconInfo.classList.add('h5p-icon-info');
     joubelIconTipNormal.append(joubelIconInfo);
 
-    return tipContainer;
+    return this.tipButton;
   }
 
   /**
