@@ -1,5 +1,7 @@
 import './blank-view.css';
 import { Blank } from '@models/blank';
+import { LocalizationLabels } from '@services/localization';
+
 
 /** Callback signatures for blank interactions. */
 type BlankCallbacks = {
@@ -106,8 +108,8 @@ export default class BlankView {
     this.tipButton = document.createElement('button');
     this.tipButton.classList.add('joubel-tip-container');
     this.tipButton.disabled = blank.isCorrect || blank.isShowingSolution;
-    this.tipButton.title = 'Tip'; // TODO: Need to localize this
-    this.tipButton.setAttribute('aria-label', 'Tip'); // TODO: Need to localize this
+    this.tipButton.title = blank.getLocalization().getTextFromLabel(LocalizationLabels.tipButton);
+    this.tipButton.setAttribute('aria-label', blank.getLocalization().getTextFromLabel(LocalizationLabels.tipButton));
     this.tipButton.setAttribute('aria-expanded', 'true');
     this.tipButton.addEventListener('click', (event: MouseEvent) => {
       this.callbacks.showHint(event, blank);

@@ -539,4 +539,12 @@ export class Blank extends ClozeElement {
   public deserialize(data: any): void {
     this.enteredText = data;
   }
+
+  /**
+   * Get Localizations.
+   * @returns {H5PLocalization} Localizations.
+   */
+  public getLocalization(): H5PLocalization {
+    return this.localization;
+  }
 }

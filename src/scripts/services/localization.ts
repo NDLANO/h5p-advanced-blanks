@@ -7,14 +7,18 @@ export enum LocalizationLabels {
   notFilledOutWarning = 'notFilledOut',
   tipButton = 'tipLabel',
   typoMessage = 'spellingMistakeWarning',
-  scoreBarLabel = 'scoreBarLabel'
+  scoreBarLabel = 'scoreBarLabel',
+  a11yCheck = 'a11yCheck',
+  a11ySubmitAndCheck = 'a11ySubmitAndCheck',
+  a11yShowSolution = 'a11yShowSolution',
+  a11yRetry = 'a11yRetry',
 }
 
 /** Localization structure enumeration for complex UI elements. */
 export enum LocalizationStructures {
   confirmCheck = 'confirmCheck',
   confirmRetry = 'confirmRetry',
-  overallFeedback = 'overallFeedback'
+  overallFeedback = 'overallFeedback',
 }
 
 /**

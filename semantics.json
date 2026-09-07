@@ -577,6 +577,42 @@
     "optional": true
   },
   {
+    "name": "a11yCheck",
+    "type": "text",
+    "label": "Assistive technology description for \"Check\" button",
+    "importance": "low",
+    "default": "Check the answers. The responses will be marked as correct or incorrect.",
+    "common": true,
+    "optional": true
+  },
+  {
+    "name": "a11ySubmitAndCheck",
+    "type": "text",
+    "label": "Assistive technology description for \"Submit\" button",
+    "importance": "low",
+    "default": "Submit the answers and check them. The responses will be marked as correct or incorrect.",
+    "common": true,
+    "optional": true
+  },
+  {
+    "name": "a11yShowSolution",
+    "type": "text",
+    "label": "Assistive technology description for \"Show Solution\" button",
+    "importance": "low",
+    "default": "Show the solution. The blanks will show the expected solution.",
+    "common": true,
+    "optional": true
+  },
+  {
+    "name": "a11yRetry",
+    "type": "text",
+    "label": "Assistive technology description for \"Retry\" button",
+    "importance": "low",
+    "default": "Retry the task. Reset all responses and start the task over again.",
+    "common": true,
+    "optional": true
+  },
+  {
     "label": "Text for \"Not filled out\" message",
     "importance": "low",
     "name": "notFilledOut",

@@ -70,9 +70,9 @@ export default class AdvancedBlanks extends (H5P.Question as { new( type:string,
    * @class
    * @param {object} params Paremeters.
    * @param {string} contentId Content ID.
-   * @param {object} contentData Content data.
+   * @param {object} extras Content data.
    */
-  constructor(params: any, contentId: string, contentData: any = {}) {
+  constructor(params: any, contentId: string, extras: any = {}) {
     super('advanced-blanks', { theme: true });
 
     // Set mandatory default values for editor widgets that create content type instances
@@ -85,11 +85,15 @@ export default class AdvancedBlanks extends (H5P.Question as { new( type:string,
         selectAlternatives: 'alternatives'
       },
       submitAnswer: 'Submit',
+      a11yCheck: 'Check the answers. The responses will be marked as correct or incorrect.',
+      a11ySubmitAndCheck: 'Submit the answers and check them. The responses will be marked as correct or incorrect.',
+      a11yShowSolution: 'Show the solution. The blanks will show the expected solution.',
+      a11yRetry: 'Retry the task. Reset all responses and start the task over again.',
     }, params);
 
     this.jQuery = H5P.jQuery;
     this.contentId = contentId;
-    this.contentData = contentData;
+    this.extras = extras;
 
     const unwrapper = new Unwrapper(this.jQuery);
 
@@ -109,8 +113,8 @@ export default class AdvancedBlanks extends (H5P.Question as { new( type:string,
     this.clozeController.onTyped = this.onTyped;
     this.clozeController.onTextChanged = () => this.triggerXAPI('interacted');
 
-    if (contentData && contentData.previousState) {
-      this.previousState = contentData.previousState;
+    if (extras?.previousState) {
+      this.previousState = extras.previousState;
     }
 
     this.clozeController.setupModel();
@@ -248,10 +252,11 @@ export default class AdvancedBlanks extends (H5P.Question as { new( type:string,
   }
 
   /**
-   * Register action buttons (check, show solution, retry). TODO: Used where?
+   * Register action buttons (check, show solution, retry).
    */
   private registerButtons() {
     const $container = this.getH5pContainer();
+    const isSubmitting = this.extras?.standalone && (this.extras?.isScoringEnabled || this.extras?.isReportingEnabled);
 
     if (!this.settings.autoCheck) {
       // Check answer button
@@ -261,7 +266,9 @@ export default class AdvancedBlanks extends (H5P.Question as { new( type:string,
         this.onCheckAnswer,
         true,
         {
-          // TODO: ARIA LABEL
+          'aria-label': isSubmitting ?
+            this.localization.getTextFromLabel(LocalizationLabels.a11ySubmitAndCheck) :
+            this.localization.getTextFromLabel(LocalizationLabels.a11yCheck),
         },
         {
           confirmationDialog: {
@@ -270,7 +277,7 @@ export default class AdvancedBlanks extends (H5P.Question as { new( type:string,
             instance: this,
             $parentElement: $container,
           },
-          contentData: this.contentData,
+          contentData: this.extras,
           textIfSubmitting: this.localization.getTextFromLabel(LocalizationLabels.submitAllButton),
           icon: 'check'
         });
@@ -283,7 +290,7 @@ export default class AdvancedBlanks extends (H5P.Question as { new( type:string,
       this.onShowSolution,
       this.settings.enableSolutionsButton,
       {
-        // TODO: ARIA-LABEL
+        'aria-label': this.localization.getTextFromLabel(LocalizationLabels.a11yShowSolution),
       },
       {
         styleType: 'secondary',
@@ -299,7 +306,7 @@ export default class AdvancedBlanks extends (H5P.Question as { new( type:string,
         this.onRetry,
         true,
         {
-          // TODO: ARIA-LABEL
+          'aria-label': this.localization.getTextFromLabel(LocalizationLabels.a11yRetry),
         },
         {
           confirmationDialog: {
@@ -436,7 +443,7 @@ export default class AdvancedBlanks extends (H5P.Question as { new( type:string,
    * @returns {boolean} True, if content type is root. Else false.
    */
   public isRoot():boolean {
-    return !!this.contentData.standalone;
+    return !!this.extras.standalone;
   }
 
   /**
