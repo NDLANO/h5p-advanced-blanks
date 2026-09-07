@@ -12,11 +12,6 @@ type BlankCallbacks = {
   textChanged: (event: Event, blank: Blank) => void;
 };
 
-/** @constant {object} ICON Icon definitions for blank UI elements. */
-const ICONS = {
-  NOTIFICATION: '&#xf05a;', // FontAwesome i icon for notification
-} as const;
-
 /**
  * View layer for rendering and managing blank input elements.
  */
@@ -183,7 +178,6 @@ export default class BlankView {
     notificationButton.addEventListener('click', (event) => {
       this.callbacks.displayFeedback(event, blank);
     });
-    notificationButton.innerHTML = ICONS.NOTIFICATION;
 
     return notificationButton;
   }
@@ -193,6 +187,8 @@ export default class BlankView {
    * @param {Blank} blank Blank model to render.
    */
   private createInputElement(blank: Blank): void {
+    this.dom.append(this.buildNotificationButton(blank));
+
     const inputWrapper = document.createElement('span');
     inputWrapper.classList.add('h5p-input-wrapper');
     this.dom.append(inputWrapper);
