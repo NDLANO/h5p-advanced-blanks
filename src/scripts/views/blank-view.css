@@ -45,7 +45,7 @@
         position: absolute;
         right: var(--h5p-theme-spacing-xxs);
         text-decoration: none;
-        content: "\e903";
+        content: var(--icon-h5ptheme-checkmark);
         font-family: 'h5p-theme';
         color: var(--h5p-theme-feedback-correct-main);
       }
@@ -65,7 +65,7 @@
         right: var(--h5p-theme-spacing-xxs);
         font-family: 'h5p-theme';
         text-decoration: none;
-        content: "\e902";
+        content: var(--icon-h5ptheme-crossmark);
         color: var(--h5p-theme-feedback-incorrect-main);
       }
     }
@@ -105,7 +105,7 @@
         position: absolute;
         font-family: 'h5p-theme';
         text-decoration: none;
-        content: "\e902";
+        content: var(--icon-h5ptheme-crossmark);
         color: var(--h5p-theme-feedback-incorrect-main);
       }
     }
@@ -123,7 +123,7 @@
         position: absolute;
         font-family: 'h5p-theme';
         text-decoration: none;
-        content: "\e902";
+        content: var(--icon-h5ptheme-crossmark);
         color: var(--h5p-theme-feedback-incorrect-main);
       }
     }
