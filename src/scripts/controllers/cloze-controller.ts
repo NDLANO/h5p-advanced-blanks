@@ -203,7 +203,7 @@ export class ClozeController {
   checkAll = (): void => {
     this.cloze.hideAllHighlights();
     for (const blank of this.cloze.blanks) {
-      if ((!blank.isCorrect) && blank.enteredText !== '') {
+      if ((!blank.isCorrect)) {
         blank.evaluateAttempt(true, true);
       }
       blank.isDisabled = true;

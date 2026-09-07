@@ -471,6 +471,9 @@ export class Blank extends ClozeElement {
    * @param {MessageType} messageType Type of message determining state.
    */
   private setAnswerState(messageType: MessageType): void {
+    const previousCorrect = this.isCorrect;
+    const previousError = this.isError;
+
     this.isCorrect = false;
     this.isError = false;
     this.isRetry = false;
@@ -488,6 +491,8 @@ export class Blank extends ClozeElement {
         break;
       case MessageType.ShowSolution:
         this.isShowingSolution = true;
+        this.isCorrect = previousCorrect;
+        this.isError = previousError;
         break;
     }
   }

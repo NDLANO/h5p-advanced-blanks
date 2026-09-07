@@ -103,7 +103,6 @@
 
       .h5p-input-wrapper:after {
         position: absolute;
-        right: var(--h5p-theme-spacing-xxs);
         font-family: 'h5p-theme';
         text-decoration: none;
         content: "\e902";
@@ -122,7 +121,6 @@
 
       .h5p-input-wrapper:after {
         position: absolute;
-        right: var(--h5p-theme-spacing-xxs);
         font-family: 'h5p-theme';
         text-decoration: none;
         content: "\e902";
@@ -210,6 +208,22 @@
         color: color-mix(in srgb, var(--h5p-theme-feedback-neutral-secondary), transparent 60%);
       }
     }
+
+    &.showing-solution button.h5p-notification {
+      background-color: var(--h5p-theme-feedback-neutral-third);
+
+      &:focus-visible {
+        outline: 2px ridge var(--h5p-theme-feedback-neutral-secondary);
+      }
+
+      &::before {
+        color: var(--h5p-theme-feedback-neutral-secondary);
+      }
+
+      &:hover::before {
+        color: color-mix(in srgb, var(--h5p-theme-feedback-neutral-secondary), transparent 60%);
+      }
+    }
   }
 
   .blank:not(.has-pending-feedback) button.h5p-notification {
@@ -228,7 +242,7 @@
           -moz-appearance: none;
           -webkit-appearance: none;
 
-          padding-right: 2.5em;
+          padding-right: 2.0rem;
         }
       }
     }

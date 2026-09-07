@@ -475,6 +475,7 @@ export default class AdvancedBlanks extends (H5P.Question as { new( type:string,
    * Show solutions and moves to embedded showing state.
    */
   public showSolutions = () => {
+    this.onCheckAnswer();
     this.onShowSolution();
     this.moveToState(States.showingSolutionsEmbedded);
   };
