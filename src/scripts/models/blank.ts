@@ -285,9 +285,6 @@ export class Blank extends ClozeElement {
    * Handle focus event for blank.
    */
   public onFocused(): void {
-    if (this.hasPendingFeedback) {
-      this.evaluateAttempt(false);
-    }
     if (this.settings.clozeType === ClozeType.Select) {
       this.setAnswerState(MessageType.None);
       this.lastCheckedText = '';
