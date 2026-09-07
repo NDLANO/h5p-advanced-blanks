@@ -2,14 +2,14 @@
 
   .highlighted {
     --space-around: calc(0.2 * var(--h5p-theme-spacing-s));
+    animation-direction: alternate;
+    animation-duration: 1000ms;
+    animation-iteration-count: 3;
+    animation-name: blink-background-color;
     background-color: var(--h5p-theme-feedback-incorrect-main);
     color: var(--h5p-theme-feedback-incorrect-secondary);
-    padding: var(--space-around);
     margin: calc(-1 * var(--space-around));
-    animation-duration: 1000ms;
-    animation-name: blink-background-color;
-    animation-iteration-count: 3;
-    animation-direction: alternate;
+    padding: var(--space-around);
   }
 }
 

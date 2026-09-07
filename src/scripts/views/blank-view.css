@@ -2,24 +2,24 @@
 
   .blank {
     .h5p-text-input {
-      font-family: var(--h5p-theme-font-name);
-      font-size: var(--h5p-theme-font-size-m);
-      border-radius: var(--h5p-theme-border-radius-medium);
       background-color: var(--h5p-theme-ui-base);
       border: 2px solid var(--h5p-theme-alternative-darker);
+      border-radius: var(--h5p-theme-border-radius-medium);
+      color: var(--h5p-theme-text-primary);
+      font-family: var(--h5p-theme-font-name);
+      font-size: var(--h5p-theme-font-size-m);
+      font-weight: 600;
+      min-height: calc(var(--h5p-theme-font-size-m) * 1.2);
+      min-width: 6em;
+      overflow: hidden;
       padding: calc(var(--h5p-theme-spacing-xs) / 2) 0 calc(var(--h5p-theme-spacing-xs) / 2) var(--h5p-theme-spacing-xxs);
       text-overflow: ellipsis;
-      overflow: hidden;
       white-space: nowrap;
-      color: var(--h5p-theme-text-primary);
-      min-width: 6em;
-      min-height: calc(var(--h5p-theme-font-size-m) * 1.2);
-      font-weight: 600;
       width: 100%;
 
       &:focus-visible {
-        box-shadow: 0 0 0.5rem 0 var(--h5p-theme-contrast-cta-white);
         border-color: var(--h5p-theme-contrast-cta-white);
+        box-shadow: 0 0 0.5rem 0 var(--h5p-theme-contrast-cta-white);
         outline: 1px ridge var(--h5p-theme-contrast-cta-white);
       }
 
@@ -42,31 +42,31 @@
       }
 
       .h5p-input-wrapper:after {
+        color: var(--h5p-theme-feedback-correct-main);
+        content: var(--icon-h5ptheme-checkmark);
+        font-family: 'h5p-theme';
         position: absolute;
         right: var(--h5p-theme-spacing-xxs);
         text-decoration: none;
-        content: var(--icon-h5ptheme-checkmark);
-        font-family: 'h5p-theme';
-        color: var(--h5p-theme-feedback-correct-main);
       }
     }
 
     &.error {
       .h5p-text-input {
-        color: var(--h5p-theme-feedback-incorrect-main);
         background-color: var(--h5p-theme-feedback-incorrect-secondary);
         border: solid 2px var(--h5p-theme-feedback-incorrect-third);
+        color: var(--h5p-theme-feedback-incorrect-main);
         font-weight: bold;
         padding-right: var(--h5p-theme-spacing-m);
       }
 
       .h5p-input-wrapper:after {
+        color: var(--h5p-theme-feedback-incorrect-main);
+        content: var(--icon-h5ptheme-crossmark);
+        font-family: 'h5p-theme';
         position: absolute;
         right: var(--h5p-theme-spacing-xxs);
-        font-family: 'h5p-theme';
         text-decoration: none;
-        content: var(--icon-h5ptheme-crossmark);
-        color: var(--h5p-theme-feedback-incorrect-main);
       }
     }
 
@@ -90,9 +90,9 @@
 
     &.retry {
       .h5p-text-input {
-        color: var(--h5p-theme-feedback-incorrect-main);
         background-color: var(--h5p-theme-feedback-incorrect-secondary);
         border: solid 2px var(--h5p-theme-feedback-incorrect-third);
+        color: var(--h5p-theme-feedback-incorrect-main);
         font-weight: bold;
         padding-right: var(--h5p-theme-spacing-m);
       }
@@ -102,43 +102,43 @@
       }
 
       .h5p-input-wrapper:after {
-        position: absolute;
-        font-family: 'h5p-theme';
-        text-decoration: none;
-        content: var(--icon-h5ptheme-crossmark);
         color: var(--h5p-theme-feedback-incorrect-main);
+        content: var(--icon-h5ptheme-crossmark);
+        font-family: 'h5p-theme';
+        position: absolute;
+        text-decoration: none;
       }
     }
 
     &.showing-solution {
       .h5p-text-input {
-        color: var(--h5p-theme-feedback-incorrect-main);
         background-color: var(--h5p-theme-feedback-incorrect-secondary);
         border: solid 2px var(--h5p-theme-feedback-incorrect-third);
+        color: var(--h5p-theme-feedback-incorrect-main);
         font-weight: bold;
         padding-right: var(--h5p-theme-spacing-m);
       }
 
       .h5p-input-wrapper:after {
-        position: absolute;
-        font-family: 'h5p-theme';
-        text-decoration: none;
-        content: var(--icon-h5ptheme-crossmark);
         color: var(--h5p-theme-feedback-incorrect-main);
+        content: var(--icon-h5ptheme-crossmark);
+        font-family: 'h5p-theme';
+        position: absolute;
+        text-decoration: none;
       }
     }
   }
 
   .correct-answer {
-    color: var(--h5p-theme-feedback-correct-main);
-    font-weight: bold;
-    border: 2px var(--h5p-theme-feedback-correct-main) dashed;
     background-color: var(--h5p-theme-feedback-correct-secondary);
-    padding: calc(var(--h5p-theme-spacing-xs) / 2);
+    border: 2px var(--h5p-theme-feedback-correct-main) dashed;
     border-radius: var(--h5p-theme-border-radius-medium);
-    margin-left: .5em;
+    color: var(--h5p-theme-feedback-correct-main);
     display: inline-flex;
+    font-weight: bold;
     line-height: normal;
+    margin-left: .5em;
+    padding: calc(var(--h5p-theme-spacing-xs) / 2);
 
     &[hidden] {
       display: none;
@@ -146,33 +146,33 @@
   }
 
   .blank.has-pending-feedback button.h5p-notification {
-    aspect-ratio: 1;
-    border: none;
-    border-radius: 50%;
-    background: none;
-    cursor: pointer;
-    font-family: h5p-theme, sans-serif;
-    text-decoration: none;
     animation: shake 3s cubic-bezier(.36, .07, .19, .97) reverse;
     animation-iteration-count: 2;
-    transform: translate3d(0, 0, 0);
+    aspect-ratio: 1;
     backface-visibility: hidden;
-    perspective: 1000px;
+    background: none;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    font-family: h5p-theme, sans-serif;
     font-size: large;
-    position: relative;
     margin-right: 2px;
+    perspective: 1000px;
+    position: relative;
+    text-decoration: none;
+    transform: translate3d(0, 0, 0);
     width: max(24px, var(--h5p-theme-font-size-m));
 
     &::before {
-      position: absolute;
       content: var(--icon-h5ptheme-info);
       left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
+      position: absolute;
       text-shadow: 1px 1px var(--h5p-theme-ui-base),
                   1px -1px var(--h5p-theme-ui-base),
                   -1px -1px var(--h5p-theme-ui-base),
                   -1px 1px var(--h5p-theme-ui-base);
+      top: 50%;
+      transform: translate(-50%, -50%);
     }
   }
 
@@ -180,12 +180,12 @@
     &.error button.h5p-notification {
       background-color: var(--h5p-theme-feedback-incorrect-secondary);
 
-      &:focus-visible {
-        outline: 2px ridge var(--h5p-theme-feedback-incorrect-main);
-      }
-
       &::before {
         color: var(--h5p-theme-feedback-incorrect-main);
+      }
+
+      &:focus-visible {
+        outline: 2px ridge var(--h5p-theme-feedback-incorrect-main);
       }
 
       &:hover::before {
@@ -196,12 +196,12 @@
     &.retry button.h5p-notification {
       background-color: var(--h5p-theme-feedback-neutral-third);
 
-      &:focus-visible {
-        outline: 2px ridge var(--h5p-theme-feedback-neutral-secondary);
-      }
-
       &::before {
         color: var(--h5p-theme-feedback-neutral-secondary);
+      }
+
+      &:focus-visible {
+        outline: 2px ridge var(--h5p-theme-feedback-neutral-secondary);
       }
 
       &:hover::before {
@@ -212,12 +212,12 @@
     &.showing-solution button.h5p-notification {
       background-color: var(--h5p-theme-feedback-neutral-third);
 
-      &:focus-visible {
-        outline: 2px ridge var(--h5p-theme-feedback-neutral-secondary);
-      }
-
       &::before {
         color: var(--h5p-theme-feedback-neutral-secondary);
+      }
+
+      &:focus-visible {
+        outline: 2px ridge var(--h5p-theme-feedback-neutral-secondary);
       }
 
       &:hover::before {
@@ -238,10 +238,9 @@
       &.retry,
       &.showing-solution {
         select.h5p-text-input {
-          appearance: none;
           -moz-appearance: none;
           -webkit-appearance: none;
-
+          appearance: none;
           padding-right: 2.0rem;
         }
       }
@@ -258,16 +257,16 @@
   }
 
   .h5p-input-wrapper {
+    align-items: center;
     display: inline-flex;
     position: relative;
-    align-items: center;
     vertical-align: middle;
   }
 
   select.h5p-text-input {
-    appearance: button;
     -moz-appearance: none;
     -webkit-appearance: button;
+    appearance: button;
   }
 
   .h5p-advanced-blanks-type-mode {

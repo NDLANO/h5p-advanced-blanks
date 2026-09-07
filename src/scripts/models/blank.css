@@ -3,12 +3,12 @@
 
     .missing-character,
     .mistaken-character {
+      animation-direction: alternate;
+      animation-duration: 500ms;
+      animation-iteration-count: 13;
+      animation-name: blink-color;
       color: var(--h5p-theme-feedback-incorrect-main);
       font-weight: bold;
-      animation-duration: 500ms;
-      animation-name: blink-color;
-      animation-iteration-count: 13;
-      animation-direction: alternate;
     }
   }
 }
