@@ -77,6 +77,7 @@ export default class AdvancedBlanks extends (H5P.Question as { new( type:string,
 
     // Set mandatory default values for editor widgets that create content type instances
     params = extend({
+      media: {},
       content: {
         blanksText: ''
       },
