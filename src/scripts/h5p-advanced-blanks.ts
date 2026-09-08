@@ -492,6 +492,10 @@ export default class AdvancedBlanks extends (H5P.Question as { new( type:string,
    * Show solutions and moves to embedded showing state.
    */
   public showSolutions = () => {
+    if (this.clozeController.maxScore === 0) {
+      return;
+    }
+
     this.onCheckAnswer();
     this.onShowSolution();
     this.moveToState(States.showingSolutionsEmbedded);
