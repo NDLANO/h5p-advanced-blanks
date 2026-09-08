@@ -247,6 +247,10 @@
       "default": "Verificați ortografia: @mistake"
     },
     {
+      "label": "No blanks defined",
+      "default": "No blanks were defined for this exercise."
+    },
+    {
       "label": "Dialog de confirmare la verificare",
       "fields": [
         {

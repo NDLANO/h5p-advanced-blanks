@@ -247,6 +247,10 @@
       "default": "Kyk na jou spelling: @mistake"
     },
     {
+      "label": "No blanks defined",
+      "default": "No blanks were defined for this exercise."
+    },
+    {
       "label": "Toets bevestigingsdialoog",
       "fields": [
         {

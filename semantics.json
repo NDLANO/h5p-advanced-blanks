@@ -641,6 +641,14 @@
     "optional": true
   },
   {
+    "name": "noBlanks",
+    "type": "text",
+    "label": "No blanks defined",
+    "default": "No blanks were defined for this exercise.",
+    "importance": "low",
+    "common": true
+  },
+  {
     "label": "Check confirmation dialog",
     "importance": "low",
     "name": "confirmCheck",

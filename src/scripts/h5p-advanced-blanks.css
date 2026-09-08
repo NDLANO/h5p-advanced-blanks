@@ -3,5 +3,11 @@
   --icon-h5ptheme-crossmark: "\e902";
   --icon-h5ptheme-info: "\e917";
 
+  &:has(.h5p-advanced-blanks-message-box) {
+    .h5p-question-content {
+      padding: 0;
+    }
+  }
+
   position: relative;
 }

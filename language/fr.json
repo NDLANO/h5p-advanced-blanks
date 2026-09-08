@@ -247,6 +247,10 @@
       "default": "Vérifiez votre orthographe: @mistake"
     },
     {
+      "label": "No blanks defined",
+      "default": "No blanks were defined for this exercise."
+    },
+    {
       "label": "Fenêtre de confirmation pour \"Vérifier\"",
       "fields": [
         {

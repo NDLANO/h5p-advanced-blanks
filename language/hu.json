@@ -247,6 +247,10 @@
       "default": "Ellenőrizze a helyesírást: @error"
     },
     {
+      "label": "No blanks defined",
+      "default": "No blanks were defined for this exercise."
+    },
+    {
       "label": "Ellenőrzés megerősítő ablaka",
       "fields": [
         {

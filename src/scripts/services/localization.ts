@@ -12,6 +12,7 @@ export enum LocalizationLabels {
   a11ySubmitAndCheck = 'a11ySubmitAndCheck',
   a11yShowSolution = 'a11yShowSolution',
   a11yRetry = 'a11yRetry',
+  noBlanks = 'noBlanks',
 }
 
 /** Localization structure enumeration for complex UI elements. */

@@ -247,6 +247,10 @@
       "default": "Überprüfe die Rechtschreibung: @mistake"
     },
     {
+      "label": "Keine Lücken angelegt",
+      "default": "Es wurden für diese Aufgabe noch keine Lücken angelegt."
+    },
+    {
       "label": "Bestätigungsdialog beim Prüfen",
       "fields": [
         {

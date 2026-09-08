@@ -8,6 +8,7 @@ import { MessageService } from '@services/message-service';
 import { Unwrapper } from '@helpers/unwrapper';
 import { XAPIActivityDefinition } from '@models/xapi';
 import { extend } from '@helpers/helpers';
+import MessageBox from '@views/message-box';
 
 /** Application state enumeration for cloze workflow. */
 enum States {
@@ -177,12 +178,20 @@ export default class AdvancedBlanks extends (H5P.Question as { new( type:string,
    */
   registerDomElements = () => {
     this.registerMedia();
-    this.setIntroduction(this.repository.getTaskDescription());
 
     this.container = document.createElement('div');
     this.container.classList.add('h5p-advanced-blanks-content');
 
     this.setContent(H5P.jQuery(this.container));
+
+    if (this.clozeController.maxScore === 0) {
+      this.container.append(
+        new MessageBox({ text: this.localization.getTextFromLabel(LocalizationLabels.noBlanks) }).getDOM()
+      );
+      return;
+    }
+
+    this.setIntroduction(this.repository.getTaskDescription());
     this.registerButtons();
 
     this.moveToState(States.ongoing);

@@ -247,6 +247,10 @@
       "default": "Проверите правопис: @mistake"
     },
     {
+      "label": "No blanks defined",
+      "default": "No blanks were defined for this exercise."
+    },
+    {
       "label": "Проверите дијалог за потврду",
       "fields": [
         {

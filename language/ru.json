@@ -247,6 +247,10 @@
       "default": "Проверь орфографию: @mistake"
     },
     {
+      "label": "No blanks defined",
+      "default": "No blanks were defined for this exercise."
+    },
+    {
       "label": "Окно подтверждения проверки",
       "fields": [
         {

@@ -247,6 +247,10 @@
       "default": "Check your spelling: @mistake"
     },
     {
+      "label": "No blanks defined",
+      "default": "No blanks were defined for this exercise."
+    },
+    {
       "label": "Check confirmation dialog",
       "fields": [
         {

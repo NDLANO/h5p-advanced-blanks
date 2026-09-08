@@ -247,6 +247,10 @@
       "default": "Controleer je spelling: @fout"
     },
     {
+      "label": "No blanks defined",
+      "default": "No blanks were defined for this exercise."
+    },
+    {
       "label": "Controleer de bevestigingsdialoog",
       "fields": [
         {
