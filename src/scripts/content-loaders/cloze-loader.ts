@@ -4,6 +4,9 @@ import { Blank } from '@models/blank';
 import { Highlight } from '@models/highlight';
 import { Cloze } from '@models/cloze';
 
+/** @constant {RegularExpression} EXCLAMATION_MARK_REG_EXP Expression to detect highlights. */
+const EXCLAMATION_MARK_REG_EXP = /!!(.{1,40}?)!!/i;
+
 /**
  * Load and configure cloze instances from content data.
  */
@@ -49,21 +52,20 @@ export class ClozeLoader {
     const highlightInstances: Highlight[] = [];
     const blanksInstances: Blank[] = [];
 
-    const exclamationMarkRegExp = /!!(.{1,40}?)!!/i;
     let highlightCounter = 0;
     let blankCounter = 0;
 
     let nextHighlightMatch: RegExpMatchArray | null;
     let nextBlankIndex : number;
     do {
-      nextHighlightMatch = html.match(exclamationMarkRegExp);
+      nextHighlightMatch = html.match(EXCLAMATION_MARK_REG_EXP);
       nextBlankIndex = html.indexOf(ClozeLoader.normalizedBlankMarker);
 
       if (nextHighlightMatch && ((nextHighlightMatch.index < nextBlankIndex) || (nextBlankIndex < 0))) {
         const highlight = new Highlight(nextHighlightMatch[1], `highlight_${highlightCounter}`);
         highlightInstances.push(highlight);
         orderedAllElementsList.push(highlight);
-        html = html.replace(exclamationMarkRegExp, `<span id='container_highlight_${highlightCounter}'></span>`);
+        html = html.replace(EXCLAMATION_MARK_REG_EXP, `<span id='container_highlight_${highlightCounter}'></span>`);
         highlightCounter++;
       }
       else if (nextBlankIndex >= 0) {
