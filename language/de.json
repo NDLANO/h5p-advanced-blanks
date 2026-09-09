@@ -230,8 +230,24 @@
       "default": "Überprüfen"
     },
     {
-      "label": "Text for \"Submit\" button",
+      "label": "Text für den \"Absenden\"-Button",
       "default": "Submit"
+    },
+    {
+      "label": "Barrierefreiheitstext für den \"Überprüfen\"-Button",
+      "default": "Prüfe die Antworten. Die Antworten werden als richtig oder falsch gekennzeichnet."
+    },
+    {
+      "label": "Barrierefreiheitstext für den \"Absenden\"-Button",
+      "default": "Sende die Antworten und überprüfe sie. Die Antworten werden als richtig oder falsch gekennzeichnet."
+    },
+    {
+      "label": "Barrierefreiheitstext für den \"Lösung anzeigen\"-Button",
+      "default": "Zeige die Lösungen. Die Lücken werden sie erwartete Lösung anzeigen."
+    },
+    {
+      "label": "Barrierefreiheitstext für den \"Wiederholen\" button",
+      "default": "Wiederhole die Aufgabe. Setze alle Antworten zurück und starte von vorne."
     },
     {
       "label": "Text der \"Nicht ausgefüllt\"-Nachricht",

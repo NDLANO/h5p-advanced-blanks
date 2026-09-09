@@ -234,6 +234,22 @@
       "default": "Submit"
     },
     {
+      "label": "Assistive technology description for \"Check\" button",
+      "default": "Check the answers. The responses will be marked as correct or incorrect."
+    },
+    {
+      "label": "Assistive technology description for \"Submit\" button",
+      "default": "Submit the answers and check them. The responses will be marked as correct or incorrect."
+    },
+    {
+      "label": "Assistive technology description for \"Show Solution\" button",
+      "default": "Show the solution. The blanks will show the expected solution."
+    },
+    {
+      "label": "Assistive technology description for \"Retry\" button",
+      "default": "Retry the task. Reset all responses and start the task over again."
+    },
+    {
       "label": "Teksti \"Not filled out\" viestille",
       "default": "Ole hyvä ja täytä kaikki aukkokohdat nähdäksesi vastaukset"
     },
