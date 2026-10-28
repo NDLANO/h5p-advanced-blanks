@@ -37,58 +37,82 @@
           ],
           "field": {
             "label": "Lücke",
-            "entity": "alternative",
-            "field": {
-              "label": "Lücke",
-              "fields": [
-                {
-                  "label": "Text",
-                  "description": "Alternative Antworten können jeweils mit einem Schrägstrich (/) angefügt werden."
-                },
-                {
-                  "label": "Richtige Antwort"
-                },
-                {
-                  "label": "Tipp"
-                },
-                {
-                  "label": "Optionen für falsche Antworten",
+            "fields": [
+              {
+                "label": "Antwortmodus",
+                "options": [
+                  {
+                    "label": "Globalen Modus verwenden"
+                  },
+                  {
+                    "label": "Der Nutzer tippt die Antwort ein (Text)"
+                  },
+                  {
+                    "label": "Der Nutzer tippt die Antwort ein (Zahl)"
+                  },
+                  {
+                    "label": "Der Nutzer wählt eine Option aus"
+                  },
+                  {
+                    "label": "Der Nutzer wählt mehrere Optionen aus"
+                  }
+                ]
+              },
+              {
+                "label": "Lücke",
+                "entity": "alternative",
+                "field": {
+                  "label": "Lücke",
                   "fields": [
                     {
-                      "label": "Rückmeldung",
-                      "description": "Die Rückmeldung sollte dem Nutzer dabei helfen, die richtige Antwort zu finden und dabei auf die eingegebene Antwort Rücksicht nehmen."
+                      "label": "Text"
                     },
                     {
-                      "label": "Hervorhebung im Text anzeigen während die Rückmeldung gegeben wird",
-                      "description": "Hervorhebungen müssen mit !! begonnen und beendet werden. Beispiel: Dies ist !!eine Hervorhebung!!"
+                      "label": "Richtige Antwort"
                     },
                     {
-                      "label": "Position der Hervorhebung relativ zur Lücke:",
-                      "options": [
+                      "label": "Tipp"
+                    },
+                    {
+                      "label": "Optionen für falsche Antworten",
+                      "fields": [
                         {
-                          "label": "- 1 (die letzte Hervorhebung vor der Lücke)"
+                          "label": "Rückmeldung",
+                          "description": "Die Rückmeldung sollte dem Nutzer dabei helfen, die richtige Antwort zu finden und dabei auf die eingegebene Antwort Rücksicht nehmen."
                         },
                         {
-                          "label": "- 2 (die vorletzte Hervorhebung vor der Lücke)"
+                          "label": "Hervorhebung im Text anzeigen während die Rückmeldung gegeben wird",
+                          "description": "Hervorhebungen müssen mit !! begonnen und beendet werden. Beispiel: Dies ist !!eine Hervorhebung!!"
                         },
                         {
-                          "label": "- 3 (drei Hervorhebungen vor der Lücke)"
-                        },
-                        {
-                          "label": "+ 1 (die erste Hervorhebung nach der Lücke)"
-                        },
-                        {
-                          "label": "+ 2 (die zweite Hervorhebung nach der Lücke)"
-                        },
-                        {
-                          "label": "+ 3 (die dritte Hervorhebung nach der Lücke)"
+                          "label": "Position der Hervorhebung relativ zur Lücke:",
+                          "options": [
+                            {
+                              "label": "- 1 (die letzte Hervorhebung vor der Lücke)"
+                            },
+                            {
+                              "label": "- 2 (die vorletzte Hervorhebung vor der Lücke)"
+                            },
+                            {
+                              "label": "- 3 (drei Hervorhebungen vor der Lücke)"
+                            },
+                            {
+                              "label": "+ 1 (die erste Hervorhebung nach der Lücke)"
+                            },
+                            {
+                              "label": "+ 2 (die zweite Hervorhebung nach der Lücke)"
+                            },
+                            {
+                              "label": "+ 3 (die dritte Hervorhebung nach der Lücke)"
+                            }
+                          ]
                         }
                       ]
                     }
                   ]
                 }
-              ]
-            }
+              }
+            ]
           }
         }
       ]
@@ -151,48 +175,64 @@
           "description": "Legt fest, auf welche Weise der Nutzer Antworten gibt.",
           "options": [
             {
-              "label": "Der Nutzer wählt aus einer Liste aus."
+              "label": "Der Nutzer wählt eine Option aus"
             },
             {
-              "label": "Der Nutzer tippt sie ein."
+              "label": "Der Nutzer tippt sie ein (Text)"
+            },
+            {
+              "label": "Der Nutzer tippt sie ein (Zahl)"
+            },
+            {
+              "label": "Der Nutzer wählt mehrere Optionen aus"
             }
           ]
         },
         {
-          "label": "Alternativen, die zur Auswahl angeboten werden",
-          "options": [
+          "label": "Einstellungen für den Auswahlmodus",
+          "fields": [
             {
-              "label": "Die für die jeweilige Lücke eingegebenen falschen Antworten"
+              "label": "Alternativen, die zur Auswahl angeboten werden",
+              "options": [
+                {
+                  "label": "Die für die jeweilige Lücke eingegebenen falschen Antworten"
+                },
+                {
+                  "label": "Die richtigen Antworten von allen anderen Lücken"
+                }
+              ]
             },
             {
-              "label": "Die richtigen Antworten von allen anderen Lücken"
+              "label": "Antwortoptionen zufällig anordnen"
+            },
+            {
+              "label": "Maximalzahl der richtigen Antworten von allen anderen Lücken, die zur Auswahl angeboten werden",
+              "description": "Gib 0 ein, um keine Begrenzung zu setzen."
             }
           ]
         },
         {
-          "label": "Antwortoptionen zufällig anordnen"
-        },
-        {
-          "label": "Maximalzahl der richtigen Antworten von allen anderen Lücken, die zur Auswahl angeboten werden",
-          "description": "Gib 0 ein, um keine Begrenzung zu setzen."
-        },
-        {
-          "label": "Verhalten bei Tippfehlern",
-          "options": [
+          "label": "Einstellungen für den Tippmodus",
+          "fields": [
             {
-              "label": "Als richtige Antwort akzeptieren"
+              "label": "Verhalten bei Tippfehlern",
+              "options": [
+                {
+                  "label": "Als richtige Antwort akzeptieren"
+                },
+                {
+                  "label": "Den Nutzer über den Fehler warnen"
+                },
+                {
+                  "label": "Als Fehler ansehen"
+                }
+              ]
             },
             {
-              "label": "Den Nutzer über den Fehler warnen"
-            },
-            {
-              "label": "Als Fehler ansehen"
+              "label": "Auf Groß-/Kleinschreibung achten",
+              "description": "Stellt sicher, dass die Lösung exakt der Vorgabe entspricht."
             }
           ]
-        },
-        {
-          "label": "Auf Groß-/Kleinschreibung achten",
-          "description": "Stellt sicher, dass die Lösung exakt der Vorgabe entspricht."
         },
         {
           "label": "Antworten nach Eingabe automatisch prüfen"

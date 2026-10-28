@@ -112,133 +112,185 @@
           }
         ],
         "field": {
-          "name": "alternativesList",
-          "type": "list",
-          "label": "Alternatives",
-          "entity": "alternative",
-          "widget": "advancedBlankslistCheckbox",
-          "listCheckbox": {
-            "checkbox": "isCorrect"
-          },
-          "min": 1,
-          "field": {
-            "name": "alternativeGroup",
-            "type": "group",
-            "label": "Alternatives",
-            "fields": [
-              {
-                "name": "text",
-                "type": "text",
-                "label": "Text",
-                "description": "You can separate alternative answers with a slash (/)."
-              },
-              {
-                "name": "isCorrect",
-                "type": "boolean",
-                "label": "Correct answer",
-                "optional": true
-              },
-              {
-                "name": "hint",
-                "type": "text",
-                "label": "Hint",
-                "optional": true,
-                "widget": "showWhen",
-                "showWhen": {
-                  "rules": [
-                    {
-                      "field": "isCorrect",
-                      "equals": true
-                    }
-                  ]
-                }
-              },
-              {
-                "name": "optionsIncorrect",
-                "type": "group",
-                "label": "Options for incorrect alternatives",
-                "expanded": false,
-                "widget": "showWhen",
-                "showWhen": {
-                  "rules": [
-                    {
-                      "field": "isCorrect",
-                      "equals": false
-                    }
-                  ]
+          "name": "blank",
+          "type": "group",
+          "label": "Blank",
+          "fields": [
+            {
+              "name": "mode",
+              "type": "select",
+              "label": "Answer mode",
+              "options": [
+                {
+                  "value": "global",
+                  "label": "Use the global mode"
                 },
+                {
+                  "value": "typing",
+                  "label": "The user types the answer (text)"
+                },
+                {
+                  "value": "typingNumber",
+                  "label": "The user types the answer (number)"
+                },
+                {
+                  "value": "selection",
+                  "label": "The user selects one option"
+                },
+                {
+                  "value": "selectionMultiple",
+                  "label": "The user selects multiple options"
+                }
+              ],
+              "default": "global"
+            },
+            {
+              "name": "alternativesList",
+              "type": "list",
+              "label": "Alternatives",
+              "entity": "alternative",
+              "widget": "advancedBlankslistCheckbox",
+              "listCheckbox": {
+                "checkbox": "isCorrect",
+                "allowMultipleWhen": [
+                  [
+                    {
+                      "field": "mode",
+                      "equals": "selectionMultiple"
+                    }
+                  ],
+                  [
+                    {
+                      "field": "mode",
+                      "equals": "global"
+                    },
+                    {
+                      "field": "../../../behaviour/mode",
+                      "equals": "selectionMultiple"
+                    }
+                  ]
+                ]
+              },
+              "min": 1,
+              "field": {
+                "name": "alternativeGroup",
+                "type": "group",
+                "label": "Alternatives",
                 "fields": [
                   {
-                    "name": "incorrectAnswerFeedback",
+                    "name": "text",
                     "type": "text",
-                    "label": "Feedback",
-                    "optional": true,
-                    "description": "The feedback should help the user find the correct answer and ideally be tailored to the answer the user has entered.",
-                    "widget": "html",
-                    "tags": [
-                      "strong",
-                      "em",
-                      "u",
-                      "a",
-                      "ul",
-                      "ol",
-                      "sub",
-                      "sup"
-                    ]
+                    "label": "Text"
                   },
                   {
-                    "name": "showHighlight",
+                    "name": "isCorrect",
                     "type": "boolean",
-                    "label": "Show highlight in the text when feedback is shown",
-                    "description": "Put !! before and after a piece of text to mark it as a highlight. (e.g. This is !!a highlight!!)",
-                    "default": false,
-                    "optional": false
+                    "label": "Correct answer",
+                    "optional": true
                   },
                   {
-                    "name": "highlight",
-                    "type": "select",
-                    "label": "Highlight position relative to blank:",
+                    "name": "hint",
+                    "type": "text",
+                    "label": "Hint",
+                    "optional": true,
                     "widget": "showWhen",
                     "showWhen": {
                       "rules": [
                         {
-                          "field": "showHighlight",
+                          "field": "isCorrect",
                           "equals": true
                         }
                       ]
+                    }
+                  },
+                  {
+                    "name": "optionsIncorrect",
+                    "type": "group",
+                    "label": "Options for incorrect alternatives",
+                    "expanded": false,
+                    "widget": "showWhen",
+                    "showWhen": {
+                      "rules": [
+                        {
+                          "field": "isCorrect",
+                          "equals": false
+                        }
+                      ]
                     },
-                    "options": [
+                    "fields": [
                       {
-                        "value": "-1",
-                        "label": "- 1 (right before the blank)"
+                        "name": "incorrectAnswerFeedback",
+                        "type": "text",
+                        "label": "Feedback",
+                        "optional": true,
+                        "description": "The feedback should help the user find the correct answer and ideally be tailored to the answer the user has entered.",
+                        "widget": "html",
+                        "tags": [
+                          "strong",
+                          "em",
+                          "u",
+                          "a",
+                          "ul",
+                          "ol",
+                          "sub",
+                          "sup"
+                        ]
                       },
                       {
-                        "value": "-2",
-                        "label": "- 2 (two highlights before the blank)"
+                        "name": "showHighlight",
+                        "type": "boolean",
+                        "label": "Show highlight in the text when feedback is shown",
+                        "description": "Put !! before and after a piece of text to mark it as a highlight. (e.g. This is !!a highlight!!)",
+                        "default": false,
+                        "optional": false
                       },
                       {
-                        "value": "-3",
-                        "label": "- 3 (three highlights before the blank)"
-                      },
-                      {
-                        "value": "1",
-                        "label": "+ 1 (right after the blank)"
-                      },
-                      {
-                        "value": "2",
-                        "label": "+ 2 (two highlights after the blank)"
-                      },
-                      {
-                        "value": "3",
-                        "label": "+ 3 (three highlights after the blank)"
+                        "name": "highlight",
+                        "type": "select",
+                        "label": "Highlight position relative to blank:",
+                        "widget": "showWhen",
+                        "showWhen": {
+                          "rules": [
+                            {
+                              "field": "showHighlight",
+                              "equals": true
+                            }
+                          ]
+                        },
+                        "options": [
+                          {
+                            "value": "-1",
+                            "label": "- 1 (right before the blank)"
+                          },
+                          {
+                            "value": "-2",
+                            "label": "- 2 (two highlights before the blank)"
+                          },
+                          {
+                            "value": "-3",
+                            "label": "- 3 (three highlights before the blank)"
+                          },
+                          {
+                            "value": "1",
+                            "label": "+ 1 (right after the blank)"
+                          },
+                          {
+                            "value": "2",
+                            "label": "+ 2 (two highlights after the blank)"
+                          },
+                          {
+                            "value": "3",
+                            "label": "+ 3 (three highlights after the blank)"
+                          }
+                        ],
+                        "default": "-1"
                       }
-                    ],
-                    "default": "-1"
+                    ]
                   }
                 ]
               }
-            ]
-          }
+            }
+          ]
         }
       }
     ]
@@ -368,121 +420,100 @@
         "options": [
           {
             "value": "selection",
-            "label": "The users selects from options."
+            "label": "The users selects one option"
           },
           {
             "value": "typing",
-            "label": "The users types in the answers."
+            "label": "The user types in the answers (text)"
+          },
+          {
+            "value": "typingNumber",
+            "label": "The user types in the answers (number)"
+          },
+          {
+            "value": "selectionMultiple",
+            "label": "The users selects multiple options"
           }
         ],
         "default": "typing"
       },
       {
-        "name": "selectAlternatives",
-        "type": "select",
-        "label": "Alternatives offered for selection",
-        "optional": false,
-        "widget": "showWhen",
-        "showWhen": {
-          "rules": [
-            {
-              "field": "mode",
-              "equals": "selection"
-            }
-          ]
-        },
-        "options": [
-          {
-            "value": "alternatives",
-            "label": "The incorrect answers entered for the blank"
-          },
-          {
-            "value": "all",
-            "label": "The correct answers of all other blanks"
-          }
-        ],
-        "default": "alternatives"
-      },
-      {
-        "name": "randomAnswers",
-        "type": "boolean",
-        "label": "Randomize answer options",
-        "optional": true,
-        "default": true,
-        "widget": "showWhen",
-        "showWhen": {
-          "rules": [
-            {
-              "field": "mode",
-              "equals": "selection"
-            }
-          ]
-        }
-      },
-      {
-        "name": "selectAlternativeRestriction",
-        "type": "number",
-        "label": "Maximum number of alternatives of other blanks offered for selection",
-        "description": "Enter 0 to set no limit.",
-        "min": 0,
-        "step": 1,
-        "default": 5,
-        "widget": "showWhen",
-        "showWhen": {
-          "rules": [
-            {
-              "field": "mode",
-              "equals": "selection"
-            }
-          ]
-        }
-      },
-      {
-        "name": "spellingErrorBehaviour",
-        "type": "select",
-        "label": "Behaviour when user makes a spelling error",
+        "name": "selectionSettings",
+        "type": "group",
+        "label": "Settings for selection mode",
         "importance": "low",
-        "options": [
+        "fields": [
           {
-            "value": "accept",
-            "label": "Accept it as a correct answer"
+            "name": "selectAlternatives",
+            "type": "select",
+            "label": "Alternatives offered for selection",
+            "optional": false,
+            "options": [
+              {
+                "value": "alternatives",
+                "label": "The incorrect answers entered for the blank"
+              },
+              {
+                "value": "all",
+                "label": "The correct answers of all other blanks"
+              }
+            ],
+            "default": "alternatives"
           },
           {
-            "value": "warn",
-            "label": "Warn the user about the error"
+            "name": "randomAnswers",
+            "type": "boolean",
+            "label": "Randomize answer options",
+            "optional": true,
+            "default": true
           },
           {
-            "value": "mistake",
-            "label": "Consider it a regular mistake"
+            "name": "selectAlternativeRestriction",
+            "type": "number",
+            "label": "Maximum number of alternatives of other blanks offered for selection",
+            "description": "Enter 0 to set no limit.",
+            "min": 0,
+            "step": 1,
+            "default": 5
           }
-        ],
-        "default": "mistake",
-        "widget": "showWhen",
-        "showWhen": {
-          "rules": [
-            {
-              "field": "mode",
-              "equals": "typing"
-            }
-          ]
-        }
+        ]
       },
       {
-        "name": "caseSensitive",
+        "name": "typingSettings",
+        "type": "group",
+        "label": "Settings for typing mode",
         "importance": "low",
-        "type": "boolean",
-        "default": false,
-        "label": "Case sensitive",
-        "description": "If enabled, capitalization that is different from the solution is considered an error.",
-        "widget": "showWhen",
-        "showWhen": {
-          "rules": [
-            {
-              "field": "mode",
-              "equals": "typing"
-            }
-          ]
-        }
+        "fields": [
+          {
+            "name": "spellingErrorBehaviour",
+            "type": "select",
+            "label": "Behaviour when user makes a spelling error",
+            "importance": "low",
+            "options": [
+              {
+                "value": "accept",
+                "label": "Accept it as a correct answer"
+              },
+              {
+                "value": "warn",
+                "label": "Warn the user about the error"
+              },
+              {
+                "value": "mistake",
+                "label": "Consider it a regular mistake"
+              }
+            ],
+            "default": "mistake"
+          },
+          {
+            "name": "caseSensitive",
+            "importance": "low",
+            "type": "boolean",
+            "default": false,
+            "label": "Case sensitive",
+            "description": "If enabled, capitalization that is different from the solution is considered an error."
+          }
+        ]
       },
       {
         "label": "Automatically check answers after input",

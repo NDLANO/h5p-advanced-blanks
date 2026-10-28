@@ -2,8 +2,10 @@ import { BlankLoader } from '@content-loaders/blank-loader';
 import { Blank } from '@models/blank';
 import { Snippet } from '@models/snippet';
 import { ISettings } from '@services/settings';
+import { ClozeType } from '@models/enums';
 import { H5PLocalization } from './localization';
 import { Unwrapper } from '@helpers/unwrapper';
+import { parseNumber } from '@helpers/helpers';
 
 /**
  * Interface for accessing cloze content data.
@@ -80,14 +82,26 @@ export class H5PDataRepository implements IDataRepository {
     }
 
     for (let i = 0; i < this.h5pConfigData.content.blanksList.length; i++) {
-      const h5pBlank = this.h5pConfigData.content.blanksList[i];
+      const h5pBlankGroup = this.h5pConfigData.content.blanksList[i] ?? {};
+      const h5pBlank = h5pBlankGroup.alternativesList ?? [];
 
-      const correctAnswer = h5pBlank.filter((alternative) => alternative.isCorrect).shift() || {};
-      if (correctAnswer.text === '' || correctAnswer.text === undefined) {
+      const defaultOrder = h5pBlank.map((alternative) => alternative.text);
+      const clozeType = this.getClozeType(h5pBlankGroup.mode, defaultOrder);
+
+      // Multiple selection blanks require all correct alternatives, other blanks use the first one
+      const correctAlternatives = clozeType === ClozeType.SelectMultiple ?
+        h5pBlank.filter((alternative) =>
+          alternative.isCorrect && alternative.text !== '' && alternative.text !== undefined
+        ) :
+        h5pBlank.filter((alternative) => alternative.isCorrect).slice(0, 1);
+      if (
+        correctAlternatives.length === 0 ||
+        correctAlternatives[0].text === '' || correctAlternatives[0].text === undefined
+      ) {
         continue;
       }
 
-      const defaultOrder = h5pBlank.map((alternative) => alternative.text);
+      const hint = correctAlternatives.map((alternative) => alternative.hint).find((hint) => hint);
       const incorrectAnswers = h5pBlank
         .filter((alternative) => !alternative.isCorrect)
         .map((answer) => ({
@@ -98,13 +112,54 @@ export class H5PDataRepository implements IDataRepository {
         }));
 
       const blank = BlankLoader.instance.createBlank('cloze-' + H5P.createUUID() + '-' + i,
-        correctAnswer.text, correctAnswer.hint, incorrectAnswers, defaultOrder);
+        correctAlternatives.map((alternative) => alternative.text), hint, incorrectAnswers, defaultOrder, clozeType);
 
       blank.finishInitialization();
       blanks.push(blank);
     }
 
     return blanks;
+  }
+
+  /**
+   * Return cloze type for blank mode, falling back to global mode.
+   * Number mode falls back to text if any alternative is not a number.
+   * @param {string} mode Mode of blank (global, typing, typingNumber, selection, selectionMultiple).
+   * @param {string[]} alternativeTexts Texts of all alternatives of blank.
+   * @returns {ClozeType} Cloze type for blank.
+   */
+  private getClozeType(mode: string, alternativeTexts: string[]): ClozeType {
+    let clozeType = this.settings.clozeType;
+    if (mode === 'typing') {
+      clozeType = ClozeType.Type;
+    }
+    else if (mode === 'typingNumber') {
+      clozeType = ClozeType.Number;
+    }
+    else if (mode === 'selection') {
+      clozeType = ClozeType.Select;
+    }
+    else if (mode === 'selectionMultiple') {
+      clozeType = ClozeType.SelectMultiple;
+    }
+
+    if (clozeType === ClozeType.Number && !this.areAllNumbers(alternativeTexts)) {
+      clozeType = ClozeType.Type;
+    }
+
+    return clozeType;
+  }
+
+  /**
+   * Check whether all alternatives are numbers. Empty alternatives are ignored.
+   * @param {string[]} alternativeTexts Texts of alternatives.
+   * @returns {boolean} True if all non-empty alternatives are numbers.
+   */
+  private areAllNumbers(alternativeTexts: string[]): boolean {
+    return alternativeTexts
+      .map((text) => text ?? '')
+      .filter((text) => text.trim() !== '')
+      .every((text) => !Number.isNaN(parseNumber(text)));
   }
 
   /**

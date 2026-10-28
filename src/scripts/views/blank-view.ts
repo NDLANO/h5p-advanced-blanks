@@ -1,6 +1,7 @@
 import './blank-view.css';
 import { Blank } from '@models/blank';
 import { LocalizationLabels } from '@services/localization';
+import { MULTIPLE_SELECTION_SEPARATOR } from '@models/enums';
 
 
 /** Callback signatures for blank interactions. */
@@ -141,6 +142,9 @@ export default class BlankView {
    * @param {Blank} blank Blank model to render.
    */
   private createSelectElement(blank: Blank): void {
+    // Previous state is set before view is bound to blank
+    const restoredText = blank.enteredText;
+
     this.dom.append(this.buildNotificationButton(blank));
 
     const inputWrapper = document.createElement('span');
@@ -150,8 +154,8 @@ export default class BlankView {
     const selectElement = document.createElement('select');
     selectElement.id = blank.id;
     selectElement.classList.add('h5p-text-input');
-    selectElement.size = 1;
-    selectElement.value = blank.enteredText || '';
+    selectElement.multiple = blank.isMultiple;
+    selectElement.size = blank.isMultiple ? blank.choices.length : 1;
     selectElement.disabled = blank.isCorrect || blank.isShowingSolution;
 
     this.bindInputToBlank(blank, selectElement);
@@ -163,6 +167,11 @@ export default class BlankView {
       const optionElement = document.createElement('option');
       optionElement.textContent = choice;
       selectElement.append(optionElement);
+    }
+
+    // Value can only be set once options exist
+    if (restoredText) {
+      blank.enteredText = restoredText;
     }
 
     if (blank.hasHint) {
@@ -200,9 +209,12 @@ export default class BlankView {
     this.inputElement = document.createElement('input');
     this.inputElement.classList.add('h5p-text-input');
     this.inputElement.id = blank.id;
-    this.inputElement.type = 'text';
+    this.inputElement.type = blank.isNumber ? 'number' : 'text';
+    if (blank.isNumber) {
+      this.inputElement.step = 'any';
+    }
     this.inputElement.value = blank.enteredText || '';
-    this.inputElement.size = blank.minTextLength;
+    this.setInputWidth(this.inputElement, blank);
     this.inputElement.setAttribute('autoComplete', 'off');
     this.inputElement.setAttribute('autoCapitalize', 'off');
     this.inputElement.disabled = blank.isCorrect || blank.isShowingSolution;
@@ -215,6 +227,20 @@ export default class BlankView {
     if (blank.hasHint) {
       const tipContainer = this.buildTipContainer(blank);
       inputWrapper.append(tipContainer);
+    }
+  }
+
+  /**
+   * Set width of input element. Number inputs ignore the size attribute.
+   * @param {HTMLInputElement} element Input element to set width for.
+   * @param {Blank} blank Blank model with minimum text length.
+   */
+  private setInputWidth(element: HTMLInputElement, blank: Blank): void {
+    if (element.type === 'number') {
+      element.style.width = `${blank.minTextLength}ch`;
+    }
+    else {
+      element.size = blank.minTextLength;
     }
   }
 
@@ -237,8 +263,19 @@ export default class BlankView {
    */
   private setupSelectEventHandlers(element: HTMLSelectElement, blank: Blank): void {
     element.addEventListener('keydown', (event) => this.handleSelectKeydown(event, blank));
-    element.addEventListener('change', (event) => this.callbacks.checkBlank(event, blank, 'change'));
     element.addEventListener('focus', (event) => this.callbacks.focus(event, blank));
+
+    if (blank.isMultiple) {
+      // Selection is only complete when user leaves the field
+      element.addEventListener('change', (event) => {
+        this.callbacks.textTyped(event, blank);
+        this.callbacks.textChanged(event, blank);
+      });
+      element.addEventListener('blur', (event) => this.callbacks.checkBlank(event, blank, 'blur'));
+    }
+    else {
+      element.addEventListener('change', (event) => this.callbacks.checkBlank(event, blank, 'change'));
+    }
   }
 
   /**
@@ -279,6 +316,21 @@ export default class BlankView {
    * @param {HTMLInputElement | HTMLSelectElement} inputElement Input element to bind.
    */
   private bindInputToBlank(blank: Blank, inputElement: HTMLInputElement | HTMLSelectElement): void {
+    if (inputElement instanceof HTMLSelectElement && inputElement.multiple) {
+      Object.defineProperty(blank, 'enteredText', {
+        get: () => Array.from(inputElement.selectedOptions)
+          .map((option) => option.value)
+          .join(MULTIPLE_SELECTION_SEPARATOR),
+        set: (value) => {
+          const selectedTexts = (value ?? '').split(MULTIPLE_SELECTION_SEPARATOR);
+          Array.from(inputElement.options).forEach((option) => {
+            option.selected = selectedTexts.includes(option.value);
+          });
+        }
+      });
+      return;
+    }
+
     Object.defineProperty(blank, 'enteredText', {
       get: () => inputElement.value,
       set: (value) => {
@@ -307,7 +359,7 @@ export default class BlankView {
     if (this.inputElement instanceof HTMLInputElement) {
       // this.inputElement.value = blank.enteredText || '';
       this.inputElement.disabled = isInputDisabled;
-      this.inputElement.size = blank.minTextLength;
+      this.setInputWidth(this.inputElement, blank);
     }
     else if (this.inputElement instanceof HTMLSelectElement) {
       // this.inputElement.value = blank.enteredText || '';
@@ -317,7 +369,7 @@ export default class BlankView {
     const showSolution = blank.isShowingSolution && !blank.isCorrect;
     this.solutionSpan.hidden = !showSolution;
     if (showSolution) {
-      this.solutionSpan.textContent = blank.getCorrectAnswers()[0];
+      this.solutionSpan.textContent = blank.getSolutionText();
     }
   }
 }

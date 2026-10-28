@@ -6,6 +6,7 @@ import { H5PLocalization } from '@services/localization';
 import { ISettings } from '@services/settings';
 import { Message } from '@models/message';
 import { Snippet } from '@models/snippet';
+import { ClozeType } from '@models/enums';
 
 /**
  * Load and configure blank instances from content data.
@@ -74,19 +75,23 @@ export class BlankLoader {
   /**
    * Create and configure Blank instance from content data.
    * @param {string} id Blank identifier.
-   * @param {string} correctText Correct answer text.
+   * @param {string[]} correctTexts Correct answer texts.
    * @param {string} hintText Hint text.
    * @param {any[]} incorrectAnswers List of incorrect answers.
    * @param {string[]} defaultOrder Default choice order.
+   * @param {ClozeType} clozeType Cloze type of blank.
    * @returns {Blank} Configured Blank instance.
    */
   public createBlank(
-    id: string, correctText: string, hintText: string, incorrectAnswers: any[], defaultOrder: string[]
+    id: string, correctTexts: string[], hintText: string, incorrectAnswers: any[], defaultOrder: string[],
+    clozeType: ClozeType
   ): Blank {
-    const blank = new Blank(this.settings, this.localization, this.jquery, this.messageService, id);
-    if (correctText) {
-      correctText = this.decodeHtml(correctText);
-      blank.addCorrectAnswer(new Answer(correctText, '', false, 0, this.settings));
+    const blankSettings = this.settings.getSettingsForClozeType(clozeType);
+    const blank = new Blank(blankSettings, this.localization, this.jquery, this.messageService, id);
+    for (const correctText of correctTexts) {
+      if (correctText) {
+        blank.addCorrectAnswer(new Answer(this.decodeHtml(correctText), '', false, 0, blankSettings));
+      }
     }
     blank.setHint(new Message(hintText ? hintText : '', false, 0));
 

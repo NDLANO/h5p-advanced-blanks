@@ -4,7 +4,7 @@ import { ClozeElement, ClozeElementType } from './cloze-element';
 import { Answer } from './answer';
 import { Correctness } from './evaluation';
 import { Message } from './message';
-import { MessageType, ClozeType, SelectAlternatives } from './enums';
+import { MessageType, ClozeType, SelectAlternatives, MULTIPLE_SELECTION_SEPARATOR } from './enums';
 import { H5PLocalization, LocalizationLabels } from '@services/localization';
 import { ISettings } from '@services/settings';
 import { getLongestString, shuffleArray } from '@helpers/helpers';
@@ -28,6 +28,9 @@ export class Blank extends ClozeElement {
 
   /** List of choices for select-mode blanks. */
   choices: string[];
+
+  /** Correct answers of other blanks that may be offered as choices. */
+  private otherBlanksChoices: string[] = [];
 
   /** Order of alternatives as entered by content author. */
   defaultOrder: string[];
@@ -71,14 +74,14 @@ export class Blank extends ClozeElement {
   /**
    * Create Blank instance.
    * @class
-   * @param {ISettings} settings Application settings.
+   * @param {ISettings} settings Settings for this blank's cloze type.
    * @param {H5PLocalization} localization Localization service.
    * @param {JQueryStatic} jquery jQuery instance.
    * @param {MessageService} messageService Message service.
    * @param {string} id Blank identifier.
    */
   constructor(
-    private settings: ISettings,
+    public readonly settings: ISettings,
     private localization: H5PLocalization,
     private jquery: JQueryStatic,
     private messageService: MessageService,
@@ -97,13 +100,34 @@ export class Blank extends ClozeElement {
   }
 
   /**
+   * Check whether blank is select-mode blank.
+   * @returns {boolean} True if blank is select-mode blank.
+   */
+  public get isSelect(): boolean {
+    return this.settings.clozeType === ClozeType.Select || this.settings.clozeType === ClozeType.SelectMultiple;
+  }
+
+  /**
+   * Check whether blank allows selecting multiple options.
+   * @returns {boolean} True if blank allows selecting multiple options.
+   */
+  public get isMultiple(): boolean {
+    return this.settings.clozeType === ClozeType.SelectMultiple;
+  }
+
+  /**
+   * Check whether blank is number-mode blank.
+   * @returns {boolean} True if blank is number-mode blank.
+   */
+  public get isNumber(): boolean {
+    return this.settings.clozeType === ClozeType.Number;
+  }
+
+  /**
    * Finalize initialization after all incorrect answers are added.
    */
   public finishInitialization(): void {
-    if (
-      this.settings.clozeType === ClozeType.Select &&
-      this.settings.selectAlternatives === SelectAlternatives.Alternatives
-    ) {
+    if (this.isSelect && this.settings.selectAlternatives === SelectAlternatives.Alternatives) {
       this.loadChoicesFromOwnAlternatives();
     }
     this.calculateMinTextLength();
@@ -166,7 +190,7 @@ export class Blank extends ClozeElement {
       answers.push(getLongestString(correctAnswer.alternatives));
     }
 
-    if (this.settings.clozeType === ClozeType.Select) {
+    if (this.isSelect) {
       for (const incorrectAnswer of this.incorrectAnswers) {
         answers.push(getLongestString(incorrectAnswer.alternatives));
       }
@@ -183,10 +207,7 @@ export class Blank extends ClozeElement {
    */
   private loadChoicesFromOwnAlternatives(): string[] {
     if (this.defaultOrder) {
-      this.choices = this.defaultOrder
-        .reduce((choices, choice) => {
-          return [...choices, ...choice.split('/')];
-        }, []);
+      this.choices = [...this.defaultOrder];
     }
     else {
       this.choices = [];
@@ -206,7 +227,9 @@ export class Blank extends ClozeElement {
     if (this.settings.randomAnswers) {
       this.choices = shuffleArray(this.choices);
     }
-    this.choices.unshift('');
+    if (!this.isMultiple) {
+      this.choices.unshift('');
+    }
 
     return this.choices;
   }
@@ -234,6 +257,7 @@ export class Blank extends ClozeElement {
     }
 
     otherChoices = shuffleArray(otherChoices);
+    this.otherBlanksChoices = otherChoices;
 
     let maxChoices = this.settings.selectAlternativeRestriction;
     if (maxChoices === undefined || maxChoices === 0) {
@@ -251,7 +275,9 @@ export class Blank extends ClozeElement {
     }
 
     this.choices = shuffleArray(ownChoices);
-    this.choices.unshift('');
+    if (!this.isMultiple) {
+      this.choices.unshift('');
+    }
 
     return this.choices;
   }
@@ -285,7 +311,7 @@ export class Blank extends ClozeElement {
    * Handle focus event for blank.
    */
   public onFocused(): void {
-    if (this.settings.clozeType === ClozeType.Select) {
+    if (this.isSelect) {
       this.setAnswerState(MessageType.None);
       this.lastCheckedText = '';
     }
@@ -388,6 +414,11 @@ export class Blank extends ClozeElement {
     this.hasPendingFeedback = false;
     this.removeTooltip();
 
+    if (this.isMultiple) {
+      this.evaluateMultipleAttempt(surpressTooltips);
+      return;
+    }
+
     const getMatches = (answers: Answer[], correctness: Correctness) => {
       return answers
         .map((answer) => answer.evaluateAttempt(this.enteredText))
@@ -404,7 +435,7 @@ export class Blank extends ClozeElement {
 
     if (exactCorrectMatches.length > 0) {
       this.setAnswerState(MessageType.Correct);
-      if (!this.settings.caseSensitive) {
+      if (!this.settings.caseSensitive && !this.isNumber) {
         this.enteredText = exactCorrectMatches[0].usedAlternative;
       }
       return;
@@ -446,6 +477,79 @@ export class Blank extends ClozeElement {
     }
 
     this.setAnswerState(MessageType.Error);
+  }
+
+  /**
+   * Return options selected by user in multiple selection blank.
+   * @returns {string[]} Selected options.
+   */
+  private getSelectedTexts(): string[] {
+    return (this.enteredText || '').split(MULTIPLE_SELECTION_SEPARATOR).filter((text) => text !== '');
+  }
+
+  /**
+   * Evaluate selection of multiple selection blank. Correct only if exactly all correct options are selected.
+   * @returns {object} Result with isCorrect and first matching incorrect answer, if any.
+   */
+  public evaluateSelection(): { isCorrect: boolean, wrongAnswer?: Answer } {
+    const isExactMatch = (answer: Answer, text: string) =>
+      answer.evaluateAttempt(text).correctness === Correctness.ExactMatch;
+
+    const matchedCorrectAnswers = new Set<Answer>();
+    let hasWrongSelection = false;
+    let wrongAnswer: Answer;
+
+    for (const text of this.getSelectedTexts()) {
+      const correctAnswer = this.correctAnswers.find((answer) => isExactMatch(answer, text));
+      if (correctAnswer) {
+        matchedCorrectAnswers.add(correctAnswer);
+        continue;
+      }
+
+      hasWrongSelection = true;
+      wrongAnswer = wrongAnswer ?? this.incorrectAnswers.find((answer) => isExactMatch(answer, text));
+    }
+
+    return {
+      isCorrect: !hasWrongSelection && matchedCorrectAnswers.size === this.correctAnswers.length,
+      wrongAnswer: wrongAnswer
+    };
+  }
+
+  /**
+   * Evaluate selection of multiple selection blank, providing feedback.
+   * @param {boolean} surpressTooltips Whether to suppress tooltip display.
+   */
+  private evaluateMultipleAttempt(surpressTooltips: boolean): void {
+    const result = this.evaluateSelection();
+    if (result.isCorrect) {
+      this.setAnswerState(MessageType.Correct);
+      return;
+    }
+
+    if (result.wrongAnswer) {
+      this.showErrorTooltip(result.wrongAnswer, surpressTooltips);
+    }
+    else {
+      const alwaysApplyingAnswer = this.incorrectAnswers.find((a) => a.appliesAlways);
+      if (alwaysApplyingAnswer) {
+        this.showErrorTooltip(alwaysApplyingAnswer, surpressTooltips);
+      }
+    }
+
+    this.setAnswerState(MessageType.Error);
+  }
+
+  /**
+   * Return text to display as solution.
+   * @returns {string} Solution text.
+   */
+  public getSolutionText(): string {
+    if (this.isMultiple) {
+      return this.correctAnswers.map((answer) => answer.alternatives[0]).join(', ');
+    }
+
+    return this.getCorrectAnswers()[0];
   }
 
   /**
@@ -525,6 +629,27 @@ export class Blank extends ClozeElement {
   }
 
   /**
+   * Return response for xAPI. Selected options of multiple selection blanks are
+   * sorted in the order entered by content author to match the expected response.
+   * @returns {string} Response for xAPI.
+   */
+  public getXAPIResponse(): string {
+    if (!this.isMultiple) {
+      return this.enteredText;
+    }
+
+    const authorOrder = (this.defaultOrder ?? []).map((text) => text.trim());
+    const getPosition = (text: string) => {
+      const position = authorOrder.indexOf(text.trim());
+      return position === -1 ? authorOrder.length : position;
+    };
+
+    return this.getSelectedTexts()
+      .sort((a, b) => getPosition(a) - getPosition(b))
+      .join(MULTIPLE_SELECTION_SEPARATOR);
+  }
+
+  /**
    * Serialize blank state to string.
    * @returns {string} User-entered text.
    */
@@ -538,6 +663,37 @@ export class Blank extends ClozeElement {
    */
   public deserialize(data: any): void {
     this.enteredText = data;
+
+    if (this.isSelect && typeof data === 'string') {
+      const restoredTexts = this.isMultiple ? data.split(MULTIPLE_SELECTION_SEPARATOR) : [data];
+      this.includeChoices(restoredTexts.filter((text) => text !== ''));
+    }
+  }
+
+  /**
+   * Ensure that restored texts are offered as choices again. Choices from other blanks
+   * are picked randomly, so a restored one replaces another one from other blanks.
+   * @param {string[]} texts Texts that must be offered as choices.
+   */
+  private includeChoices(texts: string[]): void {
+    const ownChoices = this.getCorrectAnswers();
+
+    for (const text of texts) {
+      if (this.choices.includes(text) || !this.otherBlanksChoices.includes(text)) {
+        continue;
+      }
+
+      const replaceableIndex = this.choices.findIndex((choice) =>
+        choice !== '' && !ownChoices.includes(choice) && !texts.includes(choice)
+      );
+
+      if (replaceableIndex !== -1) {
+        this.choices[replaceableIndex] = text;
+      }
+      else {
+        this.choices.push(text);
+      }
+    }
   }
 
   /**

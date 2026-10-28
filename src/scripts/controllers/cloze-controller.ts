@@ -6,7 +6,7 @@ import { Cloze } from '@models/cloze';
 import { IDataRepository } from '@services/data-repository';
 import { ISettings } from '@services/settings';
 import { H5PLocalization } from '@services/localization';
-import { ClozeType, SelectAlternatives } from '@models/enums';
+import { ClozeType, SelectAlternatives, MULTIPLE_SELECTION_SEPARATOR } from '@models/enums';
 import { Highlight } from '@models/highlight';
 import { Blank } from '@models/blank';
 import { Correctness } from '@models/evaluation';
@@ -44,9 +44,6 @@ export class ClozeController {
   /** Cloze model instance. */
   private cloze: Cloze;
 
-  /** True if this is a select-mode cloze. */
-  private isSelectCloze: boolean;
-
   /** Callback invoked when score changes. */
   public onScoreChanged: ScoreChanged;
 
@@ -77,31 +74,41 @@ export class ClozeController {
   }
 
   /**
-   * Detect whether any blank has more than one solution.
-   * @returns {boolean} True if at least one blank has multiple solutions.
-   */
-  public get hasAlternatives(): boolean {
-    return this.cloze.blanks.some((b) => b.correctAnswers[0].alternatives.length > 1);
-  }
-
-  /**
    * Calculate current score from all blank evaluations.
    * @returns {number} Current score.
    */
   public get currentScore(): number {
     const score = this.cloze.blanks.reduce((score, b) => {
       const notShowingSolution = !b.isShowingSolution;
-      const correctAnswerGiven = b.correctAnswers[0].alternatives.indexOf(b.enteredText || '') !== -1;
+      let correctAnswerGiven: boolean;
+      if (b.isMultiple) {
+        correctAnswerGiven = b.evaluateSelection().isCorrect;
+      }
+      else if (b.isNumber) {
+        correctAnswerGiven =
+          b.correctAnswers[0].evaluateAttempt(b.enteredText || '').correctness === Correctness.ExactMatch;
+      }
+      else {
+        correctAnswerGiven = b.correctAnswers[0].alternatives.indexOf(b.enteredText || '') !== -1;
+      }
 
       const closeCorrectMatches = b.correctAnswers
         .map((answer) => answer.evaluateAttempt(b.enteredText))
         .filter((evaluation) => evaluation.correctness === Correctness.CloseMatch);
-      const similarAnswerGiven = this.settings.acceptSpellingErrors && closeCorrectMatches.length > 0;
+      const similarAnswerGiven = b.settings.acceptSpellingErrors && closeCorrectMatches.length > 0;
 
       return score + ((notShowingSolution && (correctAnswerGiven || similarAnswerGiven)) ? 1 : 0);
     }, 0);
 
     return Math.max(0, score);
+  }
+
+  /**
+   * Check whether any blank evaluates answers case-sensitively.
+   * @returns {boolean} True if at least one blank is case-sensitive.
+   */
+  public get isCaseSensitive(): boolean {
+    return this.cloze?.blanks.some((b) => b.settings.caseSensitive) ?? false;
   }
 
   /**
@@ -167,12 +174,10 @@ export class ClozeController {
    * Set up cloze model (blanks, snippets, cloze instance).
    */
   public setupModel(): void {
-    this.isSelectCloze = this.settings.clozeType === ClozeType.Select ? true : false;
-
     const blanks = this.repository.getBlanks();
 
-    if (this.isSelectCloze && this.settings.selectAlternatives === SelectAlternatives.All) {
-      for (const blank of blanks) {
+    if (this.settings.selectAlternatives === SelectAlternatives.All) {
+      for (const blank of blanks.filter((b) => b.isSelect)) {
         const otherBlanks = blanks.filter((v) => v !== blank);
         blank.loadChoicesFromOtherBlanks(otherBlanks);
       }
@@ -338,7 +343,7 @@ export class ClozeController {
   private createAndAddContainers(addTo: HTMLElement): { cloze: HTMLDivElement } {
     const clozeContainerElement = document.createElement('div');
     clozeContainerElement.classList.add('h5p-cloze-container');
-    if (this.settings.clozeType === ClozeType.Select) {
+    if (this.settings.clozeType === ClozeType.Select || this.settings.clozeType === ClozeType.SelectMultiple) {
       clozeContainerElement.classList.add('h5p-advanced-blanks-select-mode');
     }
     else {
@@ -368,7 +373,7 @@ export class ClozeController {
    * @param {Blank} blank Blank to create view for.
    */
   private createBlankView(blank: Blank): void {
-    const blankView = new BlankView(blank, this.isSelectCloze, {
+    const blankView = new BlankView(blank, blank.isSelect, {
       requestCloseTooltip: this.requestCloseTooltip,
       checkBlank: this.checkBlank,
       textTyped: this.textTyped,
@@ -433,6 +438,18 @@ export class ClozeController {
   };
 
   /**
+   * Retrieve responses of all blanks for xAPI.
+   * @returns {string[]} Response per blank.
+   */
+  public getXAPIResponses(): string[] {
+    if (!this.cloze) {
+      return [];
+    }
+
+    return this.cloze.blanks.map((blank) => blank.getXAPIResponse());
+  }
+
+  /**
    * Serialize current cloze state to strings.
    * @returns {string[]} Array of user answers per blank.
    */
@@ -457,19 +474,17 @@ export class ClozeController {
   }
 
   /**
-   * Retrieve list of correct answers for all blanks.
-   * @returns {string[][]} List of correct answer lists per blank.
+   * Retrieve expected response for all blanks.
+   * @returns {string[]} Expected response per blank.
    */
-  public getCorrectAnswerList(): string[][] {
-    if (!this.cloze || this.cloze.blanks.length === 0) {
-      return [[]];
+  public getCorrectAnswerList(): string[] {
+    if (!this.cloze) {
+      return [];
     }
 
-    const result = [];
-    for (const blank of this.cloze.blanks) {
-      result.push(blank.getCorrectAnswers());
-    }
-
-    return result;
+    return this.cloze.blanks.map((blank) => blank.isMultiple ?
+      blank.getCorrectAnswers().join(MULTIPLE_SELECTION_SEPARATOR) :
+      blank.getCorrectAnswers()[0]
+    );
   }
 }

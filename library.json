@@ -2,7 +2,7 @@
   "title": "Advanced Fill in the Blanks",
   "description": "Fill the blanks exercise with individual feedback",
   "majorVersion": 1,
-  "minorVersion": 4,
+  "minorVersion": 5,
   "patchVersion": 0,
   "runnable": 1,
   "author": "S. Rettig, NDLA",
@@ -56,7 +56,7 @@
     {
       "machineName": "H5PEditor.AdvancedBlanks",
       "majorVersion": 1,
-      "minorVersion": 0
+      "minorVersion": 1
     }
   ]
 }

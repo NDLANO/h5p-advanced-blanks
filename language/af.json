@@ -36,59 +36,83 @@
             }
           ],
           "field": {
-            "label": "Leeg",
-            "entity": "alternative",
-            "field": {
-              "label": "Leeg",
-              "fields": [
-                {
-                  "label": "Teks",
-                  "description": "Jy kan alternatiewe antwoorde met 'n flap (/) onderskei."
-                },
-                {
-                  "label": "Regte antwoord"
-                },
-                {
-                  "label": "Wenk"
-                },
-                {
-                  "label": "Opsies vir verkeerde antwoorde",
+            "label": "Blank",
+            "fields": [
+              {
+                "label": "Answer mode",
+                "options": [
+                  {
+                    "label": "Use the global mode"
+                  },
+                  {
+                    "label": "The user types the answer (text)"
+                  },
+                  {
+                    "label": "The user types the answer (number)"
+                  },
+                  {
+                    "label": "The user selects one option"
+                  },
+                  {
+                    "label": "The user selects multiple options"
+                  }
+                ]
+              },
+              {
+                "label": "Leeg",
+                "entity": "alternative",
+                "field": {
+                  "label": "Leeg",
                   "fields": [
                     {
-                      "label": "Terugvoer",
-                      "description": "Die terugvoer behoort die gebruiker te help om die regte antwoord te vind. Die ideaal is om dit aan te pas volgens die antwoord wat die gebruiker gegee het."
+                      "label": "Teks"
                     },
                     {
-                      "label": "Wys beklemtoning in die teks wanneer die terugvoer gewys word",
-                      "description": "Plaas !! voor en na 'n stuk teks om dit te laat uitstaan. (bv. Hierdie gaan !!uitstaan!!)"
+                      "label": "Regte antwoord"
                     },
                     {
-                      "label": "Beklemtoon posisie relatief tot leë spasie:",
-                      "options": [
+                      "label": "Wenk"
+                    },
+                    {
+                      "label": "Opsies vir verkeerde antwoorde",
+                      "fields": [
                         {
-                          "label": "- 1 (reg voor die oop spasie)"
+                          "label": "Terugvoer",
+                          "description": "Die terugvoer behoort die gebruiker te help om die regte antwoord te vind. Die ideaal is om dit aan te pas volgens die antwoord wat die gebruiker gegee het."
                         },
                         {
-                          "label": "- 2 (twee beklemtonings voor die oop spasie)"
+                          "label": "Wys beklemtoning in die teks wanneer die terugvoer gewys word",
+                          "description": "Plaas !! voor en na 'n stuk teks om dit te laat uitstaan. (bv. Hierdie gaan !!uitstaan!!)"
                         },
                         {
-                          "label": "- 3 (drie beklemtonings voor die oop spasie)"
-                        },
-                        {
-                          "label": "+ 1 (direk na die oop spasie)"
-                        },
-                        {
-                          "label": "+ 2 (twee bekemtonings na die oop spasie)"
-                        },
-                        {
-                          "label": "+ 3 (drie beklemtonings na die oop spasie)"
+                          "label": "Beklemtoon posisie relatief tot leë spasie:",
+                          "options": [
+                            {
+                              "label": "- 1 (reg voor die oop spasie)"
+                            },
+                            {
+                              "label": "- 2 (twee beklemtonings voor die oop spasie)"
+                            },
+                            {
+                              "label": "- 3 (drie beklemtonings voor die oop spasie)"
+                            },
+                            {
+                              "label": "+ 1 (direk na die oop spasie)"
+                            },
+                            {
+                              "label": "+ 2 (twee bekemtonings na die oop spasie)"
+                            },
+                            {
+                              "label": "+ 3 (drie beklemtonings na die oop spasie)"
+                            }
+                          ]
                         }
                       ]
                     }
                   ]
                 }
-              ]
-            }
+              }
+            ]
           }
         }
       ]
@@ -151,48 +175,64 @@
           "description": "Dui aan op watter wyse die gebruiker antwoorde gee.",
           "options": [
             {
-              "label": "Die gebruiker kies vanuit opsies."
+              "label": "Die gebruiker kies vanuit opsies"
             },
             {
-              "label": "Die gebruiker tik die antwoorde in."
+              "label": "Die gebruiker tik die antwoorde in"
+            },
+            {
+              "label": "The users types in the answers (number)"
+            },
+            {
+              "label": "The users selects multiple options"
             }
           ]
         },
         {
-          "label": "Alternatiewe beskikbaar vir keuse",
-          "options": [
+          "label": "Settings for selection mode",
+          "fields": [
             {
-              "label": "Die verkeerde antwoord in die oop spasie ingelees"
+              "label": "Alternatiewe beskikbaar vir keuse",
+              "options": [
+                {
+                  "label": "Die verkeerde antwoord in die oop spasie ingelees"
+                },
+                {
+                  "label": "Die regte antwoorde van al die ander oop spasies"
+                }
+              ]
             },
             {
-              "label": "Die regte antwoorde van al die ander oop spasies"
+              "label": "Willekeurige antwoordopsies"
+            },
+            {
+              "label": "Maksimum aantal alternatiewe beskikbaar vir ander oop spasies",
+              "description": "Voer 0 in om geen beperking te stel nie."
             }
           ]
         },
         {
-          "label": "Willekeurige antwoordopsies"
-        },
-        {
-          "label": "Maksimum aantal alternatiewe beskikbaar vir ander oop spasies",
-          "description": "Voer 0 in om geen beperking te stel nie."
-        },
-        {
-          "label": "Gedragsinstellings wanneer gebruiker 'n spelfout maak",
-          "options": [
+          "label": "Settings for typing mode",
+          "fields": [
             {
-              "label": "Anvaar dit as 'n regte anwoord"
+              "label": "Gedragsinstellings wanneer gebruiker 'n spelfout maak",
+              "options": [
+                {
+                  "label": "Anvaar dit as 'n regte anwoord"
+                },
+                {
+                  "label": "Waarsku die gebruiker oor die fout"
+                },
+                {
+                  "label": "Beskou dit as 'n gereelde fout"
+                }
+              ]
             },
             {
-              "label": "Waarsku die gebruiker oor die fout"
-            },
-            {
-              "label": "Beskou dit as 'n gereelde fout"
+              "label": "Hooflettergevoelig",
+              "description": "Indien geaktiveer , word kapitalisasie wat verskil van die memorandum as 'n fout beskou."
             }
           ]
-        },
-        {
-          "label": "Hooflettergevoelig",
-          "description": "Indien geaktiveer , word kapitalisasie wat verskil van die memorandum as 'n fout beskou."
         },
         {
           "label": "Toets antwoorde outomaties na invoering"

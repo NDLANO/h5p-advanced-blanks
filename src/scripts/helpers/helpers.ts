@@ -59,3 +59,17 @@ export const shuffleArray = (array: any[]): any[] => {
 
   return array;
 };
+
+/**
+ * Parse number accepting comma or dot as decimal separator.
+ * @param {string} text Text to parse.
+ * @returns {number} Parsed number or NaN if text is not a number.
+ */
+export const parseNumber = (text: string): number => {
+  const normalized = text.trim().replace(',', '.');
+  if (!/^[-+]?(\d+\.?\d*|\.\d+)(e[-+]?\d+)?$/i.test(normalized)) {
+    return NaN;
+  }
+
+  return Number(normalized);
+};

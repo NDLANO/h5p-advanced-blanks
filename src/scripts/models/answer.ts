@@ -1,7 +1,9 @@
 ﻿import { Correctness, Evaluation } from './evaluation';
 import { Highlight } from './highlight';
 import { Message } from './message';
+import { ClozeType } from './enums';
 import { ISettings } from '@services/settings';
+import { parseNumber } from '@helpers/helpers';
 import * as jsdiff from 'diff';
 
 /** Represents possible answer for blank, such as correct or incorrect answer. */
@@ -18,7 +20,7 @@ export class Answer {
   /**
    * Create Answer instance.
    * @class
-   * @param {string} answerText Expected answer. Alternatives separated by /.
+   * @param {string} answerText Expected answer.
    * @param {string} reaction Tooltip to display. Format: Tooltip Text;!!-1!! !!+1!!
    * @param {boolean} showHighlight Show highlight with message.
    * @param {number} highlight Highlight id shown with message.
@@ -27,7 +29,7 @@ export class Answer {
   constructor(
     answerText: string, reaction: string, showHighlight: boolean, highlight: number, private settings: ISettings
   ) {
-    this.alternatives = answerText.split(/\//).map((s) => s.trim());
+    this.alternatives = [answerText.trim()];
     this.message = new Message(reaction, showHighlight, highlight);
     if (answerText.trim() === '') {
       this.appliesAlways = true;
@@ -127,6 +129,16 @@ export class Answer {
 
     for (const alternative of this.alternatives) {
       const cleanedAlternative = this.cleanString(alternative);
+
+      if (this.settings.clozeType === ClozeType.Number) {
+        const attemptNumber = parseNumber(cleanedAttempt);
+        if (!Number.isNaN(attemptNumber) && attemptNumber === parseNumber(cleanedAlternative)) {
+          evaluation.usedAlternative = cleanedAlternative;
+          evaluation.correctness = Correctness.ExactMatch;
+          return evaluation;
+        }
+        continue;
+      }
 
       const diff = jsdiff.diffChars(cleanedAlternative, cleanedAttempt,
         { ignoreCase: !this.settings.caseSensitive });

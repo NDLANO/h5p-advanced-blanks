@@ -15,6 +15,12 @@
     appearance: button;
   }
 
+  select.h5p-text-input[multiple] {
+    -moz-appearance: auto;
+    -webkit-appearance: auto;
+    appearance: auto;
+  }
+
   .joubel-tip-container {
     background: none;
     border: none;

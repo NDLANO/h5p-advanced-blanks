@@ -4,7 +4,7 @@ import { ClozeType, SelectAlternatives } from '@models/enums';
  * Interface defining cloze behavior settings.
  */
 export interface ISettings {
-  /** Type of cloze (Type or Select). */
+  /** Type of cloze (Type, Select, Number or SelectMultiple). */
   clozeType: ClozeType;
 
   /** Source of select alternatives. */
@@ -48,13 +48,16 @@ export interface ISettings {
 
   /** True if answers are randomized. */
   randomAnswers: boolean;
+
+  /** Return copy of settings with logic for given cloze type enforced. */
+  getSettingsForClozeType(clozeType: ClozeType): ISettings;
 }
 
 /**
  * Default implementation of ISettings, initialized from H5P config.
  */
 export class H5PSettings implements ISettings {
-  /** Type of cloze (Type or Select). */
+  /** Type of cloze (Type, Select, Number or SelectMultiple). */
   public clozeType: ClozeType = ClozeType.Type;
 
   /** Source of select alternatives. */
@@ -108,44 +111,71 @@ export class H5PSettings implements ISettings {
     if (h5pConfigData.behaviour.mode === 'selection') {
       this.clozeType = ClozeType.Select;
     }
+    else if (h5pConfigData.behaviour.mode === 'typingNumber') {
+      this.clozeType = ClozeType.Number;
+    }
+    else if (h5pConfigData.behaviour.mode === 'selectionMultiple') {
+      this.clozeType = ClozeType.SelectMultiple;
+    }
     else {
       this.clozeType = ClozeType.Type;
     }
 
-    if (h5pConfigData.behaviour.selectAlternatives === 'all') {
+    const selectionSettings = h5pConfigData.behaviour.selectionSettings ?? {};
+    const typingSettings = h5pConfigData.behaviour.typingSettings ?? {};
+
+    if (selectionSettings.selectAlternatives === 'all') {
       this.selectAlternatives = SelectAlternatives.All;
     }
-    else if (h5pConfigData.behaviour.selectAlternatives === 'alternatives') {
+    else if (selectionSettings.selectAlternatives === 'alternatives') {
       this.selectAlternatives = SelectAlternatives.Alternatives;
     }
     else {
       this.selectAlternatives = SelectAlternatives.All;
     }
 
-    this.selectAlternativeRestriction = h5pConfigData.behaviour.selectAlternativeRestriction;
+    this.selectAlternativeRestriction = selectionSettings.selectAlternativeRestriction;
     this.enableRetry = h5pConfigData.behaviour.enableRetry;
     this.enableSolutionsButton = h5pConfigData.behaviour.enableSolutionsButton;
     this.enableCheckButton = h5pConfigData.behaviour.enableCheckButton;
     this.autoCheck = h5pConfigData.behaviour.autoCheck;
-    this.caseSensitive = h5pConfigData.behaviour.caseSensitive;
-    this.warnSpellingErrors = h5pConfigData.behaviour.spellingErrorBehaviour === 'warn';
-    this.acceptSpellingErrors = h5pConfigData.behaviour.spellingErrorBehaviour === 'accept';
+    this.caseSensitive = typingSettings.caseSensitive;
+    this.warnSpellingErrors = typingSettings.spellingErrorBehaviour === 'warn';
+    this.acceptSpellingErrors = typingSettings.spellingErrorBehaviour === 'accept';
     this.showSolutionsRequiresInput = h5pConfigData.behaviour.showSolutionsRequiresInput;
     this.confirmCheckDialog = h5pConfigData.behaviour.confirmCheckDialog;
     this.confirmRetryDialog = h5pConfigData.behaviour.confirmRetryDialog;
     this.disableImageZooming = h5pConfigData.media?.disableImageZooming ?? false;
-    this.randomAnswers = h5pConfigData.behaviour.randomAnswers;
-
-    this.enforceLogic();
+    this.randomAnswers = selectionSettings.randomAnswers;
   }
 
   /**
-   * Set sensible default values for settings hidden with showWhen.
+   * Return copy of settings with logic for given cloze type enforced.
+   * @param {ClozeType} clozeType Cloze type of the blank.
+   * @returns {ISettings} Settings for the cloze type.
+   */
+  public getSettingsForClozeType(clozeType: ClozeType): ISettings {
+    const settings: H5PSettings = Object.assign(Object.create(H5PSettings.prototype), this);
+    settings.clozeType = clozeType;
+    settings.enforceLogic();
+
+    return settings;
+  }
+
+  /**
+   * Set sensible default values for settings not relevant for the cloze type.
    */
   private enforceLogic(): void {
-    if (this.clozeType === ClozeType.Type) {
+    if (this.clozeType === ClozeType.Type || this.clozeType === ClozeType.Number) {
       this.selectAlternatives = SelectAlternatives.All;
       this.selectAlternativeRestriction = 0;
+
+      // Numbers always need to match exactly
+      if (this.clozeType === ClozeType.Number) {
+        this.warnSpellingErrors = false;
+        this.acceptSpellingErrors = false;
+        this.caseSensitive = false;
+      }
     }
     else {
       if (this.selectAlternativeRestriction === SelectAlternatives.Alternatives) {

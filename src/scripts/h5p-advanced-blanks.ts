@@ -19,14 +19,8 @@ enum States {
   showingSolutionsEmbedded = 'showing-solution-embedded'
 }
 
-/** XAPI extension key for alternative responses. */
-const XAPI_ALTERNATIVE_EXTENSION = 'https://h5p.org/x-api/alternatives';
-
 /** XAPI extension key for case sensitivity setting. */
 const XAPI_CASE_SENSITIVITY = 'https://h5p.org/x-api/case-sensitivity';
-
-/** XAPI extension key for reporting version. */
-const XAPI_REPORTING_VERSION_EXTENSION = 'https://h5p.org/x-api/h5p-reporting-version';
 
 /**
  * Main class for H5P Advanced Blanks content type.
@@ -84,7 +78,9 @@ export default class AdvancedBlanks extends (H5P.Question as { new( type:string,
       },
       behaviour: {
         mode: 'typing',
-        selectAlternatives: 'alternatives'
+        selectionSettings: {
+          selectAlternatives: 'alternatives'
+        }
       },
       submitAnswer: 'Submit',
       a11yCheck: 'Check the answers. The responses will be marked as correct or incorrect.',
@@ -548,24 +544,14 @@ export default class AdvancedBlanks extends (H5P.Question as { new( type:string,
     // We use the 'fill-in' type even in select mode, as the xAPI format for selections doesn't cater for sequences.
     definition.interactionType = 'fill-in';
 
-    const correctResponsesPatternPrefix = '{case_matters=' + this.settings.caseSensitive + '}';
+    const correctResponsesPatternPrefix = '{case_matters=' + this.clozeController.isCaseSensitive + '}';
 
-    const correctAnswerList = this.clozeController.getCorrectAnswerList();
+    // Each blank has exactly one expected response, so no alternatives extension is required
+    const correctResponses = this.clozeController.getCorrectAnswerList().join('[,]');
+    definition.correctResponsesPattern = [`${correctResponsesPatternPrefix}${correctResponses}`];
 
-    // H5P uses extension instead of full correct responses pattern to counter complexity
-    const firstAlternatives = correctAnswerList.reduce((result, list) => {
-      result.push(list[0]);
-      return result;
-    }, []).join('[,]');
-    definition.correctResponsesPattern = [`${correctResponsesPatternPrefix}${firstAlternatives}`];
-
-    /*
-     * Add H5P Alternative extension which provides all combinations of different answers
-     * Reporting software will need to support this extension for alternatives to work.
-     */
     definition.extensions = definition.extensions || {};
-    definition.extensions[XAPI_CASE_SENSITIVITY] = this.settings.caseSensitive;
-    definition.extensions[XAPI_ALTERNATIVE_EXTENSION] = correctAnswerList;
+    definition.extensions[XAPI_CASE_SENSITIVITY] = this.clozeController.isCaseSensitive;
 
     return definition;
   };
@@ -577,13 +563,6 @@ export default class AdvancedBlanks extends (H5P.Question as { new( type:string,
   public addQuestionToXAPI = (xAPIEvent: any) => {
     const definition = xAPIEvent.getVerifiedStatementValue(['object', 'definition']);
     this.jQuery.extend(true, definition, this.getxAPIDefinition());
-
-    // Set reporting module version if alternative extension is used
-    if (this.clozeController.hasAlternatives) {
-      const context = xAPIEvent.getVerifiedStatementValue(['context']);
-      context.extensions = context.extensions || {};
-      context.extensions[XAPI_REPORTING_VERSION_EXTENSION] = '1.0.0';
-    }
   };
 
   /**
@@ -601,7 +580,6 @@ export default class AdvancedBlanks extends (H5P.Question as { new( type:string,
    * @returns {string} User answers separated by "[,]" pattern.
    */
   public getxAPIResponse = (): string => {
-    const usersAnswers = this.getCurrentState();
-    return usersAnswers.join('[,]');
+    return this.clozeController.getXAPIResponses().join('[,]');
   };
 }

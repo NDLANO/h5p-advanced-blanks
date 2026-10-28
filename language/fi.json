@@ -36,59 +36,83 @@
             }
           ],
           "field": {
-            "label": "Aukko",
-            "entity": "alternative",
-            "field": {
-              "label": "Aukko",
-              "fields": [
-                {
-                  "label": "Teksti",
-                  "description": "Voit listata useita oikeita vastaustavaihtoehtoja erottamalla ne kenoviivalla (/) esim. helsinki/turku/hämeenlinna"
-                },
-                {
-                  "label": "Oikea vastaus"
-                },
-                {
-                  "label": "Vihje"
-                },
-                {
-                  "label": "Vaihtoehdot väärille vastauksille",
+            "label": "Blank",
+            "fields": [
+              {
+                "label": "Answer mode",
+                "options": [
+                  {
+                    "label": "Use the global mode"
+                  },
+                  {
+                    "label": "The user types the answer (text)"
+                  },
+                  {
+                    "label": "The user types the answer (number)"
+                  },
+                  {
+                    "label": "The user selects one option"
+                  },
+                  {
+                    "label": "The user selects multiple options"
+                  }
+                ]
+              },
+              {
+                "label": "Aukko",
+                "entity": "alternative",
+                "field": {
+                  "label": "Aukko",
                   "fields": [
                     {
-                      "label": "Väärän vastauksen palaute",
-                      "description": "Väärän vastauksen palautteen tarkoituksena on auttaa käyttäjää löytämään oikea vastaus ja ideaalitilanteessa se sopii jokaiseen mahdolliseen väärään vastausvaihtoehtoon jota hän voi antaa"
+                      "label": "Teksti"
                     },
                     {
-                      "label": "Korosta tekstiä silloin kun palaute näytetään.",
-                      "description": "Kun haluat korostaa tekstiä palautteen aikana laita sen ympärille huutomerkit !!(esim. Tämä on !!korostettu teksti!!)"
+                      "label": "Oikea vastaus"
                     },
                     {
-                      "label": "Korosteen sijainti suhteessa aukkokohdan:",
-                      "options": [
+                      "label": "Vihje"
+                    },
+                    {
+                      "label": "Vaihtoehdot väärille vastauksille",
+                      "fields": [
                         {
-                          "label": "- 1 (oikein aukkoa edeltävä)"
+                          "label": "Väärän vastauksen palaute",
+                          "description": "Väärän vastauksen palautteen tarkoituksena on auttaa käyttäjää löytämään oikea vastaus ja ideaalitilanteessa se sopii jokaiseen mahdolliseen väärään vastausvaihtoehtoon jota hän voi antaa"
                         },
                         {
-                          "label": "- 2 (kaksi korostetta ennen aukkoa)"
+                          "label": "Korosta tekstiä silloin kun palaute näytetään.",
+                          "description": "Kun haluat korostaa tekstiä palautteen aikana laita sen ympärille huutomerkit !!(esim. Tämä on !!korostettu teksti!!)"
                         },
                         {
-                          "label": "- 3 (kolme korostetta ennen aukkoa)"
-                        },
-                        {
-                          "label": "+ 1 (oikein aukkoa seuraava)"
-                        },
-                        {
-                          "label": "+ 2 (kaksi korostetta jälkeen aukkoa)"
-                        },
-                        {
-                          "label": "+ 3 (kolme korostetta jälkeen aukkoa)"
+                          "label": "Korosteen sijainti suhteessa aukkokohdan:",
+                          "options": [
+                            {
+                              "label": "- 1 (oikein aukkoa edeltävä)"
+                            },
+                            {
+                              "label": "- 2 (kaksi korostetta ennen aukkoa)"
+                            },
+                            {
+                              "label": "- 3 (kolme korostetta ennen aukkoa)"
+                            },
+                            {
+                              "label": "+ 1 (oikein aukkoa seuraava)"
+                            },
+                            {
+                              "label": "+ 2 (kaksi korostetta jälkeen aukkoa)"
+                            },
+                            {
+                              "label": "+ 3 (kolme korostetta jälkeen aukkoa)"
+                            }
+                          ]
                         }
                       ]
                     }
                   ]
                 }
-              ]
-            }
+              }
+            ]
           }
         }
       ]
@@ -154,45 +178,61 @@
               "label": "Käyttäjä valitsee vastauksensa valmiilta listalta"
             },
             {
-              "label": "Käyttäjä kirjoittaa vastauksensa."
+              "label": "Käyttäjä kirjoittaa vastauksensa"
+            },
+            {
+              "label": "The users types in the answers (number)"
+            },
+            {
+              "label": "The users selects multiple options"
             }
           ]
         },
         {
-          "label": "Valittavissa olevat vaihtoehdot",
-          "options": [
+          "label": "Settings for selection mode",
+          "fields": [
             {
-              "label": "Väärät vastaukset aukoille"
+              "label": "Valittavissa olevat vaihtoehdot",
+              "options": [
+                {
+                  "label": "Väärät vastaukset aukoille"
+                },
+                {
+                  "label": "Oikeat vastaukset kaikille muille aukoille"
+                }
+              ]
             },
             {
-              "label": "Oikeat vastaukset kaikille muille aukoille."
+              "label": "Arvo vastausvaihtoehdot"
+            },
+            {
+              "label": "Muiden vaihtoehtojen maksimimäärä joita tarjotaan valittavaksi.",
+              "description": "Syötä 0 asettaakesi rajoittomattoman määrän"
             }
           ]
         },
         {
-          "label": "Arvo vastausvaihtoehdot"
-        },
-        {
-          "label": "Muiden vaihtoehtojen maksimimäärä joita tarjotaan valittavaksi.",
-          "description": "Syötä 0 asettaakesi rajoittomattoman määrän"
-        },
-        {
-          "label": "Käytös kun käyttäjä tekee kirjoitusvirheen",
-          "options": [
+          "label": "Settings for typing mode",
+          "fields": [
             {
-              "label": "Hyväksy oikeana vastauksena."
+              "label": "Käytös kun käyttäjä tekee kirjoitusvirheen",
+              "options": [
+                {
+                  "label": "Hyväksy oikeana vastauksena"
+                },
+                {
+                  "label": "Varoita käyttäjää kirjoitusvirheestä"
+                },
+                {
+                  "label": "Hyväksy se tavanomaisena virheenä"
+                }
+              ]
             },
             {
-              "label": "Varoita käyttäjää kirjoitusvirheestä."
-            },
-            {
-              "label": "Hyväksy se tavanomaisena virheenä"
+              "label": "Merkkikokoriippuvainne",
+              "description": "Jos päällä niin kirjainkoko vaikuttaa siihen hyväksytäänkö vastaus oikeana vai virheellisenä esimerkiksi hyväksytäänkö helsinki vai ainoastaan Helsinki"
             }
           ]
-        },
-        {
-          "label": "Merkkikokoriippuvainne",
-          "description": "Jos päällä niin kirjainkoko vaikuttaa siihen hyväksytäänkö vastaus oikeana vai virheellisenä esimerkiksi hyväksytäänkö helsinki vai ainoastaan Helsinki"
         },
         {
           "label": "Tarkista vastaukset automaattisesti heti vastauksen jälkeen."

@@ -36,59 +36,83 @@
             }
           ],
           "field": {
-            "label": "Leeg",
-            "entity": "alternative",
-            "field": {
-              "label": "Leeg",
-              "fields": [
-                {
-                  "label": "Text",
-                  "description": "Je kunt alternatieve antwoorden scheiden met een schuine streep (/)."
-                },
-                {
-                  "label": "Juist antwoord"
-                },
-                {
-                  "label": "Hint"
-                },
-                {
-                  "label": "Onjuiste antwoorden",
+            "label": "Blank",
+            "fields": [
+              {
+                "label": "Answer mode",
+                "options": [
+                  {
+                    "label": "Use the global mode"
+                  },
+                  {
+                    "label": "The user types the answer (text)"
+                  },
+                  {
+                    "label": "The user types the answer (number)"
+                  },
+                  {
+                    "label": "The user selects one option"
+                  },
+                  {
+                    "label": "The user selects multiple options"
+                  }
+                ]
+              },
+              {
+                "label": "Leeg",
+                "entity": "alternative",
+                "field": {
+                  "label": "Leeg",
                   "fields": [
                     {
-                      "label": "Feedback",
-                      "description": "De feedback moet de gebruiker helpen het juiste antwoord te vinden en moet idealiter zijn afgestemd op het antwoord dat de gebruiker heeft ingevoerd."
+                      "label": "Text"
                     },
                     {
-                      "label": "Geef de markering in de tekst weer wanneer feedback wordt getoond",
-                      "description": "Plaats !! voor en na een stuk tekst om het als opvallend kenmerk te markeren. (bijvoorbeeld Dit is !!een opvallend kenmerk!!)"
+                      "label": "Juist antwoord"
                     },
                     {
-                      "label": "Markeer de positie ten opzichte van een lege plek:",
-                      "options": [
+                      "label": "Hint"
+                    },
+                    {
+                      "label": "Onjuiste antwoorden",
+                      "fields": [
                         {
-                          "label": "- 1 (vlak voor de lege plek)"
+                          "label": "Feedback",
+                          "description": "De feedback moet de gebruiker helpen het juiste antwoord te vinden en moet idealiter zijn afgestemd op het antwoord dat de gebruiker heeft ingevoerd."
                         },
                         {
-                          "label": "- 2 (twee accenten voor de lege plek)"
+                          "label": "Geef de markering in de tekst weer wanneer feedback wordt getoond",
+                          "description": "Plaats !! voor en na een stuk tekst om het als opvallend kenmerk te markeren. (bijvoorbeeld Dit is !!een opvallend kenmerk!!)"
                         },
                         {
-                          "label": "- 3 (drie accenten voor de lege plek)"
-                        },
-                        {
-                          "label": "+ 1 (direct na de lege plek)"
-                        },
-                        {
-                          "label": "+ 2 (twee accenten na de lege plek)"
-                        },
-                        {
-                          "label": "+ 3 (drie accenten voor de lege plek)"
+                          "label": "Markeer de positie ten opzichte van een lege plek:",
+                          "options": [
+                            {
+                              "label": "- 1 (vlak voor de lege plek)"
+                            },
+                            {
+                              "label": "- 2 (twee accenten voor de lege plek)"
+                            },
+                            {
+                              "label": "- 3 (drie accenten voor de lege plek)"
+                            },
+                            {
+                              "label": "+ 1 (direct na de lege plek)"
+                            },
+                            {
+                              "label": "+ 2 (twee accenten na de lege plek)"
+                            },
+                            {
+                              "label": "+ 3 (drie accenten voor de lege plek)"
+                            }
+                          ]
                         }
                       ]
                     }
                   ]
                 }
-              ]
-            }
+              }
+            ]
           }
         }
       ]
@@ -151,48 +175,64 @@
           "description": "Duidt aan op welke manier de gebruiker antwoorden geeft.",
           "options": [
             {
-              "label": "De gebruikers maken keuze uit diverse opties."
+              "label": "De gebruikers maken keuze uit diverse opties"
             },
             {
-              "label": "De gebruikers typen de antwoorden in."
+              "label": "De gebruikers typen de antwoorden in"
+            },
+            {
+              "label": "The users types in the answers (number)"
+            },
+            {
+              "label": "The users selects multiple options"
             }
           ]
         },
         {
-          "label": "De alternatieven die voor selectie worden aangeboden",
-          "options": [
+          "label": "Settings for selection mode",
+          "fields": [
             {
-              "label": "De onjuiste antwoorden die zijn ingevoerd voor de lege plek"
+              "label": "De alternatieven die voor selectie worden aangeboden",
+              "options": [
+                {
+                  "label": "De onjuiste antwoorden die zijn ingevoerd voor de lege plek"
+                },
+                {
+                  "label": "De juiste antwoorden van alle andere lege plekken"
+                }
+              ]
             },
             {
-              "label": "De juiste antwoorden van alle andere lege plekken"
+              "label": "Antwoordopties willekeurig ordenen"
+            },
+            {
+              "label": "Het maximaal aantal alternatieven voor andere lege plekken, die voor de selectie worden aangeboden",
+              "description": "Om geen limiet in te stellen vul je 0 in."
             }
           ]
         },
         {
-          "label": "Antwoordopties willekeurig ordenen"
-        },
-        {
-          "label": "Het maximaal aantal alternatieven voor andere lege plekken, die voor de selectie worden aangeboden",
-          "description": "Om geen limiet in te stellen vul je 0 in."
-        },
-        {
-          "label": "Gedrag wanneer een gebruiker een spelfout maakt in de spelling",
-          "options": [
+          "label": "Settings for typing mode",
+          "fields": [
             {
-              "label": "Accepteer het als een correct antwoord"
+              "label": "Gedrag wanneer een gebruiker een spelfout maakt in de spelling",
+              "options": [
+                {
+                  "label": "Accepteer het als een correct antwoord"
+                },
+                {
+                  "label": "Waarschuw de gebruiker voor de fout"
+                },
+                {
+                  "label": "Beschouw het als een normale fout"
+                }
+              ]
             },
             {
-              "label": "Waarschuw de gebruiker voor de fout"
-            },
-            {
-              "label": "Beschouw het als een normale fout"
+              "label": "Hoofdlettergevoelig",
+              "description": "Indien ingeschakeld, wordt het hoofdlettergebruik dat afwijkt van de oplossing als een fout beschouwd."
             }
           ]
-        },
-        {
-          "label": "Hoofdlettergevoelig",
-          "description": "Indien ingeschakeld, wordt het hoofdlettergebruik dat afwijkt van de oplossing als een fout beschouwd."
         },
         {
           "label": "Controleer automatisch de antwoorden na invoer"

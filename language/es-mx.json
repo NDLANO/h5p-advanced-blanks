@@ -36,59 +36,83 @@
             }
           ],
           "field": {
-            "label": "Hueco",
-            "entity": "alternative",
-            "field": {
-              "label": "Hueco",
-              "fields": [
-                {
-                  "label": "Texto",
-                  "description": "Puede separar respuestas alternas con una diagonal (/)."
-                },
-                {
-                  "label": "Respuesta correcta"
-                },
-                {
-                  "label": "Pista"
-                },
-                {
-                  "label": "Opciones para respuestas incorrectas",
+            "label": "Blank",
+            "fields": [
+              {
+                "label": "Answer mode",
+                "options": [
+                  {
+                    "label": "Use the global mode"
+                  },
+                  {
+                    "label": "The user types the answer (text)"
+                  },
+                  {
+                    "label": "The user types the answer (number)"
+                  },
+                  {
+                    "label": "The user selects one option"
+                  },
+                  {
+                    "label": "The user selects multiple options"
+                  }
+                ]
+              },
+              {
+                "label": "Hueco",
+                "entity": "alternative",
+                "field": {
+                  "label": "Hueco",
                   "fields": [
                     {
-                      "label": "Retroalimentación",
-                      "description": "La retroalimentación debería ayudar al usuario a encontrar la respuesta correcta y estar idealmente apropiada para la respuesta que el usuario ha ingresado."
+                      "label": "Texto"
                     },
                     {
-                      "label": "Mostrar resaltado en el texto cuando se muestre la retroalimentación",
-                      "description": "Ponga !! antes y después de un trozo de texto para marcarlo como resaltado. (ejemplo Esto !!está resaltado!!)"
+                      "label": "Respuesta correcta"
                     },
                     {
-                      "label": "Resaltar posición relativa al hueco:",
-                      "options": [
+                      "label": "Pista"
+                    },
+                    {
+                      "label": "Opciones para respuestas incorrectas",
+                      "fields": [
                         {
-                          "label": "- 1 (justo antes del hueco)"
+                          "label": "Retroalimentación",
+                          "description": "La retroalimentación debería ayudar al usuario a encontrar la respuesta correcta y estar idealmente apropiada para la respuesta que el usuario ha ingresado."
                         },
                         {
-                          "label": "- 2 (dos resaltados antes del hueco)"
+                          "label": "Mostrar resaltado en el texto cuando se muestre la retroalimentación",
+                          "description": "Ponga !! antes y después de un trozo de texto para marcarlo como resaltado. (ejemplo Esto !!está resaltado!!)"
                         },
                         {
-                          "label": "- 3 (tres resaltados antes del hueco)"
-                        },
-                        {
-                          "label": "+ 1 (justo después del hueco)"
-                        },
-                        {
-                          "label": "+ 2 (dos resaltados después del hueco)"
-                        },
-                        {
-                          "label": "+ 3 (tres resaltados después del hueco)"
+                          "label": "Resaltar posición relativa al hueco:",
+                          "options": [
+                            {
+                              "label": "- 1 (justo antes del hueco)"
+                            },
+                            {
+                              "label": "- 2 (dos resaltados antes del hueco)"
+                            },
+                            {
+                              "label": "- 3 (tres resaltados antes del hueco)"
+                            },
+                            {
+                              "label": "+ 1 (justo después del hueco)"
+                            },
+                            {
+                              "label": "+ 2 (dos resaltados después del hueco)"
+                            },
+                            {
+                              "label": "+ 3 (tres resaltados después del hueco)"
+                            }
+                          ]
                         }
                       ]
                     }
                   ]
                 }
-              ]
-            }
+              }
+            ]
           }
         }
       ]
@@ -151,48 +175,64 @@
           "description": "Indica en cual forma el usuario da las respuestas.",
           "options": [
             {
-              "label": "El usuario elige entre opciones."
+              "label": "El usuario elige entre opciones"
             },
             {
-              "label": "El usuario escribe las respuestas."
+              "label": "El usuario escribe las respuestas"
+            },
+            {
+              "label": "The users types in the answers (number)"
+            },
+            {
+              "label": "The users selects multiple options"
             }
           ]
         },
         {
-          "label": "Alternativas ofrecidas para selección",
-          "options": [
+          "label": "Settings for selection mode",
+          "fields": [
             {
-              "label": "Las respuestas incorrectas ingresadas para el hueco"
+              "label": "Alternativas ofrecidas para selección",
+              "options": [
+                {
+                  "label": "Las respuestas incorrectas ingresadas para el hueco"
+                },
+                {
+                  "label": "Las respuestas correctas de todos los otros huecos"
+                }
+              ]
             },
             {
-              "label": "Las respuestas correctas de todos los otros huecos"
+              "label": "Randomizar opciones de respuesta"
+            },
+            {
+              "label": "Número máximo de alternativas de otros huecos ofrecidos para selección",
+              "description": "Escribir 0 para configurar a ilimitado."
             }
           ]
         },
         {
-          "label": "Randomizar opciones de respuesta"
-        },
-        {
-          "label": "Número máximo de alternativas de otros huecos ofrecidos para selección",
-          "description": "Escribir 0 para configurar a ilimitado."
-        },
-        {
-          "label": "Comportamiento cuando el usuario hace un error de deletreado",
-          "options": [
+          "label": "Settings for typing mode",
+          "fields": [
             {
-              "label": "Aceptarla como una respuesta correcta"
+              "label": "Comportamiento cuando el usuario hace un error de deletreado",
+              "options": [
+                {
+                  "label": "Aceptarla como una respuesta correcta"
+                },
+                {
+                  "label": "Advertirle al usuario acerca del error"
+                },
+                {
+                  "label": "Considerarla un error regular"
+                }
+              ]
             },
             {
-              "label": "Advertirle al usuario acerca del error"
-            },
-            {
-              "label": "Considerarla un error regular"
+              "label": "MAYÚSCULAS/minúsculas si importan",
+              "description": "Si se habilita, MAYÚSCULAS/minúsculas que sean diferentes de la solución son consideradas un error."
             }
           ]
-        },
-        {
-          "label": "MAYÚSCULAS/minúsculas si importan",
-          "description": "Si se habilita, MAYÚSCULAS/minúsculas que sean diferentes de la solución son consideradas un error."
         },
         {
           "label": "Automáticamente comprobar respuestas después de ingresadas"

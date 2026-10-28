@@ -7,10 +7,15 @@ export enum MessageType {
   None
 }
 
+/** Separator for options selected in multiple selection blanks. */
+export const MULTIPLE_SELECTION_SEPARATOR = '[|]';
+
 /** Cloze mode enumeration for input type. */
 export enum ClozeType {
   Type,
-  Select
+  Select,
+  Number,
+  SelectMultiple
 }
 
 /** Select alternatives enumeration for source of choices. */
